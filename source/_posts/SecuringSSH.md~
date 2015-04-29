@@ -1,0 +1,88 @@
+title: "Vps 的一些安全设置"
+date: 2015-04-20 11:22:38
+tags:
+- vps
+- centos
+- ssh
+categories: vps
+---
+
+## 前言:
+
+之前在 [Digitalocean](https://www.digitalocean.com/?refcode=85be3418a147)(PS：这是我的邀请链接) 上买了个 vps，然后架设了个 ss 服务端就一直放着了。昨天晚上登陆 vps 出现这么个提示：
+
+```
+leyar@iLeyar:~$ ssh qstars
+Last failed login: Sun Apr 19 09:13:30 EDT 2015 from 182.100.67.113 on ssh:notty
+There were 185356 failed login attempts since the last successful login.
+Last login: Sun Apr 12 16:20:37 2015 from 222.79.15.190
+```
+
+有人在试图暴力破解我的 vps 登陆帐号密码。
+到 /var/log/secure 下面查看了下日志，各种尝试登陆失败的信息开始刷屏。这人是有多无聊~ 幸好开了 vps 之后我设置了通过 ssh key 来登陆。不过为了把安全性提高一点，还是先把端口改了。并且取消密码登陆。
+
+下面记录下我的操作过程。
+
+> vps 配置： Digitalocean  512MB Ram  20GB SSD Disk 
+> 系统环境： CentOS 7 x64
+> 本地系统环境： Ubuntu 14.04 LTS
+
+<hr>
+
+## 使用 SSH Keys
+
+之前的文章《关于在 Ubuntu 上部署 Hexo 到 GitHub》的文章也有过配置使用 ssh key 登陆 github 的介绍。这里简单写下步骤。
+具体配置方法可以参考官方教程：[点这里](https://www.digitalocean.com/community/tutorials/how-to-use-ssh-keys-with-digitalocean-droplets)
+
+第一步：本地创建 ssh key。
+
+```
+ssh-keygen -t rsa
+```
+
+第二步：
+
+```
+Enter file in which to save the key(/leyar/.ssh/id_rsa):     # 这里输入需要修改的 sshkey 名称及路径。默认就直接 Enter
+
+Enter passphrase(empty for no passphrase):     #输入密码，回车即留空。
+Enter same passphrase again:     # 确认密码输入
+
+```
+
+接下来正常情况就是配置成功的提示：
+
+```
+Your identification has been saved in /leyar/.ssh/id_rsa.
+Your public key has been saved in /leyar/.ssh/id_rsa.pub.
+The key fingerprint is:
+4a:dd:0a:c6:35:4e:3f:ed:27:38:8c:74:44:4d:93:67 demo@a
+The key's randomart image is:
++--[ RSA 2048]----+
+|          .oo.   |
+|         .  o.E  |
+|        + .  o   |
+|     . = = .     |
+|      = S = .    |
+|     o + = +     |
+|      . o + o .  |
+|           . o   |
+|                 |
++-----------------+
+
+```
+提示密钥已经保存在 /leyar/.ssh 目录下，公钥为 id_rsa.pub ,私钥为 id_rsa
+
+因为使用多个 SSH keys，还需要在 config 配置里面还需要添加一下。
+
+```
+touch ~/.ssh/config
+vim ~/.ssh/config
+```
+
+这里贴下我的配置：
+
+```
+```
+
+
