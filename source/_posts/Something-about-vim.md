@@ -90,6 +90,11 @@ vimtutor
     ```
 
 - [Syntastic](https://github.com/scrooloose/syntastic):语法检查 
+- [vim-airline](https://github.com/bling/vim-airline):美化状态栏，可以使用 powerline-fonts，需要单独安装 powerline 的字体补充包，方法见[Documentation](https://powerline.readthedocs.org/en/latest/installation/linux.html#font-installation)
+- [YouCompleteMe](https://github.com/Valloric/YouCompleteMe):自动补全工具，其他参考[vim 自动补全](http://blog.marchtea.com/archives/161)
+- [Tabular](https://github.com/godlygeek/tabular):强迫症患者必备，详细操作见[演示视频](http://vimcasts.org/episodes/aligning-text-with-tabular-vim/)
+- [ctrlp.vim](https://github.com/kien/ctrlp.vim):文件查找工具
+- [vim-fugitive](https://github.com/tpope/vim-fugitive) 
 
    
 ## 配置
@@ -105,20 +110,22 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
+
 Plugin 'tpope/vim-fugitive'
 Plugin 'mattn/emmet-vim'
-Plugin 'L9'
 Plugin 'git://git.wincent.com/command-t.git'
-Plugin 'file:///home/gmarik/path/to/plugin'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'user/L9', {'name': 'newL9'}
-Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'junegunn/goyo.vim'
-Plugin 'junegunn/seoul256.vim'
-Plugin 'junegunn/limelight.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'kien/ctrlp.vim'
+
 Plugin 'jdevera/vim-cs-explorer'
-Plugin 'Syntastic'
+Plugin 'junegunn/limelight.vim'
+Plugin 'junegunn/seoul256.vim'
+Plugin 'junegunn/goyo.vim'
+Plugin 'bling/vim-airline'
+Plugin 'godlygeek/tabular'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -139,7 +146,7 @@ autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 "Used as $x^2$, $$x^2$$, escapable as \$x\$ and \$\$x\$\$.
 let g:vim_markdown_math = 1
 let g:vim_markdown_frontmatter = 1
-
+let g:vim_markdown_no_default_key_mappings=1
 
 "nnoremap <Leader>w :Goyo<CR>
 map <silent> <F12> :Goyo<CR>
@@ -185,7 +192,6 @@ set incsearch
 set ruler
 set smartindent
 set laststatus=2
-set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)
 set cursorline 
 set foldmethod=indent
 set mouse=v
@@ -203,6 +209,57 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" The NerdTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+map <C-n> :NERDTreeToggle<CR>
+
+"Tabular
+let mapleader=','
+if exists(":Tabularize")
+ nmap <Leader>a= :Tabularize /=<CR>
+ vmap <Leader>a= :Tabularize /=<CR>
+ nmap <Leader>a: :Tabularize /:\zs<CR>
+ vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
+function! s:align()
+ let p = '^\s*|\s.*\s|\s*$'
+ if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+  let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+  let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+  Tabularize/|/l1
+  normal! 0
+  call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+ endif
+endfunction
+
+" airline
+let g:airline_powerline_fonts = 1
+
+" YouCompleteMe
+let g:ycm_error_symbol = '>>'
+let g:ycm_warning_symbol = '>*'
+
+" ctrlp
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+let g:ctrlp_user_command = 'find %s -type f' 
 
 
 
