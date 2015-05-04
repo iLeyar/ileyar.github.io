@@ -84,4 +84,20 @@ sudo systemctl enable nginx.service
 所有的 Nginx 配置文件都在 '/etc/nginx/' 目录下，其中基础配置文件为目录下的 nginx.conf.
 关于一些优化配置后期再慢慢研究，现在主要修改一些网站的操作配置。
 
+-----------------------------
 
+>- 发现使用 rsync 的部署方式还是无法成功。每次发布总是出现如下错误，暂时不知道什么原因。
+
+	```
+INFO  Deploying: rsync
+events.js:85
+      throw er; // Unhandled 'error' event
+                  ^
+		  Error: spawn rsync ENOENT
+		      at exports._errnoException (util.js:746:11)
+		          at Process.ChildProcess._handle.onexit (child_process.js:1053:32)
+			      at child_process.js:1144:20
+			          at process._tickCallback (node.js:355:11)
+	```
+
+>- 另外使用 epel 方式安装的 Nginx 没有包含默认的配置，即`/etc/nginx/conf.d`目录下没有 `default.conf`这个配置文件。因此我是直接备份了 `/etc/nginx/nginx.conf`这个目录，并修改配置的。这个另外再做研究。配置这里就不贴上来了。

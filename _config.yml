@@ -71,15 +71,11 @@ deploy:
   repo: git@github.com:iLeyar/ileyar.github.io.git
   branch: master
   message:
-- type: rsync
-  host: 107.170.216.51
-  user: root
-  root: /var/www/leyar.me
-  port: 1688
-  delete: true
-  verbose: true
-  ignore_errors: false
- 
-
-
-
+          #- type: rsync
+          #  host: 107.170.216.51
+          #  user: root
+          #  root: /var/www/leyar.me
+          #  port: 1688
+          #  delete: true
+          #  verbose: true
+          #  ignore_errors: false
