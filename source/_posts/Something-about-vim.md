@@ -1,6 +1,6 @@
 ---
-
 title: Ubuntu 上 vim 使用及其配置
+date: 2015/5/1 
 tag:
 - vim
 - ubuntu
@@ -259,7 +259,9 @@ let g:ctrlp_user_command = 'find %s -type f'
 
     ```
    
- 
+
+*更多更新后的配置内容可以查看我的 [GitHub](https://github.com/iLeyar/Document/blob/master/.vimrc)*
+
 <hr>
 
 ## 小结：

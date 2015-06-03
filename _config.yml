@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: iLeyar
+title: iLeyar - Leyar's Notebook
 subtitle: 一个存放笔记的地方。
 description: 关于学习，关于分享，关于另一个自己。
 author: Leyar
 language: zh-CN
 timezone:
-
+email: leyar.me@gmail.com
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: www.leyar.me
+url: http://www.leyar.me
 root: /
 permalink: :title/
 permalink_defaults:
@@ -46,6 +46,14 @@ highlight:
 default_category: uncategorized
 category_map:
 tag_map:
+
+# Archives
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 1
+category: 1
+tag: 1
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
