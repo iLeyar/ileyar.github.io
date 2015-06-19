@@ -4,8 +4,8 @@ layout: post
 title: "Hexo 之后续篇"
 date: 2015-04-17 02:58:29
 tags: 
-- Hexo
-- DNS
+- hexo
+- dns
 categories: Hexo
 description:
 ---

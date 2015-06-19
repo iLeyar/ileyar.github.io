@@ -3,8 +3,8 @@ date: 2015-05-01 21:20:53
 tags:
 - vps
 - hexo
-- Digitalocean
-- Nginx
+- digitalocean
+- nginx
 - rsync
 categories: Hexo
 

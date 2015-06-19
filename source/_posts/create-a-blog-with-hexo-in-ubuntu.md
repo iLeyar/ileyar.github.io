@@ -3,9 +3,9 @@ layout: post
 title: "关于在 Ubuntu 上部署 Hexo 到 Github"
 date: 2015-04-13 14:57:30
 tags:
-- Hexo
-- Github
-- Ubuntu
+- hexo
+- github
+- ubuntu
 categories:
 - Hexo
 description: 之前在 Mac OX S 系统上有部署过一次 Hexo，不过都是新手上路处于懵懂茫然的状态，最后怎么搭建成功了也不甚清楚。这一次电脑系统从 Windows8.1 换到 Ubuntu14.04，打算完全参照官方文档，自己从头到尾操作一次，也顺便熟悉一下 Ubuntu 系统，因为是完全自己摸索，其中参照了大量的文档，数次Google，其中的艰辛自不必说，满满都是泪。（我是小白T^T）

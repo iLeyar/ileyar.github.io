@@ -1,6 +1,6 @@
 title: "XP 系统下硬盘安装 Ubuntu 14.04"
 date: 2015-04-22 12:26:53
-tags: Ubuntu
+tags: ubuntu
 categories: Ubuntu
 ---
 
