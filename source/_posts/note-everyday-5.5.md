@@ -1,11 +1,13 @@
 title: 5.5 每日折腾记
+date: 2015-5-5 23:59
 tag:
 - powerline
 - chrome
 - lantern
 - solarized
 categories: Ubuntu
---------------------------
+
+---
 
 前言：
 --------------------------
