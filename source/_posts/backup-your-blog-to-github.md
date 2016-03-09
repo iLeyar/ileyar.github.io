@@ -1,9 +1,10 @@
-title: 备份 Hexo 目录至 Github
+title: 备份 Hexo 源文件至 Github
 date: 2016-03-09 18:34:08
 tags:
 - git
 - hexo
 - backup
+- github
 ---
 
 ## 前言
