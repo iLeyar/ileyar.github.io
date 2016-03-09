@@ -74,6 +74,6 @@ git push origin hexo	# 或者 git push
 另外刚在 [stackoverflow](http://stackoverflow.com/questions/572549/difference-between-git-add-a-and-git-add) 上看到一个关于 `git add .` , `git add -u` 以及 `git add -A` 的区别。
 
 > git add -A stages *ALL*
-> git add .	stages new and modified, *without deleted*
-> git add -u stages modified and deleted, *without new*
+> git add .	stages new and modified, **without deleted**
+> git add -u stages modified and deleted, **without new**
 
