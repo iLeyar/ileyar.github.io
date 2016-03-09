@@ -1,4 +1,4 @@
-title: 备份 Hexo 源文件至 Github
+title: 备份 Hexo 源文件至 GitHub
 date: 2016-03-09 18:34:08
 tags:
 - git
@@ -9,14 +9,14 @@ tags:
 
 ## 前言
 
-这个博客一开始是部署到 Github 的，但是每次 Deploy 只是将生成的 html 文件部署进去。根目录文件还是在本机子，这样在换机子之后还得把整个 hexo 目录打包到新电脑，比较麻烦。我前面的操作方式是将真个根目录 push 到同仓库的一个 blog 分支下，当时没有记录操作方法。恰逢自己的生活博客也迁移到了 hexo 上，计划也将他备份到 github，这里将过程在这里记录一下。
+这个博客一开始是部署到 GitHub 的，但是每次 Deploy 只是将生成的 html 文件部署进去。根目录文件还是在本机子，这样在换机子之后还得把整个 hexo 目录打包到新电脑，比较麻烦。我前面的操作方式是将真个根目录 push 到同仓库的一个 blog 分支下，当时没有记录操作方法。恰逢自己的生活博客也迁移到了 hexo 上，计划也将他备份到 GitHub，这里将过程在这里记录一下。
 
 ## 操作
 
 ### 前提
 
-已创建有 github 仓库，并且已使用 hexo-deployer-git 部署到 master 分支。
-如果不满足请自行 google hexo 部署到 github 的操作方法。
+已创建有 GitHub 仓库，并且已使用 hexo-deployer-git 部署到 master 分支。
+如果不满足请自行 google hexo 部署到 GitHub 的操作方法。
 
 <!--more-->
 
