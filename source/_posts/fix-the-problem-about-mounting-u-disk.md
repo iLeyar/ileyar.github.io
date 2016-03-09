@@ -1,7 +1,8 @@
 title: "修复 Ubuntu 上无法自动挂载 U 盘的问题"
 date: 2015-05-15 22:38:05
-tags: ubuntu
-categories: ubuntu
+tags: 
+- ubuntu
+- u-disk
 
 ---
 

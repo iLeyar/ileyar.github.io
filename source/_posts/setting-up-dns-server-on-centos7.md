@@ -4,7 +4,6 @@ tags:
 - pdnsd
 - dns
 - centos
-categories:
 - linux
 ---
 

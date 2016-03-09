@@ -6,8 +6,6 @@ date: 2015-04-17 02:58:29
 tags: 
 - hexo
 - dns
-categories: Hexo
-description:
 ---
 
 ## 前言：

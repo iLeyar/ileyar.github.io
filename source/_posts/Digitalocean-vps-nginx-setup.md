@@ -6,7 +6,6 @@ tags:
 - digitalocean
 - nginx
 - rsync
-categories: Hexo
 
 ---
 
@@ -15,22 +14,20 @@ categories: Hexo
 
 之前就一直说要将 Hexo 迁移到 vps 上，因没能找到更好的方法，这个计划就被搁置了。但这段时间 GitHub 抽风更严重，只有在通过某科学上网方式时才能恢复。这实在是太不方便，只得赶紧先把这个问题解决了。
 
-</br>
-
+> 2016-01-09 更新: 服务器上 rsync 的启动与修改
+> 2016-01-09 更新: nginx 具体配置
 
 方案
 ================================
 
-> 1. VPS 上执行 `hexo server`，再配置 Nginx 反向代理，让域名指向 `http://localhost:4000`。
-> 2. 本地生成静态文件，再部署到 VPS 上，用 Nginx 直接做 Web 服务器。
+1. VPS 上执行 `hexo server`，再配置 Nginx 反向代理，让域名指向 `http://localhost:4000`。
+2. 本地生成静态文件，再部署到 VPS 上，用 Nginx 直接做 Web 服务器。
 
 来源参考：[在 VPS 上部署 hexo](http://blog.berry10086.com/Tech/deploy-hexo-to-vps/)。 
-
 
 毋庸置疑，为了安全起见并且在本地能同时 Deploy 到 VPS 和 Github （用作备份）上，选第二中方法肯定是比较好的。
 
 <!--more-->
-</br>
 
 部署方式
 ================================
@@ -40,13 +37,10 @@ categories: Hexo
 - git：这是 Google 到的大部分人会选择的方式
 - rsync：这是我选择的方式
 
-</br>
-
 开始安装
 ================================
 
 整理了大概方向与思路，那么现在就开始来实践操作吧，这次我是边实践边记录。
-
 
 Nginx 安装与配置
 --------------------------------
@@ -55,52 +49,84 @@ Nginx 安装与配置
 
 我的 Vps 选择的是 Digitalocean 的 5 美元每月的方案，安装的是 CentOS 7 系统，安装方式与其他 Linux 方式略有不同，大家自行斟酌。
 
-1. SSH 连接 VPS 后，添加 CenOS 7 的 EPEL 软件包：
-
+SSH 连接 VPS 后，添加 CenOS 7 的 EPEL 软件包：
 ```bash
 sudo yum install epel-release
 ```
-2. 安装 Nginx
-
+安装 Nginx
 ```bash
 sudo yum install nginx
 ```
 中间如果有出现提示，直接输入 y ，继续安装即可。
 
-3. 启动 Nginx
-
+启动 Nginx
 ```bash
 sudo systemctl start nginx.service
 ```
-
 如果开启了防火墙，需要添加规则允许 HTTP 以及 HTTPS：
-
 ```bash
 sudo firewall-cmd --permanent --zone=public --add-service=http
 sudo firewall-cmd --permanent --zone=public --add-service=https
 sudo firewall-cmd --reload
 ```
-
 设置 Nginx 自动跟随系统启动
-
 ```bash
-sudo systemctl enable nginx.service
+sudo systemctl enable nginx
 ```
-
 现在可以在浏览器中输入 vps 的 ip 检查看 Nginx!是否启动了。
 如果出现 "Welcome to Nginx.." 的字样，恭喜！代表你的 Nginx 成功安装并启动。
 
 ### 配置
 
-一些基础的配置可以参考这里：[Basic Nginx Configuration](https://www.linode.com/docs/websites/nginx/basic-nginx-configuration/)
+创建配置文件存放目录
+```
+sudo mkdir /etc/nginx/sites-available
+sudo mkdir /etc/nginx/sites-enabled
+```
+编辑默认配置文件
+```
+sudo vi /etc/nginx/nginx.conf
+```
+将以下内容添加到 `http{}` 里,
+```
+include /etc/nginx/sites-enabled/*.conf;
+server_names_hash_bucket_size 64;
+```
+保存退出.
 
+为新的网站创建配置,以我的博客 leyar.me 为例:
+```
+sudo vi /etc/nginx/sites-available/leyar.me.conf     #  名字可自定义,以 .conf 结尾
+```
+添加一下配置内容,这里附上我的配置,请自行修改.
+```
+server {
+        listen       80;
+        server_name  leyar.me www.leyar.me;
+        location / {
+                root   /var/www/leyar.me/public_html;
+                index  index.html index.htm;
+                try_files $uri $uri/ =404;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+        root   html;
+        }
+}
+```
+创建软链接:
+```
+sudo ln -s /etc/nginx/sites-available/leyar.me.conf /etc/nginx/sites-enabled/leyar.me.conf
+```
+重启 Nginx:
+```
+sudo systemctl restart nginx          ## service nginx restart
+```
+参考链接:
 
-所有的 Nginx 配置文件都在 '/etc/nginx/' 目录下，其中基础配置文件为目录下的 nginx.conf.
-关于一些优化配置后期再慢慢研究，现在主要修改一些网站的操作配置。
-
-
-PS:发现使用 epel 方式安装的 Nginx 没有包含默认的配置，即`/etc/nginx/conf.d`目录下没有 `default.conf`这个配置文件。因此我是直接备份了 `/etc/nginx/nginx.conf`这个目录，并修改配置的。这个另外再做研究。配置这里就不贴上来了。
-
++ [NGINX DOCUMENTATION](http://nginx.org/en/docs/)
++ [HOW TO INSTALL AND CONFIGURE NGINX ON CENTOS 7](https://garage.godaddy.com/tech/config/how-to-install-and-configure-nginx-on-centos-7/)
++ [Basic Nginx Configuration](https://www.linode.com/docs/websites/nginx/basic-nginx-configuration/)
 
 rsync 部署
 -----------------------------------
@@ -112,7 +138,24 @@ rsync 部署
 vps （centOS 7）安装 rsync：
 
 ```bash
-# yum -y install rsync
+sudo yum -y install rsync
+```
+
+启动
+```
+sudo systemctl start rsyncd
+sudo systemctl enable rsyncd
+```
+
+防火墙添加权限:
+```
+sudo firewall-cmd --permanent --add-port=873/tcp
+sudo firewall-cmd --permanent --add-port=873/udp
+```
+
+本地安装 rsync (Ubuntu 系统为例)
+```
+sudo apt-get install rsync
 ```
 
 hexo 目录下安装 rsync
@@ -138,7 +181,6 @@ Error: spawn rsync ENOENT
 	```
 
 静待解决...
-
 
 ### 解决问题
 

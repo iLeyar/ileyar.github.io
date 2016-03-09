@@ -4,7 +4,6 @@ date: 2015/5/1
 tag:
 - vim
 - ubuntu
-categories: vim
 
 ---
 

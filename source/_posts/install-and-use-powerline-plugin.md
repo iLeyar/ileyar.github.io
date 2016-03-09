@@ -4,7 +4,6 @@ tags:
 - powerline
 - ubuntu
 - bash
-categories: ubuntu
 
 ---
 

@@ -4,7 +4,6 @@ tags:
 - vps
 - centos
 - ssh
-categories: vps
 ---
 
 ## 前言:

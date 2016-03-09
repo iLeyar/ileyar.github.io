@@ -5,7 +5,7 @@ tag:
 - chrome
 - lantern
 - solarized
-categories: Ubuntu
+- Ubuntu
 
 ---
 

@@ -4,7 +4,6 @@ tags:
 - linux
 - vps
 - ssh
-categories: vps
 ---
 
 
