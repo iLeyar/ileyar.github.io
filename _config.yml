@@ -7,7 +7,7 @@ title: iLeyar - Leyar's Notebook
 subtitle: 一个存放笔记的地方。
 description: 关于学习，关于分享，关于另一个自己。
 author: Leyar
-language: zh-CN
+language: zh-Hans
 timezone:
 email: leyar.me@gmail.com
 # URL
@@ -26,7 +26,8 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render: 
-skip_file: google4a9fe8f4b84f7007.html
+    - google4a9fe8f4b84f7007.html 
+#skip_file: google4a9fe8f4b84f7007.html
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -70,7 +71,12 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: http://hexo.io/plugins/
+Plugins:
+        - hexo-generator-seo-friendly-sitemap
+        - hexo-generator-feed
 ## Themes: http://hexo.io/themes/
+sitemap:
+        path: sitemap.xml
 theme: yilia
 
 # Deployment
