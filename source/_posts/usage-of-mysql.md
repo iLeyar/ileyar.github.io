@@ -71,9 +71,9 @@ mysqldump -u root -p password mysql > /root/mysqlDB.dump	# 导出数据库， my
 ```
 ```
 drop database mysql;	# 删除数据库 mysql
-create database mysql1;		# 创建数据库 mysql1
+create database mysql;		# 创建数据库 mysql1
 ```
 ```
-mysql -u root -p password < /root/mysqlDB.dump		# 导入数据库
+mysql -u root -p mysql < /root/mysqlDB.dump		# 导入数据库
 ```
 
