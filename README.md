@@ -25,6 +25,6 @@ Leyar's Blog
 - [Life's blog](http://www.ileyar.com)
 - [Other blog](http://www.leyar.com)
 - [This blog](http://www.leyar.me)
-- Email: leyar.me@gmail.com
+- Email: ![](https://www.ileyar.com/images/mail.png)
 
 欢迎一起学习，交流，分享。

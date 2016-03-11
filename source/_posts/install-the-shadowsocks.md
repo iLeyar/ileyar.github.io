@@ -5,18 +5,17 @@ tag:
 - linux
 ---
 
-Install
--------
+> 版本： Python版
+> 加密方式： Chacha20
 
+#Install
+## 安装 shadowsocks
 Debian/Ubuntu:
-
 ```
 $ sudo apt-get install python-pip
 $ sudo pip install shadowsocks
 ```
-
 CentOS 7(于2016-2-5更新)
-
 ```
 $ sudo yum -y update
 $ sudo yum -y install python-pip
@@ -24,101 +23,96 @@ $ pip install --upgrade pip
 $ sudo pip install shadowsocks
 ```
 <!--more-->
+## 加密
+使用 chacha20 加密，必须安装 M2Crypto 以及libsodium
+### Installing M2Crypto
+Debian/Ubuntu:
+```
+apt-get install python-m2crypto
+```
+CentOS:
+```
+yum install m2crypto
+```
+### Installing libsodium
+安装编译工具包 build-essential
 
-Configuration
-----------------
-
+Debian/Ubuntu:
+```
+sudo apt-get install build-essential
+```
+CentOS 7:
+```
+sudo yum groupinstall "Development Tools"
+#sudo yum install kernel-devel kernel-headers
+```
+编译安装 [libsodium](https://github.com/jedisct1/libsodium)（版本需>= 1.0.0）
+```
+wget https://github.com/jedisct1/libsodium/releases/download/1.0.8/libsodium-1.0.8.tar.gz
+tar xf libsodium-1.0.8.tar.gz && cd libsodium-1.0.8
+./configure && make -j2
+sudo make install
+sudo ldconfig
+```
+# 配置
 Create a config file `/etc/shadowsocks.json` .
-
 ```
 {
 	"server":"0.0.0.0",
-	"server_port":8388,
-	"local_address":"127.0.0.1",
-	"local_port":1080,
+	"server_port":39999,
 	"password":"mypassword",
 	"timeout":300,
-	"method":"rc4-md5",
+	"method":"chacha20",
 	"fast_open":false
 }
 ```
-
-### server
-
-To run the config file in the foreground:
-
+多用户配置
+```
+{
+		"server":"0.0.0.0",
+		"port_password": {
+			"38888":"password1",
+			"38889":"password2",
+			"38890":"password3"
+		},
+		"timeout":300,
+		"method":"chacha20",
+		"fast_open":false
+}
+```
+## 服务端启动
+### 常规启动
++ To run the config file in the foreground:
 ```
 ssserver -c /etc/shadowsocks.json
 ```
-
-or to run in the background:
-
++ or to run in the background:
 ```
 ssserver -c /etc/shadowsocks.json -d start
-ssserver -c /etc/shadowsocks.json -d stop
+ssserver -c /etc/shadowsocks.json -d stop	# 停止 shadowsocks
 ```
-
-> you can also run it using command
-> 
-> To run in the background:
-> 
-	```
-	$ sudo ssserver -p *port* -k *password* -m *method* --user nobody -d start 
-	$ sudo ssserver -d stop
- 	```
-
-To check the log:
-
+### 查看日志
++ To check the log:
 ```
 sudo less /var/log/shadowsocks.log
 ```
+### 守护程序
++ To run with deamon in CentOS7
 
----
-
-To run with deamon (Archlinux)
-
-```
-$ sudo systemctl start shadowsocks-server@shadowsocks
-$ sudo systemctl enable shadowsocks-server@shadowsocks
-```
-
-#### iptable.firewall.rules
-
-```
-sudo vi /etc/iptables.firewall.rules
-```
-
-add the rules 
-
-```
--A INPUT -p tcp --dport 443 -j ACCEPT
-```
-
-#### Daemon Auto-Restart
-
-CentOS 7:
-
-```
-vi /etc/systemd/system/shadowsocks-server.service
-```
-
-write into the configuration:
-
+create file `sudo vi /etc/systemd/system/shadowsocks.service`
 ```
 [Unit]
-Description=Shadowsocks Server
-
+Description=Shadowsocks
 After=network.target
 
 [Service]
 Type=forking
-PIDFile=/var/run/shadowsocks/server.pid
+PIDFile=/run/shadowsocks/server.pid
 PermissionsStartOnly=true
-ExecStartPre=/bin/mkdir -p /var/run/shadowsocks
-ExecStartPre=/bin/chown root:root /var/run/shadowsocks
+ExecStartPre=/bin/mkdir -p /run/shadowsocks
+ExecStartPre=/bin/chown root:root /run/shadowsocks
 ExecStart=/usr/bin/ssserver --pid-file /var/run/shadowsocks/server.pid -c /etc/shadowsocks/config.json -d start
-Restart=always
-RestartSec=24h
+Restart=on-abort
 User=root
 Group=root
 UMask=0027
@@ -126,35 +120,42 @@ UMask=0027
 [Install]
 WantedBy=multi-user.target
 ```
-
 give the file permission:
-
 ```
 # cd /etc/systemd/system
-# chmod 755 shadowsocks-server.service
+# chmod 755 shadowsocks.service
 ```
-
-To run:
-
+to run
 ```
-# systemctl start shadowsocks-server.service
-# systemctl enable shadowsocks-server.service 
+sudo systemctl start shadowsocks
+sudo systemctl enable shadowsocks
 ```
-
-### Client
+### Firewalld
+```
+touch /etc/firewalld/services/shadowsocks.xml
+sudo vi /etc/firewalld/services/shadowsocks.xml
+```
+加入如下内容：
+```
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>shadowsocks</short>
+  <description>enable shadowsocks.</description>
+  <port protocol="tcp" port="39999"/>
+  <port protocol="udp" port="39999"/>
+</service>
+```
+添加防火墙策略
+```
+firewall-cmd --permanent --zone=public --add-service=shadowsocks
+firewall-cmd --permanent --add-masquerade
+firewall-cmd --reload
+```
+## 客户端启动
 
 ```
 sslocal -c /etc/shadowsocks.json
 ```
-
-or for deamon (Archlinux)
-
-```
-systemctl start shadowsocks@shadowsocks	   #run
-systemctl enable shadowsocks@shadowsocks    #run when system startup
-journalctl -u shadowsocks@shadowsocks	#check the log
-```
-
 Optimize
 -----------
 
