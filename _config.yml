@@ -3,13 +3,15 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: iLeyar - Leyar's Notebook
+title: Leyar's Notebook
 subtitle: 一个存放笔记的地方。
-description: 关于学习，关于分享，关于另一个自己。
+description: 关于学习，关于分享。
 author: Leyar
 language: zh-Hans
 timezone:
 email: leyar.me@gmail.com
+avatar: /images/avatar.jpg 
+duoshuo_shortname: leyar
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://www.leyar.me
@@ -52,9 +54,9 @@ tag_map:
 ## 2: Enable pagination
 ## 1: Disable pagination
 ## 0: Fully Disable
-archive: 1
-category: 1
-tag: 1
+#archive: 1
+#category: 1
+#tag: 1
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -71,12 +73,10 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 Plugins:
-        - hexo-generator-seo-friendly-sitemap
         - hexo-generator-feed
 ## Themes: http://hexo.io/themes/
-sitemap:
-        path: sitemap.xml
-theme: yilia
+theme: next
+google_analytics: UA-74627504-2
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html

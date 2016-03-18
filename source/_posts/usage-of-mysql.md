@@ -16,6 +16,7 @@ date: 2016-03-11 01:04
 ```
 mysql_secure_installation
 ```
+<!--more-->
 防火墙允许策略
 ```
 firewall-cmd --permanent --add-service=mysql
@@ -28,7 +29,6 @@ show databases;	# 查看已有数据库
 set password = password('123456')	# 修改当前用户在数据库中的密码为 123456
 exit	# 登出
 ```
-<!--more-->
 ### 管理数据库与表单
 ```
 create user name@localhost IDENTIFIED BY 'password';	# name 用户名 localhost 主机名 password 密码
