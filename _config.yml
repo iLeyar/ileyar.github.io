@@ -11,7 +11,8 @@ language: zh-Hans
 timezone:
 email: leyar.me@gmail.com
 avatar: /images/avatar.jpg 
-duoshuo_shortname: leyar
+#duoshuo_shortname: leyar
+disqus_shortname: ileyar
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: http://www.leyar.me
