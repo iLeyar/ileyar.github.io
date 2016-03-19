@@ -67,13 +67,13 @@ select * from books where price! =90
 
 ### 备份与恢复
 ```
-mysqldump -u root -p password mysql > /root/mysqlDB.dump	# 导出数据库， mysql 数据库名
+mysqldump -u root -p mysql > /root/mysql.dump	# 导出数据库， mysql 数据库名
 ```
 ```
 drop database mysql;	# 删除数据库 mysql
 create database mysql;		# 创建数据库 mysql1
 ```
 ```
-mysql -u root -p mysql < /root/mysqlDB.dump		# 导入数据库
+mysql -u root -p mysql < /root/mysql.dump		# 导入数据库
 ```
 
