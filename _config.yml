@@ -7,7 +7,7 @@ title: Leyar's Notebook
 subtitle: 一个存放笔记的地方。
 description: 关于学习，关于分享。
 author: Leyar
-language: zh-Hans
+language: zh-CN
 timezone:
 email: leyar.me@gmail.com
 avatar: /images/avatar.jpg 
@@ -29,7 +29,6 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render: 
-    - google4a9fe8f4b84f7007.html 
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -76,7 +75,7 @@ pagination_dir: page
 Plugins:
         - hexo-generator-feed
 ## Themes: http://hexo.io/themes/
-theme: next
+theme: apollo
 google_analytics: UA-74627504-2
 
 # Deployment
@@ -87,7 +86,7 @@ deploy:
   branch: master
   message:
 - type: rsync
-  host: 188.166.219.50
+  host: 138.68.4.135
   user: leyar 
   root: /var/www/leyar.me/public_html
   port: 1688

@@ -35,25 +35,33 @@ tags:
 
 生成密钥：
 ```
-ssh-keygen -t ss_rsa
+ssh-keygen
+```
+接下来需要输入存放路径时，输入
+```
+~/.ssh/openwrt_rsa		# 随自己喜好命名
 ```
 配置`~/.ssh/config`文件，添加如下内容
 ```
 # route
 Host ss
 HostName 192.168.1.1
-IdentityFile ~/.ssh/ss_rsa
+IdentityFile ~/.ssh/openwrt_rsa
 User root
 ```
 将公钥上传到 openwrt 相应目录下
 ```
-cat ~/.ssh/ss_rsa.pub \ | ssh ss "cat >> /etc/dropbear/authorized_keys"
+cat ~/.ssh/openwrt_rsa.pub \ | ssh root@192.168.1.1 "cat >> /etc/dropbear/authorized_keys"
 ```
-登陆路由器
+也可以使用如下命令（两者选其一）：
+```
+ssh root@192.168.1.1 "tee -a /etc/dropbear/authorized_keys" < ~/.ssh/openwrt_rsa.pub
+```
+登陆路由器，设置权限
 ```
 ssh ss
-cd /etc/dropbear
-chmod 600 authorized_keys
+chmod 700 /etc/dropbear
+chmod 600 /etc/dropbear/authorized_keys
 ```
 此时就可以通过 `ssh ss` 直接无密码直接登陆路由器了。
 
