@@ -86,11 +86,9 @@ deploy:
   branch: master
   message:
 - type: rsync
-  #  host: 138.68.4.135
   host: 139.162.108.89
   user: leyar 
   root: /var/www/www.leyar.me
-  #port: 1688
   delete: true
   verbose: true
   ignore_errors: false

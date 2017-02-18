@@ -16,7 +16,7 @@ tags:
 
 ### 前提
 
-已创建有 GitHub 仓库，并且已使用 hexo-deployer-git 部署到 master 分支。
+已创建有 GitHub 仓库，并且已使用 `hexo-deployer-git` 部署到 master 分支。
 如果不满足请自行 google hexo 部署到 GitHub 的操作方法。
 
 <!--more-->
@@ -25,19 +25,19 @@ tags:
 
 首先在官网新建一个仓库，比如我新建的仓库名为`ileyar.com`
 
-在本地 hexo *根目录*下，初始化 git 仓库
-```
+在本地 hexo **根目录**下，初始化 git 仓库
+```bash
 git init
 ```
-创建并切换到名为“hexo” 的分支
-```
-git checkout -b hexo
+创建并切换到名为“blog” 的分支
+```bash
+git checkout -b blog 
 ```
 添加 README，并填写相关的说明，此步骤可略过
-```
+```bash
 git add README.md
 ```
-创建忽略文件 `.gitignore`
+创建忽略规则文件 `.gitignore`
 ```
 vi .gitignore
 ```
@@ -52,17 +52,20 @@ node_modules/
 .npmignore
 public/
 ```
-上面最后一行忽略 public 目录，已经被 hexo 插件同步到 master 分支里，因此不需要再同步，deploy 是 hexo 的 git 配置存放目录，也不需要同步。其他内容可选择忽略也可以选择同步。
+上面最后一行忽略 public 目录，因其已被 hexo 插件同步到 master 分支里，因此不需要再同步，deploy 是 hexo 的 git 配置存放目录，也不需要同步。其他内容可选择忽略也可以选择同步。
+
+> 备注： 如果后面要修改 `.gitignore` 文件，为使其忽略规则生效，需要先通过
+> `git rm --cached file`, 然后修改 `.gitignore` 文件，再`git commit -am "xxx"`进行提交即可。
 
 添加内容到仓库并提交到远程仓库
-```
-git add .   # git add -A
+```bash
+git add .				# git add -A
 git commit -m "first commit"
-git remote add origin git@github.com:iLeyar/ileyar.com.git	 # 后面仓库目录改成自己新建的。
+git remote add origin git@github.com:iLeyar/ileyar.com.git		# 后面仓库目录改成自己新建的。
 git push -u origin hexo
 ```
 
-## 同步第三方主题
+## 通过 git submodule 来同步第三方主题
 
 首先先将主题 fork 到自己仓库，例如我目前在用的主题[hexo-theme-apollo](https://github.com/iLeyar/hexo-theme-apollo)
 
@@ -70,19 +73,31 @@ git push -u origin hexo
 ```bash
 git submodule add git@github.com:iLeyar/hexo-theme-apollo.git themes/apollo
 ```
+当主题下载下来并且修改完成后，可以通过`git submodule push`来提交到远程仓库。也可以执行如下命令来操作：
+```bash
+git commit -am "update theme"
+git push origin blog
+```
+在其他电脑同步源文件时，需要执行如下命令来同步主题
+```bash
+git submodule init
+git submodule update
+```
 ## 写在后面
 按照以上的步骤就进行了 hexo 源文件的初次备份。
-以后每次修改了内容之后，都可通过一下几条命令实现同步。
+以后每次修改了内容之后，都可通过以下几条命令实现同步。
 
-```
+```bash
 git add .
 git commit -m "..."	 # 双引号内填写更新内容
 git push origin hexo	# 或者 git push
 ```
 
 另外刚在 [stackoverflow](http://stackoverflow.com/questions/572549/difference-between-git-add-a-and-git-add) 上看到一个关于 `git add .` , `git add -u` 以及 `git add -A` 的区别。
+```bash
+git add -A	# stages **ALL**
+git add .	# stages new and modified, **without deleted**
+git add -u	# stages modified and deleted, **without new**
+```
 
-> git add -A stages **ALL**
-> git add .	stages new and modified, **without deleted**
-> git add -u stages modified and deleted, **without new**
-
+*本文最后更新：2017-2-19*
