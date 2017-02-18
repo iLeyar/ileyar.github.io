@@ -67,19 +67,20 @@ vi /etc/systemd/system/shadowsocks.service
 add the contain:
 ```
 [Unit]
-Description=Shadowsocks 
+Description=Shadowsocks
 After=network.target
 
 [Service]
-Type=simple
+Type=forking
+PIDFile=/run/shadowsocks/ss.pid
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /run/shadowsocks
+ExecStartPre=/bin/chown nobody:nobody /run/shadowsocks
+ExecStart=/usr/local/bin/ss-server -u -c /etc/shadowsocks/config.json -v -f /var/run/shadowsocks/ss.pid
+Restart=on-abort
 User=nobody
-ExecStart=/usr/local/bin/ss-server -c /etc/shadowsocks/config.json -u
-ExecReload=/bin/kill -HUP $MAINPID
-ExecStop=/bin/kill -s QUIT $MAINPID
-PrivateTmp=true
-KillMode=process
-Restart=on-failure
-RestartSec=5s
+Group=nobody
+UMask=0027
 
 [Install]
 WantedBy=multi-user.target
