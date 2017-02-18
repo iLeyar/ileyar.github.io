@@ -26,13 +26,13 @@ tags:
 #### gnome-terminal 无法启动
 
 > 刚安装完桌面环境，想启动 terminal ，结果点击图标，转了一会圈圈就没了。启动不起来。
-> **解决：**这是由于登录用户-Acconts settings 里面的 language 不正确导致的。编辑 `/etc/locale.gen`时，反注释 `en_US.UTF-8`，执行`locale-gen`，使语言生效。并且执行`echo LANG=en_US.UTF-8 > /etc/locale.conf` 添加配置文件。
+> **解决：**这是由于登录用户 - Acconts settings 里面的 language 不正确导致的。编辑 `/etc/locale.gen`时，反注释 `en_US.UTF-8`，执行`locale-gen`，使语言生效。并且执行`echo LANG=en_US.UTF-8 > /etc/locale.conf` 添加配置文件。
 
 #### gnome-terminal 中无法调出 fctix 中文输入
 
 > 这个在[官方文档](https://wiki.archlinux.org/index.php/Fcitx_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))有解决方法。照搬过来。
 > **解决：**修改 GSettings 配置，执行如下命令：
-> ```
+> ```bash
 > gsettings set \
 >   org.gnome.settings-daemon.plugins.xsettings overrides \
 >   "{'Gtk/IMModule':<'fcitx'>}"

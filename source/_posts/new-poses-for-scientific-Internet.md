@@ -16,7 +16,7 @@ tags:
 
 ## 操作步骤
 
-> 操作系统： Arch Linux （Windows 用户参考[八戒的博客](http://www.rendoumi.com/wan-quan-mian-fei-de-shadowsocksfu-wu-qi/)
+> 操作系统： Arch Linux （Windows 用户参考[八戒的博客](http://www.rendoumi.com/wan-quan-mian-fei-de-shadowsocksfu-wu-qi/))
 > 涉及内容： Docker 指令，Linux command
 
 ### 注册帐号
@@ -28,29 +28,29 @@ tags:
 登录界面后的界面，点击 `Add Cluster...`，进入 `Create Cluster` 界面，`Cluster Name` 随便填写一个名字，我这里填写的 `ss`，点击`Create Cluster` 按钮，稍等一会，STATUS 变成 `active` 绿色框框后，点击 `Get access` 按钮，`Download file` 下载压缩包到本地。
 
 例如我是下载到 `～/Docker` 文件夹里，那么
-```
+```bash
 cd ～/Docker
 unzip ss.zip
 ```
 此时会 `Docker` 目录下生成一个 `ss` 文件夹。
 ### 安装 Docker
 Arch 软件仓库有这个软件包的稳定办，可以直接安装`Docker`
-```
+```bash
 sudo pacman -S docker
 ```
 ### 设置环境变量
-```
+```bash
 source ～/Docker/ss/docker.env
 ```
 此时可以直接操作 Docker 了。
 使用` docker info` 命令可以检查是否连接成功。
 ### 创建 ss 
-```
+```bash
 docker network create my_network	# 创建网络，名为“my_network”
 docker run -d --name ss --net my_network -p 40004:40004 oddrationale/docker-shadowsocks -s 0.0.0.0 -p 40004 -k $YOURPASSWORD -m aes-256-cfb
 ```
 验证启动情况
-```
+```bash
 docker port ss	# 查询 ss 所使用端口
 docker ps	# 检查进程
 ```

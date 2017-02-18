@@ -12,7 +12,7 @@ tags:
 新建用户并加进管理组
 -------------------
 
-```
+```bash
 adduser *username*
 passwd *username*
 gpasswd -a *username* wheel
@@ -22,7 +22,7 @@ gpasswd -a *username* wheel
 拷贝公钥到个人目录下
 -------------------
 
-```
+```bash
 cd /home/*username*
 mkdir .ssh
 cd .ssh
@@ -34,7 +34,7 @@ cp /root/.ssh/authorized_keys .
 
 保留当前终端，在新终端登录：
 
-```
+```bash
 ssh *username*@*server-ip* -p *port*
 ```
 
@@ -46,7 +46,7 @@ Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
 
 尝试修改`.ssh`文件夹的用户及用户组
 
-```
+```bash
 cd /home/*username*/
 chown *username* .ssh
 chgrp *username* .ssh
@@ -59,9 +59,11 @@ chgrp *username* .ssh
 
 此时可以取消 root 登录了。
 
-```
+```bash
 sudo vi /etc/ssh/sshd_config
-------------------------------
+```
+查找并修改为如下参数：
+```
 PermitRootLogin no
 ```
 

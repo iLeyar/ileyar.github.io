@@ -23,7 +23,7 @@ tags:
 
 查看当前内核版本信息
 
-```    
+```bash
 uname -ir
 3.10.0-123.8.1.el7.x86_64 x86_64
 ```
@@ -31,7 +31,7 @@ Digitalocean 关于 Kernels 的更新操作可参考[这里](https://www.digital
 
 更新并安装最新版本
 
-```
+```bash
 yum update
 yum list --showduplicates kernel	# 列出可用的 kernel 版本
 --------------------------------
@@ -40,7 +40,7 @@ yum install kernel-*(3.10.0-229.el7)*		# 安装所需版本
 
 验证安装及列出服务器上所有已安装的 kernels：
 
-```
+```bash
 cd /boot
 ls vmlinuz*
 ```
@@ -54,19 +54,19 @@ Poweroff then poweron.
 
 增加 TCP 连接数量
 	
-```
+```bash
 echo '* soft nofile 51200
 * hard nofile 51200' >> /etc/security/limits.conf
 ```
 
 编辑 `/etc/sysctl.conf` 文件，优化 TCP 参数
 	
-```
+```bash
 vi /etc/sysctl.conf
 ```
 
 加入以下内容：
-```
+```conf
 # max open files
 fs.file-max = 51200
 # max read buffer
@@ -108,18 +108,18 @@ net.ipv4.tcp_wmem = 4096 65536 67108864
 net.ipv4.tcp_mtu_probing = 1
 ```
 刷新配置文件使之生效： 
-```
+```bash
 sysctl --system
 ```
 修改服务器中 shadowsocks 的 json 文件以开启 fast open:
 
-```
+```json
 fast_open: true
 ```
 
 SSH 到路由器，进行如下操作:
  
-```
+```bash
 echo 3 > /proc/sys/net/ipv4/tcp_fastopen
 ```
 

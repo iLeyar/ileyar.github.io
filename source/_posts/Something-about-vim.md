@@ -4,104 +4,74 @@ date: 2015/5/1
 tag:
 - vim
 - ubuntu
-
 ---
 
-
->前言：自从换了 Ubuntu，Sublime-text3 不能完美的解决中文输入法的问题一直困扰着我。系统自带的文本编辑器功能又太单一,无法满足我的需求。偶然间发现 vim 的强大，并且也支持添加例如 emmet，markdown 之类的插件，于是决定好好开始折腾这个传说中的神器。
->
-
+> 自从换了 Ubuntu，Sublime-text3 不能完美的解决中文输入法的问题一直困扰着我。系统自带的文本编辑器功能又太单一,无法满足我的需求。偶然间发现 vim 的强大，并且也支持添加例如 emmet，markdown 之类的插件，于是决定好好开始折腾这个传说中的神器。
 
 ## vim 快捷键
 
 使用 vim 自带的 Vim 教程就基本满足日常使用了，我是每天跟着教程都动手操作几遍，慢慢锻炼肌肉记忆。现在也能顺畅的进行进行文本编辑了。
 
 方法：在终端输入如下命令即可开启训练之旅啦。
-
-```
+```bash
 vimtutor
 ```
 <!--more-->
 ## 插件
 
 这里列出一些我自己使用的插件及配置。
++ [Vundle.vim](https://github.com/gmarik/Vundle.vim):vim 扩展管理器，类似于 sublime-text 的 package control, 安装方法略。:vim 扩展管理器，类似于 sublime-text 的 package control, 安装方法自行移步作者 github。
 
-- [Vundle.vim](https://github.com/gmarik/Vundle.vim):vim 扩展管理器，类似于 sublime-text 的 package control, 安装方法略。:vim 扩展管理器，类似于 sublime-text 的 package control, 安装方法自行移步作者 github。
-
-    这里记录下使用方法：
-
-   vim 中操作：
- 
-    ```bash
-    :PluginList        # 列出配置的插件
-    :PluginInstall     # 安装插件;后面添加 "!" 则等同于 :PluginUpdate 
-    :PluginUpdate      # 更新插件
-    :PluginSearch xx   # 搜索插件, xx 为搜索关键词；后面添加 "!" 则可刷新本地缓存
-    :PluginClean       # 卸载插件;后面添加 "!" 则直接卸载。 
-    :h vundle          # 查看帮助
-
-    ```
-   
-  Terminal 中操作：
-    
-    ```bash
-    vim +PluginInstall +qall
-
-    ```
-
+ vim 中操作：
+ ```
+ :PluginList        # 列出配置的插件
+ :PluginInstall     # 安装插件;后面添加 "!" 则等同于 :PluginUpdate 
+ :PluginUpdate      # 更新插件
+ :PluginSearch xx   # 搜索插件, xx 为搜索关键词；后面添加 "!" 则可刷新本地缓存
+ :PluginClean       # 卸载插件;后面添加 "!" 则直接卸载。 
+ :h vundle          # 查看帮助
+ ```
+ Terminal 中操作：
+ ```
+ vim +PluginInstall +qall
+ ```
 - [emmet-vim](https://github.com/mattn/emmet-vim/):这是我在 sublime-text 3 中必备的神器。具体也不作介绍，Google 就可以搜到一大堆实用教程。
-
-    这里留下某个参考教程：[Emmet.vim 教程](http://www.zfanw.com/blog/zencoding-vim-tutorial-chinese.html)
-
-    vim 中查看帮助：
-
-    ```bash
-    :help emmet
-
-    ```
-
+ 这里留下某个参考教程：[Emmet.vim 教程](http://www.zfanw.com/blog/zencoding-vim-tutorial-chinese.html)
+ vim 中查看帮助：
+ ```
+ :help emmet
+ ```
 - [vim-markdown](https://github.com/plasticboy/vim-markdown):支持语法高亮，批量修改 header 大小等，更多功能还在深入研究中..
-
 - [Goyo.vim](https://github.com/junegunn/goyo.vim):与下两个插件一起搭配，即可进入优雅的写作模式。
-
-    ```
-    - :Goyo              # 开启写作模式，也可使用 F12 快捷键进入
-    - :Goyo [width]      # 开启并设置宽度，默认宽度为 80
-    - :Goyo!             # 关闭写作模式，也可以使用 :q[uit], :clo[se], :tabc[lose], 或者 :Goyo
-
-    ```
-
+ ```
+ - :Goyo              # 开启写作模式，也可使用 F12 快捷键进入
+ - :Goyo [width]      # 开启并设置宽度，默认宽度为 80
+ - :Goyo!             # 关闭写作模式，也可以使用 :q[uit], :clo[se], :tabc[lose], 或者 :Goyo
+ ```
 - [seoul256.vim](https://github.com/junegunn/seoul256.vim):一个优雅漂亮的配色。
 - [limelight.vim](https://github.com/junegunn/limelight.vim):在写作模式中开启，调节背景字体暗度。
-
-    ```
-    :Limelight[0.0~1.0]        # 开启并设置暗度
-    :Limelight!                # 关闭
-    :Limelight!![0.0~1.0]      # 开关
-    
-    ```
-    某些配色如果没有生效，则加入如下代码：
-
-    ```
-    g:limelight_conceal_ctermfg   或者 
-    g:limelight_conceal_guifg
-
-    ```
-
-- [Syntastic](https://github.com/scrooloose/syntastic):语法检查 
-- [vim-airline](https://github.com/bling/vim-airline):美化状态栏，可以使用 powerline-fonts，需要单独安装 powerline 的字体补充包，方法见[Documentation](https://powerline.readthedocs.org/en/latest/installation/linux.html#font-installation)
-- [YouCompleteMe](https://github.com/Valloric/YouCompleteMe):自动补全工具，其他参考[vim 自动补全](http://blog.marchtea.com/archives/161)
-- [Tabular](https://github.com/godlygeek/tabular):强迫症患者必备，详细操作见[演示视频](http://vimcasts.org/episodes/aligning-text-with-tabular-vim/)
-- [ctrlp.vim](https://github.com/kien/ctrlp.vim):文件查找工具
+ ```
+ :Limelight[0.0~1.0]        # 开启并设置暗度
+ :Limelight!                # 关闭
+ :Limelight!![0.0~1.0]      # 开关
+ ```
+ 某些配色如果没有生效，则加入如下代码：
+ ```
+ g:limelight_conceal_ctermfg   或者 
+ g:limelight_conceal_guifg
+ ```
+- [Syntastic](https://github.com/scrooloose/syntastic): 语法检查
+- [vim-airline](https://github.com/bling/vim-airline): 美化状态栏，可以使用 powerline-fonts，需要单独安装 powerline 的字体补充包，方法见[Documentation](https://powerline.readthedocs.org/en/latest/installation/linux.html#font-installation)
+- [YouCompleteMe](https://github.com/Valloric/YouCompleteMe): 自动补全工具，其他参考[vim 自动补全](http://blog.marchtea.com/archives/161)
+- [Tabular](https://github.com/godlygeek/tabular): 强迫症患者必备，详细操作见[演示视频](http://vimcasts.org/episodes/aligning-text-with-tabular-vim/)
+- [ctrlp.vim](https://github.com/kien/ctrlp.vim): 文件查找工具
 - [vim-fugitive](https://github.com/tpope/vim-fugitive) 
 
-   
 ## 配置
 
 这里放一份我的个人配置，配置文件为 ~/.vimrc
 
-    ```bash
-
+```
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
@@ -253,20 +223,10 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_user_command = 'find %s -type f' 
-
-
-
-    ```
-   
-
+```
 *更多更新后的配置内容可以查看我的 [GitHub](https://github.com/iLeyar/Document/blob/master/.vimrc)*
 
-<hr>
-
-## 小结：
+## 小结
 
 关于 vim 还有很多需要慢慢研究的和学习的地方，边用边研究吧。Enjoy~
-
-
-
 

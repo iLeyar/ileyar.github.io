@@ -17,19 +17,14 @@ tags:
 ----
 
 到官方[pdnsd Download Page](http://members.home.nl/p.a.rombouts/pdnsd/dl.html)下载最新版本 rpm 包，截至今日（2015-7-30）最新版本为 1.2.9：
-
-```
+```bash
 wget http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-1.2.9a-par_sl6.x86_64.rpm
 ```
-
 然后通过 yum 安装
-
-```
+```bash
 yum localinstall pdnsd-1.2.9a-par_sl6.x86_64.rpm
 ```
-
 如此安装完成。
-
 <!--more-->
 
 配置 pdnsd
@@ -37,20 +32,16 @@ yum localinstall pdnsd-1.2.9a-par_sl6.x86_64.rpm
 
 拷贝配置样本 `/etc/pdnsd.conf.sample`，并重命名为`/etc/pdnsd.conf`
 
-```
+```bash
 cp /etc/pdnsd.conf.sample /etc/pdnsd.conf
 ```
-
 编辑配置文件 `pdnsd.conf`
 
-```
+```bash
 vi /etc/pdnsd.conf
 ```
-
 参考我的配置如下：
-
-
-```
+```conf
 // Sample pdnsd configuration file. Must be customized to obtain a working pdnsd setup!
 // Read the pdnsd.conf(5) manpage for an explanation of the options.
 // Add or remove '#' in front of options you want to disable or enable, respectively.
@@ -203,42 +194,29 @@ neg {
 
 启动 pdnsd
 -----
-
-```
+```bash
 service pdnsd start
 ```
-
 开机启动：
-
-```
+```bash
 chkcongif pdnsd on
 ```
-
 添加防火墙规则
 ----
-
 将 pdnsd 端口（我的是 9909）加入防火墙规则列表里：
-
-```
+```bash
 /sbin/iptables -l INPUT -p tcp --dport 9909 -j ACCEPT
 /etc/init.d/iptables save
 service iptables restart
 ```
-
 测试 pdnsd
 ----
-
 本地使用自建 DNS 测试
-
-```
+```bash
 dig @x.x.x.x -p 9909 youtube.com	# x.x.x.x 改为 DNS 服务器 IP
 ```
-
 如果设置正确，则会出现如下查询结果：
-
 ```
-
-
 ; <<>> DiG 9.10.2-P2 <<>> @104.131.144.145 -p 9909 youtube.com
 ; (1 server found)
 ;; global options: +cmd
@@ -269,9 +247,6 @@ youtube.com.		82182	IN	A	74.125.239.101
 ;; WHEN: Thu Jul 30 01:50:40 CST 2015
 ;; MSG SIZE  rcvd: 216
 ```
-
 返回的 ip 可参考：[Whatsmydns](https://www.whatsmydns.net)
-
-------------------------
 
 参考来源：[Centos自建DNS](http://blog.tshine.me/centos%E8%87%AA%E5%BB%BAdns%E6%9C%8D%E5%8A%A1%E5%99%A8.html) 

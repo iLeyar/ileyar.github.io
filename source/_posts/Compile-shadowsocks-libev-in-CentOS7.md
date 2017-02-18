@@ -1,5 +1,6 @@
 title: Compile Shadowsocks-libev in CentOS7
 date: 2017-02-13 19:35:27
+updated: 2017-2-19 05:20:00
 tags:
 - shadowsocks
 - centos7
@@ -8,7 +9,7 @@ tags:
 ## Prerequisites
 
 ### Build and install with recent mbedTLS and libsodium
-```
+```bash
 export LIBSODIUM_VER=1.0.11
 export MBEDTLS_VER=2.4.0
 wget https://github.com/jedisct1/libsodium/releases/download/1.0.11/libsodium-$LIBSODIUM_VER.tar.gz
@@ -26,29 +27,29 @@ popd
 ```
 <!--more-->
 ### Other
-```
+```bash
 yum install epel-release -y
 yum install gcc gettext autoconf libtool automake make pcre-devel asciidoc xmlto udns-devel libev-devel -y
 ```
 ### Get the latest source code
-```
+```bash
 git clone https://github.com/shadowsocks/shadowsocks-libev.git
 cd shadowsocks-libev
 git submodule update --init --recursive
 ```
 ## Installation
-```
+```bash
 ./autogen.sh && ./configure && make
 sudo make install
 ```
 ## Configuration
 ### Create the configuration file
-```
+```bash
 mkdir -p /etc/shadowsocks
 vi /etc/shadowsocks/config.json
 ```
 Put the following text into the file:
-```
+```json
 {
  "server":"0.0.0.0",
  "server_port":40002,
@@ -61,7 +62,7 @@ Put the following text into the file:
 ```
 ### To run with deamon in CentOS7
 Create and edit a file:
-```
+```bash
 vi /etc/systemd/system/shadowsocks.service
 ```
 Add the following text to the file `shadowsocks.service` :
@@ -86,35 +87,35 @@ UMask=0027
 WantedBy=multi-user.target
 ```
 To run    
-```
+```bash
 systemctl start shadowsocks
 systemctl enable shadowsocks
 ```
 To stop
-```
+```bash
 systemctl stop shadowsocks
 ```
 Check the log
-```
+```bash
 less /var/log/messages
 ```
 You can also use the following command:
-```
+```bash
 journalctl | grep ss-server 
 ```
 or
-```
+```bash
 journalctl -u shadowsocks.service
 ```
 More usage about `journalctl`
 + [How Use Systemd journalctl Command To Manage Logs](http://linoxide.com/linux-how-to/systemd-journalctl-command-logs/)
 
 ## Firewalld
-```
+```bash
 vi /etc/firewalld/services/shadowsocks.xml
 ```
 Add the following text:
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>shadowsocks</short>
@@ -124,10 +125,11 @@ Add the following text:
 </service>
 ```
 Add a firewall policy use the command `firewall-cmd`
-```
+```bash
 firewall-cmd --permanent --zone=public --add-service=shadowsocks
 firewall-cmd --reload
 ```
 ## Reference material
 + [Shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 
+*Last updated: 2017/02/19*

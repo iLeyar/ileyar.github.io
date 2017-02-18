@@ -99,5 +99,12 @@ git add -A	# stages **ALL**
 git add .	# stages new and modified, **without deleted**
 git add -u	# stages modified and deleted, **without new**
 ```
+相关资料：
++ [关于在 Ubuntu 上部署 Hexo 到 Github](http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/)
++ [Hexo 之后续篇](http://www.leyar.me/After-installing-Hexo/)
++ [通过 rsync 将 Hexo 部署到 Digitalocean vps](http://www.leyar.me/Digitalocean-vps-nginx-setup/)
++ [Hexo 部署到 GitHub 出错](http://www.leyar.me/hexo-deploy-to-git-error/)
++ [Hexo 出现 Nginx 403 错误](http://www.leyar.me/hexo-nginx-403-forbidden/)
++ [为 Hexo 博客添加404 页面](http://www.leyar.me/create-404-page)
 
 *本文最后更新：2017-2-19*

@@ -27,7 +27,7 @@ tag:
 
 下载 OpenWrt 官方安装镜像及升级包，
 
-```
+```bash
 wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/openwrt-ar71xx-nand-wndr4300-ubi-factory.img
 wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/openwrt-ar71xx-nand-wndr4300-squashfs-sysupgrade.tar
 ```
@@ -79,52 +79,49 @@ wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/openwrt-ar71
 
 `ssh` 到 openwrt
 
-```
+```bash
 $ ssh root@192.168.1.1
 ```
 
 更新软件包列表并安装依赖包
 
-```
-# opkg update
-# opkg install ip libc libgcc libgmp libnettle libopenssl zlib
+```bash
+opkg update
+opkg install ip libc libgcc libgmp libnettle libopenssl zlib
 ```
 
 添加第三方源`OpenWrt-dist`源到`etc/opkg.conf`:
 
-```
-# echo 'src/gz openwrt_dist http://openwrt-dist.sourceforge.net/releases/ar71xx/packages
+```bash
+echo 'src/gz openwrt_dist http://openwrt-dist.sourceforge.net/releases/ar71xx/packages
 src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/releases/luci/packages' >> /etc/opkg.conf
 ```
 
 卸载原本自带的 dnsmasq，安装 dnsmasq-full 和 spec 版 ss 
 
-```
-# opkg update
-# opkg remove dnsmasq
-# opkg install dnsmasq-full
-# opkg install shadowsocks-libev-spec
-# opkg install luci-app-shadowsocks-spec
+```bash
+opkg update
+opkg remove dnsmasq
+opkg install dnsmasq-full
+opkg install shadowsocks-libev-spec
+opkg install luci-app-shadowsocks-spec
 ```
 
 > 有时候会发现安装速度很慢，此时也可通过 PC 端下载并传至路由器 `/tmp`目录再执行安装．
 > 上传文件到路由器：
-> 
- 	```
- 	scp luci-app-shadowsocks-spec_1.3.3-1_all.ipk shadowsocks-libev-spec_2.2.3-1_ar71xx.ipk root@192.168.1.1:/tmp/
- 	```
-> 
+ ```bash
+  scp luci-app-shadowsocks-spec_1.3.3-1_all.ipk shadowsocks-libev-spec_2.2.3-1_ar71xx.ipk root@192.168.1.1:/tmp/
+ ```
 > ssh 到路由器执行安装:
-> 
- 	```
- 	# cd /tmp
- 	# opkg install shadowsocks-libev-spec_2.2.3-1_ar71xx.ipk
- 	# opkg install luci-app-shadowsocks-spec_1.3.3-1_all.ipk
- 	```
+ ```bash
+  cd /tmp
+  opkg install shadowsocks-libev-spec_2.2.3-1_ar71xx.ipk
+  opkg install luci-app-shadowsocks-spec_1.3.3-1_all.ipk
+ ```
 
 下载忽略列表文件到`/etc/shadowsocks/ignore.list`，之后更新该文件也是使用此命令。
 
-```
+```bash
 wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > /etc/shadowsocks/ignore.list
 ```
 
@@ -144,7 +141,7 @@ wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | awk -
 
 打开 SSH 窗口，在`/etc/dnsmasq.conf`中加入如下内容:
 
-```
+```conf
 server=127.0.0.1#5300
 ```
 
@@ -162,7 +159,7 @@ SSH 到openwrt
 
 修改 `/etc/dnsmasq.conf` 文件，对应的配置范例可点击上面链接，主要修改的几个地方:
 
-```
+```conf
 no-poll
 no-resolv
 all-servers
@@ -173,12 +170,12 @@ conf-dir=/etc/dnsmasq.d
 
 创建 `dnsmasq.d` 配置目录
 
-```
+```bash
 mkdir /etc/dnsmasq.d
 ```
 
 切换到 PC 端 terminal 操作(Linux 系统下)
-```
+```bash
 $ cd ~/Download
 $ mkdir dnsmasq.d
 $ cd dnsmasq.d
@@ -188,7 +185,7 @@ $ scp accelerated-domains.china.conf google.china.conf root@192.168.1.1:/etc/dns
 
 ### 重启 
 
-```
+```bash
 /etc/init.d/shadowsocks restart
 /etc/init.d/dnsmasq restart
 ```
@@ -206,7 +203,7 @@ $ scp accelerated-domains.china.conf google.china.conf root@192.168.1.1:/etc/dns
 
 ssh 到 openwrt，新建文件 `/root/update`，添加如下内容:
 
-```
+```bash
 #!/bin/sh
 
 # 更新 ignore 文件
@@ -232,7 +229,7 @@ for ipk in $(opkg list-upgradable | awk '$1!~/^kmod|^Multiple/{print $1}'); do
 done
 ```
 
-使用 `chmod +x /root/update` 给脚本添加可执行权限
+运行命令 `chmod +x /root/update` 给脚本添加可执行权限
 
 打开路由器 WEB 管理界面:
 
@@ -249,4 +246,4 @@ done
 
 > 参考资料:
 
-> + [1](http://undownding.me/2015/02/10/use-shadowsocks-on-openwrt/)
+> + [Use Shadowsocks on OpenWrt](http://undownding.me/2015/02/10/use-shadowsocks-on-openwrt/)

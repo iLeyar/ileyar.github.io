@@ -25,7 +25,7 @@ tags:
 <!--more-->
 ## 命令
 ### 一、新建代码库
-```
+```bash
 # 在当前目录新建一个Git代码库
 $ git init
 
@@ -37,7 +37,7 @@ $ git clone [url]
 ```
 ### 二、配置
 Git的设置文件为`.gitconfig`，它可以在用户住目录下（全局配置），也可以在项目目录下（项目配置）
-```
+```bash
 # 显示当前的Git配置
 $ git config --list
 
@@ -49,7 +49,7 @@ $ git config [--global] user.name "[name]"
 $ git config [--global] user.email "[email address]"
 ```
 ### 三、增加/删除文件
-```
+```bash
 # 添加指定文件到暂存区
 $ git add [file1] [file2] ...
 
@@ -73,7 +73,7 @@ $ git rm --cached [file]
 $ git mv [file-original] [file-renamed]
 ```
 ### 四、代码提交
-```
+```bash
 # 提交暂存区到仓库区
 $ git commit -m [message]
 
@@ -94,7 +94,7 @@ $ git commit --amend -m [message]
 $ git commit --amend [file1] [file2] ...
 ```
 ### 五、分支
-```
+```bash
 # 列出所有本地分支
 $ git branch
 
@@ -139,7 +139,7 @@ $ git push origin --delete [branch-name]
 $ git branch -dr [remote/branch]
 ```
 ### 六、标签
-```
+```bash
 # 列出所有tag
 $ git tag
 
@@ -168,7 +168,7 @@ $ git push [remote] --tags
 $ git checkout -b [branch] [tag]
 ```
 ### 七、查看信息
-```
+```bash
 # 显示有变更的文件
 $ git status
 
@@ -231,7 +231,7 @@ $ git show [commit]:[filename]
 $ git reflog
 ```
 ### 八、远程同步
-```
+```bash
 # 下载远程仓库的所有变动
 $ git fetch [remote]
 
@@ -257,8 +257,7 @@ $ git push [remote] --force
 $ git push [remote] --all
 ```
 ### 九、撤销
-```
-
+```bash
 # 恢复暂存区的指定文件到工作区
 $ git checkout [file]
 
@@ -292,12 +291,9 @@ $ git stash
 $ git stash pop
 ```
 ### 十、其他
-```
+```bash
 # 生成一个可供发布的压缩包
 $ git archive
 ```
-----------------------------------
-## 其他
-
 扩展阅读：
 + [《Git 工作流程 - 阮一峰》](http://www.ruanyifeng.com/blog/2015/12/git-workflow.html)

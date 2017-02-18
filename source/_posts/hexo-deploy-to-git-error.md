@@ -1,4 +1,4 @@
-title: hexo 部署到 github 出错
+title: Hexo 部署到 GitHub 出错
 date: 2016-02-15 15:36:08
 tags:
 - hexo
@@ -12,7 +12,7 @@ tags:
 
 经过安装 Git，通过`nvm` 安装 Node.js，然后安装 Hexo，并且配置 Git ，简略步骤如下：
 
-```
+```bash
 $ sudo pacman -S git
 $ git config --global user.name "leyar"
 $ git config --global user.email "leyar.me@gmail.com"
@@ -20,7 +20,7 @@ $ git clone https://github.com/creationix/nvm.git ~/.nvm && cd ~/.nvm && git che
 . ~/.nvm/nvm.sh
 ```
 将以下内容添加进`~/.zshrc`
-```
+```bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
 ```
@@ -28,18 +28,18 @@ export NVM_DIR="$HOME/.nvm"
 
 (可选备份操作）
 手动更新 `nvm`:
-```
+```bash
 cd "$NVM_DIR" && git pull origin master && git checkout `git describe --abbrev=0 --tags`
 . "$NVM_DIR/nvm.sh"
 ```
 重启 Terminal, 之后可通过 nvm 来控制管理 nodejs 版本。
 
-```
+```bash
 $ nvm install 4
 $ nvm use 4
 ```
 安装 hexo
-```
+```bash
 npm install -g hexo-cli
 cd hexo
 npm install
@@ -92,7 +92,7 @@ and the repository exists.
 
 错误重点就在 `Permission denied (publickey)` 这里，git 本身我配置了非默认名的 key，即`github_rsa`和`github_rsa.pub`并且指定了验证文件。如下：
 
-```
+```config
 Host ileyar.github.com
 HostName github.com
 PreferredAuthentications publickey
@@ -106,8 +106,15 @@ User git
 通过 google 搜索到官方的解决办法：[Error: Permission denied (publickey)](https://help.github.com/articles/error-permission-denied-publickey/)
 
 在尝试了如下操作之后问题解决：
-```
+```bash
 ssh-add ~/.ssh/github_rsa
 ```
 
+相关资料：
++ [关于在 Ubuntu 上部署 Hexo 到 Github](http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/)
++ [Hexo 之后续篇](http://www.leyar.me/After-installing-Hexo/)
++ [通过 rsync 将 Hexo 部署到 Digitalocean vps](http://www.leyar.me/Digitalocean-vps-nginx-setup/)
++ [Hexo 出现 Nginx 403 错误](http://www.leyar.me/hexo-nginx-403-forbidden/)
++ [备份 Hexo 源文件至 GitHub](http://www.leyar.me/backup-your-blog-to-github/)
++ [为 Hexo 博客添加404 页面](http://www.leyar.me/create-404-page/)
 

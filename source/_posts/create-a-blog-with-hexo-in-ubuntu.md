@@ -224,8 +224,15 @@ Markdown 代码语法高亮支持语言
 
 ## 写在后面
 至此，本地安装 Hexo 完成。其他的配置，命令，发布等可以查阅官方文档：
+- 英文版：http://hexo.io/docs/index.html
+- 中文版：http://hexo.io/zh-cn/docs/index.html
 
- - 英文版：http://hexo.io/docs/index.html
- - 中文版：http://hexo.io/zh-cn/docs/index.html
+相关资源：
++ [Hexo 之后续篇](http://www.leyar.me/After-installing-Hexo/)
++ [通过 rsync 将 Hexo 部署到 Digitalocean vps](http://www.leyar.me/Digitalocean-vps-nginx-setup/)
++ [Hexo 部署到 GitHub 出错](http://www.leyar.me/hexo-deploy-to-git-error/)
++ [Hexo 出现 Nginx 403 错误](http://www.leyar.me/hexo-nginx-403-forbidden/)
++ [备份 Hexo 源文件至 GitHub](http://www.leyar.me/backup-your-blog-to-github/)
++ [为 Hexo 博客添加 404 页面](http://www.leyar.me/create-404-page/)
 
 *本文最后更新：2017-2-19*

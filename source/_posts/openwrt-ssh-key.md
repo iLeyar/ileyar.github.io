@@ -34,15 +34,15 @@ tags:
 在本机 linux 下：
 
 生成密钥：
-```
+```bash
 ssh-keygen
 ```
 接下来需要输入存放路径时，输入
-```
+```bash
 ~/.ssh/openwrt_rsa		# 随自己喜好命名
 ```
 配置`~/.ssh/config`文件，添加如下内容
-```
+```config
 # route
 Host ss
 HostName 192.168.1.1
@@ -50,15 +50,15 @@ IdentityFile ~/.ssh/openwrt_rsa
 User root
 ```
 将公钥上传到 openwrt 相应目录下
-```
+```bash
 cat ~/.ssh/openwrt_rsa.pub \ | ssh root@192.168.1.1 "cat >> /etc/dropbear/authorized_keys"
 ```
 也可以使用如下命令（两者选其一）：
-```
+```bash
 ssh root@192.168.1.1 "tee -a /etc/dropbear/authorized_keys" < ~/.ssh/openwrt_rsa.pub
 ```
 登陆路由器，设置权限
-```
+```bash
 ssh ss
 chmod 700 /etc/dropbear
 chmod 600 /etc/dropbear/authorized_keys

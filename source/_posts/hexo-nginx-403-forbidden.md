@@ -1,4 +1,4 @@
-title: hexo 出现 nginx 403 错误
+title: Hexo 出现 Nginx 403 错误
 date: 2016-02-15 20:45:34
 tags:
 - hexo
@@ -31,3 +31,11 @@ Google 了下出现这个错误的可能原因主要有两点：
 
 尝试改为 root 并重启 nginx, 再次刷新网页，问题解决。
 猜想原因应该是使用 sudo 安装的 nginx，故 user 为 root.
+
+相关资料：
++ [关于在 Ubuntu 上部署 Hexo 到 Github](http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/)
++ [Hexo 之后续篇](http://www.leyar.me/After-installing-Hexo/)
++ [通过 rsync 将 Hexo 部署到 Digitalocean vps](http://www.leyar.me/Digitalocean-vps-nginx-setup/)
++ [Hexo 部署到 GitHub 出错](http://www.leyar.me/hexo-deploy-to-git-error/)
++ [备份 Hexo 源文件至 GitHub](http://www.leyar.me/backup-your-blog-to-github/)
++ [为 Hexo 博客添加404 页面](http://www.leyar.me/create-404-page)

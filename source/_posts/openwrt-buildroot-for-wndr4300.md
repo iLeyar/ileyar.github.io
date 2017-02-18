@@ -8,7 +8,7 @@ tags:
 - compile
 ---
 
-# 前言
+## 前言
 
 前段时间一直想给我的 wndr4300 接个 USB 移动硬盘实现网络共享，然而一直未能成功，针对遇见的问题 Google 了许久并且也曾试图在[V2EX](https://v2ex.com/t/258234#reply19)上寻求过帮助，未果。后来在 [openwrt](https://forum.openwrt.org/viewtopic.php?id=52504) 论坛上搜到个跟我出现问题一模一样的人，他的解决办法是重新刷固件，如此也让我有了重新刷固件的念头。
 
@@ -21,7 +21,7 @@ tags:
 
 在[Ariane](http://aiyou.im)的鼓励下，我决定从源文件编译一个固件。那么先把[官方文档](https://wiki.openwrt.org/about/toolchain)啃几遍。
 
-# 具体步骤
+## 具体步骤
 
 条件：
 + Linux 系统（我用的 Arch Linux）；
@@ -30,23 +30,23 @@ tags:
 + 设置环境变量
 <!--more-->
 
-## 预编译
+### 预编译
 
 Arch Linux 下安装 OpenWrt 编译环境相关依赖；
 
-```
+```bash
 sudo pacman -Su && sudo pacman -Syy
 sudo pacman -S --needed subversion asciidoc bash bc binutils bzip2 fastjar flex git gcc util-linux gawk intltool zlib make cdrkit ncurses openssl patch perl-extutils-makemaker rsync sdcc unzip wget gettext libxslt boost libusb bin86 sharutils b43-fwcutter findutils
 ```
 安装 `subversion` 以及 `mercurial`:
 
-```
+```bash
 sudo pacman -S install subversion mercurial
 ```
 
 下载 OpenWrt trunk 版本源码，更多版本参考[Download Sources](https://wiki.openwrt.org/doc/howto/buildroot.exigence#downloading_sources)
 
-```
+```bash
 mkdir openwrt
 cd openwrt
 git clone git://git.openwrt.org/openwrt.git trunk/
@@ -54,17 +54,17 @@ git clone git://git.openwrt.org/openwrt.git trunk/
 
 更新下载并安装所有可用的 `feeds`
 
-```
+```bash
 cd trunk
 ./scripts/feeds update -a
 ./scripts/feeds install -a
 ```
 
-## 构建基础环境
+### 构建基础环境
 
 通过图形界面选择路由器型号，检测缺失包添加自己想要的包并构建基础环境。
 
-```
+```bash
 make menuconfig
 ```
 如图：
@@ -82,13 +82,13 @@ make menuconfig
 【*】表示编译进固件包，【M】表示编译成安装文件，【】为不做操作。
 
 选择好路由器型号之后，则可以执行
-```
+```bash
 make defconfig
 ```
-## 可选配置
+### 可选配置
 
 再次执行：
-```
+```bash
 make menuconfig
 ```
 选择自己所需要安装的包。
@@ -131,11 +131,11 @@ make menuconfig
 
 执行`scripts/diffconfig.sh > diffconfig` 保存修改内容至`diffconfig`文件。
 
-## 移除保留空间
+### 移除保留空间
 
 修改文件将 wndr4300 被 Openwrt 留的 96M 空间完全利用
 
-```
+```bash
 cp ./target/linux/ar71xx/image/Makefile ./target/linux/ar71xx/image/Makefile.bak	# 备份文件
 vi ./target/linux/ar71xx/image/Makefile
 ```
@@ -153,10 +153,10 @@ vi ./target/linux/ar71xx/image/Makefile
 ```
 wndr4300_mtdlayout=mtdparts=ar934x-nfc:256k(u-boot)ro,256k(u-boot-env)ro,256k(caldata),512k(pot),2048k(language),512k(config),3072k(traffic_meter),2048k(kernel),121856k(ubi),123904k@0x6c0000(firmware),256k(caldata_backup),-(reserved) 
 ```
-## 编译
+### 编译
 
 ok, 现在开始编译：
-```
+```bash
 make -j 3 V=s  # j 后面数字改为你的 cpu 数量 +1
 ```
 初次编译，大概需要花一个多小时左右。期间可以好好看看教程，睡个午觉。
@@ -164,18 +164,18 @@ make -j 3 V=s  # j 后面数字改为你的 cpu 数量 +1
 编译完成之后，就会生成新的刷机包在`~/openwrt/trunk/bin/ar71xx/`目录下，文件名为`openwrt-ar71xx-nand-wndr4300-squashfs-sysupgrade.tar` ，在路由器中刷进去即可。(需要注意的是，只有已经刷了 Openwrt 之后才能刷这个包，如果你还是路由器出厂界面，请先刷同目录下的 .img 文件后，再刷这个更新包。）
 
 ## 编译 shadowsocks-libev
-```
+```bash
 ./scripts/feeds update packages
 ./scripts/feeds install libpcre
 git clone https://github.com/shadowsocks/openwrt-shadowsocks.git package/shadowsocks-libev
 make menuconfig
 ```
 编译：
-```
+```bash
 make V=s -j 3 
 ```
 也可以单独编译包：
-```
+```bash
 make V=99 package/shadowsocks-libev/openwrt/compile
 ```
 其他需要额外编译的软件：
@@ -187,13 +187,13 @@ make V=99 package/shadowsocks-libev/openwrt/compile
 具体编译方法参考链接，基本同上。
 
 其他`make`相关指令
-```
+```bash
 make clean		# 移除目录下的 /bin 和 /build_dir 文件夹
 make dirclean	# 移除目录下的 /bin 和 /build_dir 以及 /staging_dir ，/toolchain，/logs 文件夹
 make distclean  # 移除所有产生的配置编译文件及feeds 下载的内容。
 make package/luci/clean  # 移除 luci 目录下的内容
 ```
-## 技巧
+### 技巧
 
 配置文件可以备份到 `~/openwrt/trunk/files` 目录下，新编译的固件会自动将这些配置打包到固件里，这样你刷完固件就不需要再次配置文件啦！特别要注意路径的放置问题，例如
 路由器路径： `/etc/config/network` 
@@ -203,17 +203,14 @@ make package/luci/clean  # 移除 luci 目录下的内容
 
 ![](http://www.leyar.me/images/Screenshot_2016-02-24_17-05-09.png)
 
-# 写在后面
-
+## 写在后面
 经过这一番折腾，对于编译这个名词总算不至于特别陌生了。而我的路由器也弄好了，移动硬盘也能挂载上去了。准备研究一下 Samba，实现网络共享就在眼前...
 
 参考文档：
 + [OpenWrt build system - Installation](https://wiki.openwrt.org/doc/howto/buildroot.exigence)
 + [OpenWrt build system -Usage](https://wiki.openwrt.org/doc/howto/build)
 
-2016-12-15 更新：
-
+*本文最后更新：2016-12-15*
 + 已额外添加功能 samba, aria3, 硬盘休眠（hd-idle), 动态DNS (DDNS), mwan3, SQM Qos, UPNP 等。
-
 + 科学上网方案 shadowsocks-libev + ChinaDNS 
 + DNS 防污染方案：dnsmasq-full (dnsmasq.d) + ChinaDNS + DNS Forward( TCP 查询）
