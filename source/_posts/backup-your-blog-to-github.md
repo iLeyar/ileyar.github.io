@@ -1,5 +1,6 @@
 title: 备份 Hexo 源文件至 GitHub
 date: 2016-03-09 18:34:08
+updated: 2017-2-19 4:23:00
 tags:
 - git
 - hexo
@@ -61,6 +62,14 @@ git remote add origin git@github.com:iLeyar/ileyar.com.git	 # 后面仓库目录
 git push -u origin hexo
 ```
 
+## 同步第三方主题
+
+首先先将主题 fork 到自己仓库，例如我目前在用的主题[hexo-theme-apollo](https://github.com/iLeyar/hexo-theme-apollo)
+
+然后执行`git submodule`:
+```bash
+git submodule add git@github.com:iLeyar/hexo-theme-apollo.git themes/apollo
+```
 ## 写在后面
 按照以上的步骤就进行了 hexo 源文件的初次备份。
 以后每次修改了内容之后，都可通过一下几条命令实现同步。
