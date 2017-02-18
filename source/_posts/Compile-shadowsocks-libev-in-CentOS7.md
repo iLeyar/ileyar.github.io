@@ -47,7 +47,7 @@ sudo make install
 mkdir -p /etc/shadowsocks
 vi /etc/shadowsocks/config.json
 ```
-add the next contain:
+Put the following text into the file:
 ```
 {
  "server":"0.0.0.0",
@@ -60,11 +60,11 @@ add the next contain:
 }
 ```
 ### To run with deamon in CentOS7
-Create File:
+Create and edit a file:
 ```
 vi /etc/systemd/system/shadowsocks.service
 ```
-add the contain:
+Add the following text to the file `shadowsocks.service` :
 ```
 [Unit]
 Description=Shadowsocks
@@ -85,25 +85,35 @@ UMask=0027
 [Install]
 WantedBy=multi-user.target
 ```
-to run 
+To run    
 ```
 systemctl start shadowsocks
 systemctl enable shadowsocks
 ```
-to stop
+To stop
 ```
 systemctl stop shadowsocks
 ```
-check the log
+Check the log
 ```
-less /var/log/shadowsocks.log
+less /var/log/messages
 ```
+You can also use the following command:
+```
+journalctl | grep ss-server 
+```
+or
+```
+journalctl -u shadowsocks.service
+```
+More usage about `journalctl`
++ [How Use Systemd journalctl Command To Manage Logs](http://linoxide.com/linux-how-to/systemd-journalctl-command-logs/)
 
 ## Firewalld
 ```
 vi /etc/firewalld/services/shadowsocks.xml
 ```
-加入如下内容：
+Add the following text:
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <service>
@@ -113,11 +123,11 @@ vi /etc/firewalld/services/shadowsocks.xml
   <port protocol="udp" port="39999"/>
 </service>
 ```
-添加防火墙策略
+Add a firewall policy use the command `firewall-cmd`
 ```
 firewall-cmd --permanent --zone=public --add-service=shadowsocks
 firewall-cmd --reload
 ```
-## More Information
+## Reference material
 + [Shadowsocks-libev](https://github.com/shadowsocks/shadowsocks-libev)
 

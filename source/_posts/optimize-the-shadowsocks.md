@@ -59,7 +59,7 @@ echo '* soft nofile 51200
 * hard nofile 51200' >> /etc/security/limits.conf
 ```
 
-编辑 `/etc/sysctl.conf` 文件
+编辑 `/etc/sysctl.conf` 文件，优化 TCP 参数
 	
 ```
 vi /etc/sysctl.conf
@@ -126,20 +126,17 @@ echo 3 > /proc/sys/net/ipv4/tcp_fastopen
 参考链接：
 
 + [Optimize the shadowsocks server on Linux](https://shadowsocks.org/en/config/advanced.html)
++ [Optimizing Shadowsocks](https://github.com/shadowsocks/shadowsocks/wiki/Optimizing-Shadowsocks)
 + [TCP Fast Open](https://github.com/shadowsocks/shadowsocks/wiki/TCP-Fast-Open)
-+ [科学上网](http://wuchong.me/blog/2015/02/02/shadowsocks-install-and-optimize/)
-待续
++ [CentOS 7 Shadowsocks 优化](https://www.ifshow.com/centos-7-shadowsocks-optimization/)
 --------
- 
-关于 SS 服务器的优化，在这里先告一段落。其他的优化方案，后续实际操作了再做补充～
-
 
 更新　
 ------
 
-2016-1-12: 
-不要启用 `net.ipv4.tcp_tw_reuse` ,上文的配置文件已修正．具体原因可参考:
+2016-1-12: 不要启用 `net.ipv4.tcp_tw_reuse` ,上文的配置文件已修正．具体原因可参考:
 
 + [Coping with the TCP TIME-WAIT state on busy Linux servers](http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html)
 + [不要在linux上启用net.ipv4.tcp_tw_recycle参数](http://www.cnxct.com/coping-with-the-tcp-time_wait-state-on-busy-linux-servers-in-chinese-and-dont-enable-tcp_tw_recycle/)
-2017-2-14: 修改部分内容。
+
+2017-2-14: 修改`sysctl.conf`配置文件
