@@ -1,3 +1,4 @@
+---
 title: Archlinux 安装笔记
 date: 2015-07-28 11:28:46
 tags:

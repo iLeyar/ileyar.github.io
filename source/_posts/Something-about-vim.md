@@ -1,7 +1,7 @@
 ---
 title: Ubuntu 上 vim 使用及其配置
 date: 2015/5/1 
-tag:
+tags:
 - vim
 - ubuntu
 ---

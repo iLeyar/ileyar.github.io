@@ -1,3 +1,4 @@
+---
 title: "CentOS7 上使用 pdnsd 搭建 DNS 服务器"
 date: 2015-07-30 01:10
 tags:

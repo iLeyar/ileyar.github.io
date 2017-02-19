@@ -1,8 +1,10 @@
+---
 title: 为 Hexo 博客添加 404 页面
 date: 2016-3-10 00:14
 tags:
 - 404
 - hexo
+- nginx
 ---
 
 ## 前言

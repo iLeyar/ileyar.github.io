@@ -1,3 +1,4 @@
+---
 title: 使用密钥登陆 OpenWrt
 date: 2016-02-19 17:05:43
 tags:

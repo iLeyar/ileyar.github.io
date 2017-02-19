@@ -1,3 +1,4 @@
+---
 title: Archlinux 下踩过的坑（持续更新）
 date: 2016-03-19 06:53:52
 tags:

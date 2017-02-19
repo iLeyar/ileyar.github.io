@@ -1,6 +1,7 @@
+---
 title: 关于 Archlinux 下使用 fcitx 拼音输入法失效的解决办法
 date: 2015-11-09 00:55
-tag:
+tags:
 - fcitx
 - pinyin
 - input

@@ -1,3 +1,4 @@
+---
 title: "使用 powerline 美化插件"
 date: 2015-05-04 22:40:32
 tags:

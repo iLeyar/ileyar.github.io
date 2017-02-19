@@ -1,3 +1,4 @@
+---
 title: MariaDB 一些使用命令
 tags:
 - mysql

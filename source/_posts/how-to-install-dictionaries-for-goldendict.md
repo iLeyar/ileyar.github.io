@@ -1,3 +1,4 @@
+---
 title: "Ubuntu 下 GoldenDict 词典的安装与使用"
 date: 2015-06-21 23:59:59
 tags: 

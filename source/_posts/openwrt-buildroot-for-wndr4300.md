@@ -1,3 +1,4 @@
+---
 title: Archlinux 下为 wndr4300 编译 OpenWrt trunk 版固件(2016-12-15更新）
 date: 2016-02-24 12:46
 tags: 

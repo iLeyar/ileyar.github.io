@@ -1,6 +1,7 @@
+---
 title: NETGEAR WNDR4300 折腾之 OpenWrt + dnsmasq + SS  
 date: 2015-08-01 00:14
-tag: 
+tags: 
 - openwrt
 - SS
 - NETGEAR

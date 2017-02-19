@@ -1,6 +1,8 @@
+---
 title: "Shadowsocks 之安装篇"
 date: 2015-8-01 14:00
-tag: 
+updated: 2017-02-19 8:00
+tags: 
 - shadowsocks
 - linux
 ---
