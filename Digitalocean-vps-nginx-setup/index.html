@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 通过 rsync 将 Hexo 部署到 Digitalocean vps · Leyar's Notebook</title><meta name="description" content="通过 rsync 将 Hexo 部署到 Digitalocean vps - Leyar"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://www.leyar.me/atom.xml" title="Leyar's Notebook"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/iLeyar" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">通过 rsync 将 Hexo 部署到 Digitalocean vps</h1><div class="post-info">2015年5月1日</div><div class="post-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前就一直说要将 Hexo 迁移到 vps 上，因没能找到更好的方法，这个计划就被搁置了。但这段时间 GitHub 抽风更严重，只有在通过某科学上网方式时才能恢复。这实在是太不方便，只得赶紧先把这个问题解决了。</p>
+<blockquote>
+<p>2016-01-09 更新: 服务器上 rsync 的启动与修改<br>2016-01-09 更新: nginx 具体配置</p>
+</blockquote>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><ol>
+<li>VPS 上执行 <code>hexo server</code>，再配置 Nginx 反向代理，让域名指向 <code>http://localhost:4000</code>。</li>
+<li>本地生成静态文件，再部署到 VPS 上，用 Nginx 直接做 Web 服务器。</li>
+</ol>
+<p>来源参考：<a href="http://blog.berry10086.com/Tech/deploy-hexo-to-vps/" target="_blank" rel="external">在 VPS 上部署 hexo</a>。 </p>
+<p>毋庸置疑，为了安全起见并且在本地能同时 Deploy 到 VPS 和 Github （用作备份）上，选第二中方法肯定是比较好的。<br><a id="more"></a></p>
+<h2 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h2><p><a href="http://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="external">官方文档</a>支持多种部署方式（当然，你也可以每次通过手动上传静态文件进行更新）：</p>
+<ul>
+<li>git：这是 Google 到的大部分人会选择的方式</li>
+<li>rsync：这是我选择的方式</li>
+</ul>
+<h2 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h2><p>整理了大概方向与思路，那么现在就开始来实践操作吧，这次我是边实践边记录。</p>
+<h3 id="Nginx-安装与配置"><a href="#Nginx-安装与配置" class="headerlink" title="Nginx 安装与配置"></a>Nginx 安装与配置</h3><h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>我的 Vps 选择的是 Digitalocean 的 5 美元每月的方案，安装的是 CentOS 7 系统，安装方式与其他 Linux 方式略有不同，大家自行斟酌。</p>
+<p>SSH 连接 VPS 后，添加 CenOS 7 的 EPEL 软件包：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install epel-release</div></pre></td></tr></table></figure></p>
+<p>安装 Nginx<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install nginx</div></pre></td></tr></table></figure></p>
+<p>中间如果有出现提示，直接输入 y ，继续安装即可。</p>
+<p>启动 Nginx<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl start nginx.service</div></pre></td></tr></table></figure></p>
+<p>如果开启了防火墙，需要添加规则允许 HTTP 以及 HTTPS：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo firewall-cmd --permanent --zone=public --add-service=http</div><div class="line">sudo firewall-cmd --permanent --zone=public --add-service=https</div><div class="line">sudo firewall-cmd --reload</div></pre></td></tr></table></figure></p>
+<p>设置 Nginx 自动跟随系统启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl <span class="built_in">enable</span> nginx</div></pre></td></tr></table></figure></p>
+<p>现在可以在浏览器中输入 vps 的 ip 检查看 Nginx!是否启动了。<br>如果出现 “Welcome to Nginx..” 的字样，恭喜！代表你的 Nginx 成功安装并启动。</p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>创建配置文件存放目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo mkdir /etc/nginx/sites-available</div><div class="line">sudo mkdir /etc/nginx/sites-enabled</div></pre></td></tr></table></figure></p>
+<p>编辑默认配置文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/nginx/nginx.conf</div></pre></td></tr></table></figure></p>
+<p>将以下内容添加到 <code>http{}</code> 里,<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">include /etc/nginx/sites-enabled/*.conf;</div><div class="line">server_names_hash_bucket_size 64;</div></pre></td></tr></table></figure></p>
+<p>保存退出.</p>
+<p>为新的网站创建配置,以我的博客 leyar.me 为例:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/nginx/sites-available/leyar.me.conf     <span class="comment">#  名字可自定义,以 .conf 结尾</span></div></pre></td></tr></table></figure></p>
+<p>添加一下配置内容,这里附上我的配置,请自行修改.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">        listen       80;</div><div class="line">        server_name  leyar.me www.leyar.me;</div><div class="line">        location / &#123;</div><div class="line">                root   /var/www/leyar.me/public_html;</div><div class="line">                index  index.html index.htm;</div><div class="line">                try_files $uri $uri/ =404;</div><div class="line">        &#125;</div><div class="line">        error_page   500 502 503 504  /50x.html;</div><div class="line">        location = /50x.html &#123;</div><div class="line">        root   html;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>创建软链接:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln <span class="_">-s</span> /etc/nginx/sites-available/leyar.me.conf /etc/nginx/sites-enabled/leyar.me.conf</div></pre></td></tr></table></figure></p>
+<p>重启 Nginx:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl restart nginx          <span class="comment">## service nginx restart</span></div></pre></td></tr></table></figure></p>
+<p>参考链接:</p>
+<ul>
+<li><a href="http://nginx.org/en/docs/" target="_blank" rel="external">NGINX DOCUMENTATION</a></li>
+<li><a href="https://garage.godaddy.com/tech/config/how-to-install-and-configure-nginx-on-centos-7/" target="_blank" rel="external">HOW TO INSTALL AND CONFIGURE NGINX ON CENTOS 7</a></li>
+<li><a href="https://www.linode.com/docs/websites/nginx/basic-nginx-configuration/" target="_blank" rel="external">Basic Nginx Configuration</a></li>
+</ul>
+<h3 id="rsync-部署"><a href="#rsync-部署" class="headerlink" title="rsync 部署"></a>rsync 部署</h3><h4 id="安装-rsync"><a href="#安装-rsync" class="headerlink" title="安装 rsync"></a>安装 rsync</h4><p>远程 vps 与本地 vps 都需要安装 rsync </p>
+<p>vps （centOS 7）安装 rsync：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum -y install rsync</div></pre></td></tr></table></figure></p>
+<p>启动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo systemctl start rsyncd</div><div class="line">sudo systemctl <span class="built_in">enable</span> rsyncd</div></pre></td></tr></table></figure></p>
+<p>防火墙添加权限:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo firewall-cmd --permanent --add-port=873/tcp</div><div class="line">sudo firewall-cmd --permanent --add-port=873/udp</div></pre></td></tr></table></figure></p>
+<p>本地安装 rsync (Ubuntu 系统为例)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install rsync</div></pre></td></tr></table></figure></p>
+<p>hexo 目录下安装 rsync<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install hexo-deployer-rsync --save</div></pre></td></tr></table></figure></p>
+<h4 id="遇见问题"><a href="#遇见问题" class="headerlink" title="遇见问题"></a>遇见问题</h4><p>发现使用 rsync 的部署方式还是无法成功。每次发布总是出现如下错误，暂时不知道什么原因。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">INFO  Deploying: rsync</div><div class="line">events.js:85</div><div class="line">      throw er; // Unhandled &apos;error&apos; event</div><div class="line">                  ^</div><div class="line">Error: spawn rsync ENOENT</div><div class="line">    at exports._errnoException (util.js:746:11)</div><div class="line">    at Process.ChildProcess._handle.onexit (child_process.js:1053:32)</div><div class="line">    at child_process.js:1144:20</div><div class="line">    at process._tickCallback (node.js:355:11)</div></pre></td></tr></table></figure></p>
+<p>静待解决…</p>
+<h4 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h4><p>Update:</p>
+<p>感谢 <a href="http://willin.wang/" target="_blank" rel="external">Willin Wang</a> 的热心帮助，问题得以解决。</p>
+<p>本地需要安装 rsync<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install rsync</div></pre></td></tr></table></figure></p>
+<p>目测问题就可能是出现在这…</p>
+<hr>
+<p>记录下我其中的操作步骤。（可忽略）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim node_modules/hexo-deployer-rsync/lib/deployer.js</div></pre></td></tr></table></figure></p>
+<p>在 <code>return</code> 前面添加 <code>console.log(params.join(&#39; &#39;));</code>（！PS：括号引号内是一个空格） 然后 <code>:wq</code> 保存退出。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo -g d</div></pre></td></tr></table></figure></p>
+<p>然后出现一列参数如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--delete -v -az public/ -e ssh -p 1688 root@107.170.216.51:/var/www/leyar.me</div></pre></td></tr></table></figure></p>
+<p>执行这个命令，我因为前面添加时没有加上空格，在这个步骤上出现各种错误，正好到饭点，就暂时搁置了。</p>
+<p>回来之后设置里添加上空格，再执行 <code>hexo -g d</code> 结果竟然 deploy 成功！<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sent 353,570 bytes  received 2,012 bytes  30,920.17 bytes/sec</div><div class="line">total size is 870,006  speedup is 2.45</div><div class="line">INFO  Deploy <span class="keyword">done</span>: rsync</div></pre></td></tr></table></figure></p>
+<p>纠结了我许久的问题总算解决。再次感谢帮助过我的 Willin Wang！</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个问题困扰了我大概也好几周了，自己也是够倔强，此路不通本来可以换一条路，比如换 git 部署也不错，但心里作祟就是不愿意 vps 上安装太多东西，囧！不过有付出总是有收获的，至少以后不会让自己再遇到类似的问题了。</p>
+<p>相关资料：</p>
+<ul>
+<li><a href="http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/">关于在 Ubuntu 上部署 Hexo 到 Github</a></li>
+<li><a href="http://www.leyar.me/After-installing-Hexo/">Hexo 之后续篇</a></li>
+<li><a href="http://www.leyar.me/hexo-deploy-to-git-error/">Hexo 部署到 GitHub 出错</a></li>
+<li><a href="http://www.leyar.me/hexo-nginx-403-forbidden/">Hexo 出现 Nginx 403 错误</a></li>
+<li><a href="http://www.leyar.me/backup-your-blog-to-github/">备份 Hexo 源文件至 GitHub</a></li>
+<li><a href="http://www.leyar.me/create-404-page/">为 Hexo 博客添加404 页面</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/install-and-use-powerline-plugin/" class="prev">PREV</a><a href="/Something-about-vim/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+var disqus_identifier = 'Digitalocean-vps-nginx-setup/';
+var disqus_title = '通过 rsync 将 Hexo 部署到 Digitalocean vps';
+var disqus_url = 'http://www.leyar.me/Digitalocean-vps-nginx-setup/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//ileyar.disqus.com/count.js" async></script><div class="copyright"><p>© 2011 - 2017 <a href="http://www.leyar.me">Leyar</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-74627504-2",'auto');ga('send','pageview');</script></body></html>

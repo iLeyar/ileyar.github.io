@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 关于 Archlinux 下使用 fcitx 拼音输入法失效的解决办法 · Leyar's Notebook</title><meta name="description" content="关于 Archlinux 下使用 fcitx 拼音输入法失效的解决办法 - Leyar"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://www.leyar.me/atom.xml" title="Leyar's Notebook"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/iLeyar" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">关于 Archlinux 下使用 fcitx 拼音输入法失效的解决办法</h1><div class="post-info">2015年11月9日</div><div class="post-content"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在 Arch 上通过 fcitx 使用拼音输入法有时候会出现快捷键”Ctrl + space” 切换不到拼音输入的情况,或者是有时候修改了下配置,输入法就又无法正常工作.重启也无法解决.</p>
+<p>当<code>locale</code>为英文的时候,这种情况会比较普遍. 下面针对几种情况记录一下我的解决办法.</p>
+<ol>
+<li><p>GTK2 程序中(例如 Firefox, Chromium 等)拼音输入法无法正常启用:</p>
+<blockquote>
+<p>解决办法就是安装 <code>fcitx-gtk2</code> 并且设置 <code>GTK_IM_MODULE</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo pacman install fcitx-gtk2</div><div class="line"><span class="built_in">export</span> GTK_IM_MODULE=fcitx</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>gnome-terminal 中拼音输入法无法正常启用:</p>
+<blockquote>
+<p>修改 GSetting 配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">  gsettings <span class="built_in">set</span> \</div><div class="line">  	org.gnome.settings-daemon.plugins.xsettings overrides \</div><div class="line"><span class="string">"&#123;'Gtk/IMModule':&lt;'fcitx'&gt;&#125;"</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<p>通过如上的设置,麻麻再也不用担心我打不出中文拉:)</p>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Fcitx_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29#.E5.9C.A8_gnome-terminal.E4.B8.AD_Ctrl_.2B_Space_.E4.B8.8D.E8.83.BD.E8.B0.83.E5.87.BA.E8.BE.93.E5.85.A5.E6.B3.95" target="_blank" rel="external">Arch Wiki</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/hexo-deploy-to-git-error/" class="prev">PREV</a><a href="/resolve-the-issue-about-Permission-denied/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+var disqus_identifier = 'about-fcitx-pinyin-input/';
+var disqus_title = '关于 Archlinux 下使用 fcitx 拼音输入法失效的解决办法';
+var disqus_url = 'http://www.leyar.me/about-fcitx-pinyin-input/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//ileyar.disqus.com/count.js" async></script><div class="copyright"><p>© 2011 - 2017 <a href="http://www.leyar.me">Leyar</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-74627504-2",'auto');ga('send','pageview');</script></body></html>

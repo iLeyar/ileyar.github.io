@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Archlinux 下为 wndr4300 编译 OpenWrt trunk 版固件 · Leyar's Notebook</title><meta name="description" content="Archlinux 下为 wndr4300 编译 OpenWrt trunk 版固件 - Leyar"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://www.leyar.me/atom.xml" title="Leyar's Notebook"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/iLeyar" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Archlinux 下为 wndr4300 编译 OpenWrt trunk 版固件</h1><div class="post-info">2016年2月24日</div><div class="post-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间一直想给我的 wndr4300 接个 USB 移动硬盘实现网络共享，然而一直未能成功，针对遇见的问题 Google 了许久并且也曾试图在<a href="https://v2ex.com/t/258234#reply19" target="_blank" rel="external">V2EX</a>上寻求过帮助，未果。后来在 <a href="https://forum.openwrt.org/viewtopic.php?id=52504" target="_blank" rel="external">openwrt</a> 论坛上搜到个跟我出现问题一模一样的人，他的解决办法是重新刷固件，如此也让我有了重新刷固件的念头。</p>
+<blockquote>
+<p><a href="https://wiki.openwrt.org/doc/howto/obtain.firmware" target="_blank" rel="external">官方</a>获取固件的 5 种方式：</p>
+<ol>
+<li>从官网下载服务器下载预编译好的固件；</li>
+<li>使用<a href="https://wiki.openwrt.org/doc/howto/obtain.firmware.generate" target="_blank" rel="external">Image Generator</a> 生成固件镜像文件再自行定制编译；</li>
+<li>使用 OpenWrt 的 <a href="https://wiki.openwrt.org/doc/howto/obtain.firmware.sdk" target="_blank" rel="external">SDK</a> 工具交叉编译包；</li>
+<li>通过<a href="https://wiki.openwrt.org/about/toolchain" target="_blank" rel="external">OpenWrt Buildroot</a>从源代码进行编译；</li>
+<li>通过已做好的<a href="https://wiki.openwrt.org/doc/howto/obtain.firmware.docker" target="_blank" rel="external">Docker Image</a>定制自己的固件</li>
+</ol>
+</blockquote>
+<p>在<a href="http://aiyou.im" target="_blank" rel="external">Ariane</a>的鼓励下，我决定从源文件编译一个固件。那么先把<a href="https://wiki.openwrt.org/about/toolchain" target="_blank" rel="external">官方文档</a>啃几遍。</p>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><p>条件：</p>
+<ul>
+<li>Linux 系统（我用的 Arch Linux）；</li>
+<li>至少 5G 的硬盘空间;</li>
+<li>联网;</li>
+<li>设置环境变量<a id="more"></a>
+</li>
+</ul>
+<h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><p>Arch Linux 下安装 OpenWrt 编译环境相关依赖；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo pacman -Su &amp;&amp; sudo pacman -Syy</div><div class="line">sudo pacman -S --needed subversion asciidoc bash bc binutils bzip2 fastjar flex git gcc util-linux gawk intltool zlib make cdrkit ncurses openssl patch perl-extutils-makemaker rsync sdcc unzip wget gettext libxslt boost libusb bin86 sharutils b43-fwcutter findutils</div></pre></td></tr></table></figure>
+<p>安装 <code>subversion</code> 以及 <code>mercurial</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pacman -S install subversion mercurial</div></pre></td></tr></table></figure>
+<p>下载 OpenWrt trunk 版本源码，更多版本参考<a href="https://wiki.openwrt.org/doc/howto/buildroot.exigence#downloading_sources" target="_blank" rel="external">Download Sources</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir openwrt</div><div class="line"><span class="built_in">cd</span> openwrt</div><div class="line">git <span class="built_in">clone</span> git://git.openwrt.org/openwrt.git trunk/</div></pre></td></tr></table></figure>
+<p>更新下载并安装所有可用的 <code>feeds</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> trunk</div><div class="line">./scripts/feeds update <span class="_">-a</span></div><div class="line">./scripts/feeds install <span class="_">-a</span></div></pre></td></tr></table></figure>
+<h3 id="构建基础环境"><a href="#构建基础环境" class="headerlink" title="构建基础环境"></a>构建基础环境</h3><p>通过图形界面选择路由器型号，检测缺失包添加自己想要的包并构建基础环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make menuconfig</div></pre></td></tr></table></figure>
+<p>如图：</p>
+<p><img src="http://www.leyar.me/images/Screenshot_2016-02-24_14-42-35.png" alt=""></p>
+<ul>
+<li><code>Target System</code> 选中’(Atheros AR7xxx/AR9xxx)’</li>
+<li><code>Subtarget</code> 选中 ‘(Genaric devices with NAND flsh)’</li>
+<li><code>Target Profile</code> 选中’(NETGEAR WNDR3700v4/WNDR4300)’</li>
+</ul>
+<p>简单操作指令：<br>【Enter】进入下级菜单；【Y】编译进固件包；【M】编译成单独的安装文件；【N】取消选择；按两次【Esc】退出或者返回上级菜单；【？】帮助；【/】搜索</p>
+<p>标记说明：<br>【*】表示编译进固件包，【M】表示编译成安装文件，【】为不做操作。</p>
+<p>选择好路由器型号之后，则可以执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make defconfig</div></pre></td></tr></table></figure></p>
+<h3 id="可选配置"><a href="#可选配置" class="headerlink" title="可选配置"></a>可选配置</h3><p>再次执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make menuconfig</div></pre></td></tr></table></figure></p>
+<p>选择自己所需要安装的包。</p>
+<p>这里列一些我的选择：</p>
+<p><strong>Base system –&gt;</strong></p>
+<ul>
+<li>block-mount  # 挂载设备需要</li>
+<li>取消 dnsmasq，选择 dnsmasq-full</li>
+</ul>
+<p><strong>Kernel modulesi –&gt;</strong></p>
+<ul>
+<li>Block Devices –&gt; kmod-scsi-core  # 内核对 SCSI 设备的支持</li>
+<li>Filesystems –&gt; kmod-fs-ext4    # 我的移动硬盘是 ext4, 额外可选 ntfs,exfat等</li>
+<li>LED modules –&gt; kmod-ledtrig-usbdev        # USB 设备闪灯</li>
+<li>Native Language Support –&gt; kmod-nls-utf8    # utf8 编码格式的支持</li>
+<li>USB Support –&gt; kmod-usb-core kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci kmod-usb2 </li>
+</ul>
+<p><strong>Libraries –&gt;</strong></p>
+<ul>
+<li>SSL –&gt; libopenssl</li>
+</ul>
+<p><strong>LuCI –&gt;</strong></p>
+<ul>
+<li>Collections –&gt; luci</li>
+<li>Applications –&gt; luci-adblock luci-app-aria2 luci-ddns luci-app-mwan3 luci-app-samba luci-app-shadowsocks</li>
+</ul>
+<p><strong>Network –&gt;</strong></p>
+<ul>
+<li>ChinaDNS</li>
+<li>Download Manager –&gt; webui-aria2 yaaw</li>
+<li>Fire Transfer –&gt; curl wget</li>
+<li>shadowsocks-libev (官方源版本较低，可以自行编译一个，后面附方法)</li>
+</ul>
+<p><strong>Utilities –&gt;</strong></p>
+<ul>
+<li>compression –&gt; bzip2 unrar unzip zip    #压缩解压缩工具</li>
+<li>Editors –&gt; vim</li>
+<li>Filesystem –&gt; e2fsprogs    # 支持ext2、ext3、ext4 等分区工具(可选ntfs-3g ntfs-3g-utils)</li>
+<li>disc –&gt; blkid fdisk lsblk    </li>
+<li>zoneinfo –&gt; zoninfo-asia</li>
+<li>dmesg    # 可使用 dmesg 命令</li>
+<li>file    # 可使用 file 命令</li>
+<li>mount-utils        # 挂载助手</li>
+</ul>
+<p>执行<code>scripts/diffconfig.sh &gt; diffconfig</code> 保存修改内容至<code>diffconfig</code>文件。</p>
+<h3 id="移除保留空间"><a href="#移除保留空间" class="headerlink" title="移除保留空间"></a>移除保留空间</h3><p>修改文件将 wndr4300 被 Openwrt 留的 96M 空间完全利用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp ./target/linux/ar71xx/image/Makefile ./target/linux/ar71xx/image/Makefile.bak	<span class="comment"># 备份文件</span></div><div class="line">vi ./target/linux/ar71xx/image/Makefile</div></pre></td></tr></table></figure>
+<p>搜索 wndr4300，找到其后面的 <code>(ubi)</code>以及<code>(firmware)</code> ，</p>
+<p>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">23552k(ubi),25600k@0x6c0000(firmware)</div></pre></td></tr></table></figure></p>
+<p>修改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">121856k(ubi),123904k@0x6c0000(firmware)</div></pre></td></tr></table></figure></p>
+<p>使整个语段变为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wndr4300_mtdlayout=mtdparts=ar934x-nfc:256k(u-boot)ro,256k(u-boot-env)ro,256k(caldata),512k(pot),2048k(language),512k(config),3072k(traffic_meter),2048k(kernel),121856k(ubi),123904k@0x6c0000(firmware),256k(caldata_backup),-(reserved)</div></pre></td></tr></table></figure></p>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>ok, 现在开始编译：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make -j 3 V=s  <span class="comment"># j 后面数字改为你的 cpu 数量 +1</span></div></pre></td></tr></table></figure></p>
+<p>初次编译，大概需要花一个多小时左右。期间可以好好看看教程，睡个午觉。</p>
+<p>编译完成之后，就会生成新的刷机包在<code>~/openwrt/trunk/bin/ar71xx/</code>目录下，文件名为<code>openwrt-ar71xx-nand-wndr4300-squashfs-sysupgrade.tar</code> ，在路由器中刷进去即可。(需要注意的是，只有已经刷了 Openwrt 之后才能刷这个包，如果你还是路由器出厂界面，请先刷同目录下的 .img 文件后，再刷这个更新包。）</p>
+<h2 id="编译-shadowsocks-libev"><a href="#编译-shadowsocks-libev" class="headerlink" title="编译 shadowsocks-libev"></a>编译 shadowsocks-libev</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./scripts/feeds update packages</div><div class="line">./scripts/feeds install libpcre</div><div class="line">git <span class="built_in">clone</span> https://github.com/shadowsocks/openwrt-shadowsocks.git package/shadowsocks-libev</div><div class="line">make menuconfig</div></pre></td></tr></table></figure>
+<p>编译：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make V=s -j 3</div></pre></td></tr></table></figure></p>
+<p>也可以单独编译包：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make V=99 package/shadowsocks-libev/openwrt/compile</div></pre></td></tr></table></figure></p>
+<p>其他需要额外编译的软件：</p>
+<ul>
+<li><a href="https://github.com/shadowsocks/luci-app-shadowsocks" target="_blank" rel="external">luci-app-shadowsocks</a></li>
+<li><a href="https://github.com/aa65535/openwrt-dist-luci" target="_blank" rel="external">OpenWrt-dist Luci</a> - 包含了chinadns，dns-forwarder,redsocks2,shadowvpn 的 Luci 可选包</li>
+<li><a href="https://github.com/aa65535/openwrt-dns-forwarder" target="_blank" rel="external">DNS-Forwarder</a></li>
+<li><a href="https://github.com/aa65535/openwrt-chinadns" target="_blank" rel="external">ChinaDNS</a></li>
+</ul>
+<p>具体编译方法参考链接，基本同上。</p>
+<p>其他<code>make</code>相关指令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">make clean		<span class="comment"># 移除目录下的 /bin 和 /build_dir 文件夹</span></div><div class="line">make dirclean	<span class="comment"># 移除目录下的 /bin 和 /build_dir 以及 /staging_dir ，/toolchain，/logs 文件夹</span></div><div class="line">make distclean  <span class="comment"># 移除所有产生的配置编译文件及feeds 下载的内容。</span></div><div class="line">make package/luci/clean  <span class="comment"># 移除 luci 目录下的内容</span></div></pre></td></tr></table></figure></p>
+<h3 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h3><p>配置文件可以备份到 <code>~/openwrt/trunk/files</code> 目录下，新编译的固件会自动将这些配置打包到固件里，这样你刷完固件就不需要再次配置文件啦！特别要注意路径的放置问题，例如<br>路由器路径： <code>/etc/config/network</code><br>备份路径：   <code>~/openwrt/trunk/files/etc/config/network</code></p>
+<p>最好别弄错啦！这里截个图，我目前备份的了的配置文件：</p>
+<p><img src="http://www.leyar.me/images/Screenshot_2016-02-24_17-05-09.png" alt=""></p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>经过这一番折腾，对于编译这个名词总算不至于特别陌生了。而我的路由器也弄好了，移动硬盘也能挂载上去了。准备研究一下 Samba，实现网络共享就在眼前…</p>
+<p>参考文档：</p>
+<ul>
+<li><a href="https://wiki.openwrt.org/doc/howto/buildroot.exigence" target="_blank" rel="external">OpenWrt build system - Installation</a></li>
+<li><a href="https://wiki.openwrt.org/doc/howto/build" target="_blank" rel="external">OpenWrt build system -Usage</a></li>
+</ul>
+<p><em>本文最后更新：2016-12-15</em></p>
+<ul>
+<li>已额外添加功能 samba, aria3, 硬盘休眠（hd-idle), 动态DNS (DDNS), mwan3, SQM Qos, UPNP 等。</li>
+<li>科学上网方案 shadowsocks-libev + ChinaDNS </li>
+<li>DNS 防污染方案：dnsmasq-full (dnsmasq.d) + ChinaDNS + DNS Forward( TCP 查询）</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/backup-your-blog-to-github/" class="prev">PREV</a><a href="/openwrt-ssh-key/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+var disqus_identifier = 'openwrt-buildroot-for-wndr4300/';
+var disqus_title = 'Archlinux 下为 wndr4300 编译 OpenWrt trunk 版固件';
+var disqus_url = 'http://www.leyar.me/openwrt-buildroot-for-wndr4300/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//ileyar.disqus.com/count.js" async></script><div class="copyright"><p>© 2011 - 2017 <a href="http://www.leyar.me">Leyar</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-74627504-2",'auto');ga('send','pageview');</script></body></html>

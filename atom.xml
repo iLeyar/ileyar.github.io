@@ -1,0 +1,1300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Leyar&#39;s Notebook</title>
+  <subtitle>一个存放笔记的地方。</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://www.leyar.me/"/>
+  <updated>2017-02-18T21:20:00.000Z</updated>
+  <id>http://www.leyar.me/</id>
+  
+  <author>
+    <name>Leyar</name>
+    <email>leyar.me@gmail.com</email>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Compile Shadowsocks-libev in CentOS7</title>
+    <link href="http://www.leyar.me/Compile-shadowsocks-libev-in-CentOS7/"/>
+    <id>http://www.leyar.me/Compile-shadowsocks-libev-in-CentOS7/</id>
+    <published>2017-02-13T11:35:27.000Z</published>
+    <updated>2017-02-18T21:20:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h2><h3 id="Build-and-install-with-recent-mbedTLS-and-libsodium"><a href="#Build-and-install-with-recent-mbedTLS-and-libsodium" class="headerlink" title="Build and install with recent mbedTLS and libsodium"></a>Build and install with recent mbedTLS and libsodium</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> LIBSODIUM_VER=1.0.11</div><div class="line"><span class="built_in">export</span> MBEDTLS_VER=2.4.0</div><div class="line">wget https://github.com/jedisct1/libsodium/releases/download/1.0.11/libsodium-<span class="variable">$LIBSODIUM_VER</span>.tar.gz</div><div class="line">tar xvf libsodium-<span class="variable">$LIBSODIUM_VER</span>.tar.gz</div><div class="line"><span class="built_in">pushd</span> libsodium-<span class="variable">$LIBSODIUM_VER</span></div><div class="line">./configure --prefix=/usr &amp;&amp; make</div><div class="line">sudo make install</div><div class="line"><span class="built_in">popd</span></div><div class="line">wget https://tls.mbed.org/download/mbedtls-<span class="variable">$MBEDTLS_VER</span>-gpl.tgz</div><div class="line">tar xvf mbedtls-<span class="variable">$MBEDTLS_VER</span>-gpl.tgz</div><div class="line"><span class="built_in">pushd</span> mbedtls-<span class="variable">$MBEDTLS_VER</span></div><div class="line">make SHARED=1 CFLAGS=<span class="_">-f</span>PIC</div><div class="line">sudo make DESTDIR=/usr install</div><div class="line"><span class="built_in">popd</span></div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="Other"><a href="#Other" class="headerlink" title="Other"></a>Other</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum install epel-release -y</div><div class="line">yum install gcc gettext autoconf libtool automake make pcre-devel asciidoc xmlto udns-devel libev-devel -y</div></pre></td></tr></table></figure>
+<h3 id="Get-the-latest-source-code"><a href="#Get-the-latest-source-code" class="headerlink" title="Get the latest source code"></a>Get the latest source code</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/shadowsocks/shadowsocks-libev.git</div><div class="line"><span class="built_in">cd</span> shadowsocks-libev</div><div class="line">git submodule update --init --recursive</div></pre></td></tr></table></figure>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./autogen.sh &amp;&amp; ./configure &amp;&amp; make</div><div class="line">sudo make install</div></pre></td></tr></table></figure>
+<h2 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h2><h3 id="Create-the-configuration-file"><a href="#Create-the-configuration-file" class="headerlink" title="Create the configuration file"></a>Create the configuration file</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mkdir -p /etc/shadowsocks</div><div class="line">vi /etc/shadowsocks/config.json</div></pre></td></tr></table></figure>
+<p>Put the following text into the file:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"> <span class="attr">"server"</span>:<span class="string">"0.0.0.0"</span>,</div><div class="line"> <span class="attr">"server_port"</span>:<span class="number">40002</span>,</div><div class="line"> <span class="attr">"local_address"</span>: <span class="string">"127.0.0.1"</span>,</div><div class="line"> <span class="attr">"local_port"</span>:<span class="number">1080</span>,</div><div class="line"> <span class="attr">"password"</span>:<span class="string">"mypassword"</span>,</div><div class="line"> <span class="attr">"timeout"</span>:<span class="number">300</span>,</div><div class="line"> <span class="attr">"method"</span>:<span class="string">"chacha20"</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="To-run-with-deamon-in-CentOS7"><a href="#To-run-with-deamon-in-CentOS7" class="headerlink" title="To run with deamon in CentOS7"></a>To run with deamon in CentOS7</h3><p>Create and edit a file:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/systemd/system/shadowsocks.service</div></pre></td></tr></table></figure></p>
+<p>Add the following text to the file <code>shadowsocks.service</code> :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">Description=Shadowsocks</div><div class="line">After=network.target</div><div class="line"></div><div class="line">[Service]</div><div class="line">Type=forking</div><div class="line">PIDFile=/run/shadowsocks/ss.pid</div><div class="line">PermissionsStartOnly=true</div><div class="line">ExecStartPre=/bin/mkdir -p /run/shadowsocks</div><div class="line">ExecStartPre=/bin/chown nobody:nobody /run/shadowsocks</div><div class="line">ExecStart=/usr/local/bin/ss-server -u -c /etc/shadowsocks/config.json -v -f /var/run/shadowsocks/ss.pid</div><div class="line">Restart=on-abort</div><div class="line">User=nobody</div><div class="line">Group=nobody</div><div class="line">UMask=0027</div><div class="line"></div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure></p>
+<p>To run<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl start shadowsocks</div><div class="line">systemctl <span class="built_in">enable</span> shadowsocks</div></pre></td></tr></table></figure></p>
+<p>To stop<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl stop shadowsocks</div></pre></td></tr></table></figure></p>
+<p>Check the log<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">less /var/<span class="built_in">log</span>/messages</div></pre></td></tr></table></figure></p>
+<p>You can also use the following command:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">journalctl | grep ss-server</div></pre></td></tr></table></figure></p>
+<p>or<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">journalctl -u shadowsocks.service</div></pre></td></tr></table></figure></p>
+<p>More usage about <code>journalctl</code></p>
+<ul>
+<li><a href="http://linoxide.com/linux-how-to/systemd-journalctl-command-logs/" target="_blank" rel="external">How Use Systemd journalctl Command To Manage Logs</a></li>
+</ul>
+<h2 id="Firewalld"><a href="#Firewalld" class="headerlink" title="Firewalld"></a>Firewalld</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/firewalld/services/shadowsocks.xml</div></pre></td></tr></table></figure>
+<p>Add the following text:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">service</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">short</span>&gt;</span>shadowsocks<span class="tag">&lt;/<span class="name">short</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>enable shadowsocks.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">port</span> <span class="attr">protocol</span>=<span class="string">"tcp"</span> <span class="attr">port</span>=<span class="string">"39999"</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">port</span> <span class="attr">protocol</span>=<span class="string">"udp"</span> <span class="attr">port</span>=<span class="string">"39999"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>Add a firewall policy use the command <code>firewall-cmd</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --permanent --zone=public --add-service=shadowsocks</div><div class="line">firewall-cmd --reload</div></pre></td></tr></table></figure></p>
+<h2 id="Reference-material"><a href="#Reference-material" class="headerlink" title="Reference material"></a>Reference material</h2><ul>
+<li><a href="https://github.com/shadowsocks/shadowsocks-libev" target="_blank" rel="external">Shadowsocks-libev</a></li>
+</ul>
+<p><em>Last updated: 2017/02/19</em></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Prerequisites&quot;&gt;&lt;a href=&quot;#Prerequisites&quot; class=&quot;headerlink&quot; title=&quot;Prerequisites&quot;&gt;&lt;/a&gt;Prerequisites&lt;/h2&gt;&lt;h3 id=&quot;Build-and-install-with-recent-mbedTLS-and-libsodium&quot;&gt;&lt;a href=&quot;#Build-and-install-with-recent-mbedTLS-and-libsodium&quot; class=&quot;headerlink&quot; title=&quot;Build and install with recent mbedTLS and libsodium&quot;&gt;&lt;/a&gt;Build and install with recent mbedTLS and libsodium&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;12&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;13&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;14&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;export&lt;/span&gt; LIBSODIUM_VER=1.0.11&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;export&lt;/span&gt; MBEDTLS_VER=2.4.0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;wget https://github.com/jedisct1/libsodium/releases/download/1.0.11/libsodium-&lt;span class=&quot;variable&quot;&gt;$LIBSODIUM_VER&lt;/span&gt;.tar.gz&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;tar xvf libsodium-&lt;span class=&quot;variable&quot;&gt;$LIBSODIUM_VER&lt;/span&gt;.tar.gz&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;pushd&lt;/span&gt; libsodium-&lt;span class=&quot;variable&quot;&gt;$LIBSODIUM_VER&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;./configure --prefix=/usr &amp;amp;&amp;amp; make&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;sudo make install&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;popd&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;wget https://tls.mbed.org/download/mbedtls-&lt;span class=&quot;variable&quot;&gt;$MBEDTLS_VER&lt;/span&gt;-gpl.tgz&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;tar xvf mbedtls-&lt;span class=&quot;variable&quot;&gt;$MBEDTLS_VER&lt;/span&gt;-gpl.tgz&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;pushd&lt;/span&gt; mbedtls-&lt;span class=&quot;variable&quot;&gt;$MBEDTLS_VER&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;make SHARED=1 CFLAGS=&lt;span class=&quot;_&quot;&gt;-f&lt;/span&gt;PIC&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;sudo make DESTDIR=/usr install&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;popd&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="shadowsocks" scheme="http://www.leyar.me/tags/shadowsocks/"/>
+    
+      <category term="centos7" scheme="http://www.leyar.me/tags/centos7/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>科学上网新姿势（docker + ss）</title>
+    <link href="http://www.leyar.me/new-poses-for-scientific-Internet/"/>
+    <id>http://www.leyar.me/new-poses-for-scientific-Internet/</id>
+    <published>2016-04-08T16:31:22.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<p>2016-12-15 更新: Cariana 已失效，可以尝试自建服务器上使用 docker</p>
+<p>最近折腾的东西很杂很乱，笔记都没来得及整理。折腾内容包括但不限于： Docker, Ruby on Rails，vim 进阶用法…当然折腾的内容也比较浅显，没有系统的学习显得有点乱，基本是仅能满足需求而已。</p>
+<p>这里记录下，使用 <a href="https://getcarina.com/" target="_blank" rel="external">Carina by Rackspace</a> + Docker 实现科学上网的过程。（其实用 Docker 搭建 ssserver 很早就有，只不过一直没研究，这里当作练手了)</p>
+<a id="more"></a>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><blockquote>
+<p>操作系统： Arch Linux （Windows 用户参考<a href="http://www.rendoumi.com/wan-quan-mian-fei-de-shadowsocksfu-wu-qi/" target="_blank" rel="external">八戒的博客</a>)<br>涉及内容： Docker 指令，Linux command</p>
+</blockquote>
+<h3 id="注册帐号"><a href="#注册帐号" class="headerlink" title="注册帐号"></a>注册帐号</h3><p>链接：<a href="https://getcarina.com/" target="_blank" rel="external">https://getcarina.com/</a> ，注册步骤很简单，邮箱验证，手机验证即可。据说手机号可以重复验证多个帐号。</p>
+<h3 id="新建-Cluster"><a href="#新建-Cluster" class="headerlink" title="新建 Cluster"></a>新建 Cluster</h3><p>登录界面后的界面，点击 <code>Add Cluster...</code>，进入 <code>Create Cluster</code> 界面，<code>Cluster Name</code> 随便填写一个名字，我这里填写的 <code>ss</code>，点击<code>Create Cluster</code> 按钮，稍等一会，STATUS 变成 <code>active</code> 绿色框框后，点击 <code>Get access</code> 按钮，<code>Download file</code> 下载压缩包到本地。</p>
+<p>例如我是下载到 <code>～/Docker</code> 文件夹里，那么<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ～/Docker</div><div class="line">unzip ss.zip</div></pre></td></tr></table></figure></p>
+<p>此时会 <code>Docker</code> 目录下生成一个 <code>ss</code> 文件夹。</p>
+<h3 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h3><p>Arch 软件仓库有这个软件包的稳定办，可以直接安装<code>Docker</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pacman -S docker</div></pre></td></tr></table></figure></p>
+<h3 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">source</span> ～/Docker/ss/docker.env</div></pre></td></tr></table></figure>
+<p>此时可以直接操作 Docker 了。<br>使用<code>docker info</code> 命令可以检查是否连接成功。</p>
+<h3 id="创建-ss"><a href="#创建-ss" class="headerlink" title="创建 ss"></a>创建 ss</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker network create my_network	<span class="comment"># 创建网络，名为“my_network”</span></div><div class="line">docker run <span class="_">-d</span> --name ss --net my_network -p 40004:40004 oddrationale/docker-shadowsocks <span class="_">-s</span> 0.0.0.0 -p 40004 -k <span class="variable">$YOURPASSWORD</span> -m aes-256-cfb</div></pre></td></tr></table></figure>
+<p>验证启动情况<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker port ss	<span class="comment"># 查询 ss 所使用端口</span></div><div class="line">docker ps	<span class="comment"># 检查进程</span></div></pre></td></tr></table></figure></p>
+<p>如果一切正常，那么可以在客户端进行测试了。</p>
+<h2 id="待实现"><a href="#待实现" class="headerlink" title="待实现"></a>待实现</h2><p>准备自己做个能包含<code>chacha20</code> 加密协议的<code>Docker 镜像</code>，如果能打包配置文件，似乎也不错诶。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;2016-12-15 更新: Cariana 已失效，可以尝试自建服务器上使用 docker&lt;/p&gt;
+&lt;p&gt;最近折腾的东西很杂很乱，笔记都没来得及整理。折腾内容包括但不限于： Docker, Ruby on Rails，vim 进阶用法…当然折腾的内容也比较浅显，没有系统的学习显得有点乱，基本是仅能满足需求而已。&lt;/p&gt;
+&lt;p&gt;这里记录下，使用 &lt;a href=&quot;https://getcarina.com/&quot;&gt;Carina by Rackspace&lt;/a&gt; + Docker 实现科学上网的过程。（其实用 Docker 搭建 ssserver 很早就有，只不过一直没研究，这里当作练手了)&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Docker" scheme="http://www.leyar.me/tags/Docker/"/>
+    
+      <category term="Shadowsocks" scheme="http://www.leyar.me/tags/Shadowsocks/"/>
+    
+      <category term="Carina" scheme="http://www.leyar.me/tags/Carina/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>web 开发学习线路</title>
+    <link href="http://www.leyar.me/skill-tree/"/>
+    <id>http://www.leyar.me/skill-tree/</id>
+    <published>2016-03-23T05:15:00.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<ol>
+<li>Web 框架的基础知识 –&gt; Ruby on Rails<ol>
+<li><a href="https://www.railstutorial.org/book/frontmatter" target="_blank" rel="external">Ruby-on-Rails-tutorial-book</a><ul>
+<li><a href="http://railscasts.com/" target="_blank" rel="external">Railscasts</a></li>
+<li><a href="http://guides.rubyonrails.org/getting_started.html" target="_blank" rel="external">Railsguild</a></li>
+</ul>
+</li>
+<li>Ruby Learning<ul>
+<li>Codecademy –&gt; 编程基本元素（循环、数据结构等）</li>
+<li><a href="http://www.rubyist.net/~slagell/ruby/backtoexamples.html" target="_blank" rel="external">Ruby tutorial</a></li>
+<li>Download and read <a href="http://rubykoans.com/" target="_blank" rel="external">Ryby Koas</a></li>
+<li><a href="http://www.amazon.com/Eloquent-Ruby-Addison-Wesley-Professional-Series/dp/0321584104/ref=sr_1_1?ie=UTF8&amp;qid=1330902043&amp;sr=8-1" target="_blank" rel="external">Eloquent Ruby</a>–进阶  <a id="more"></a></li>
+</ul>
+</li>
+</ol>
+</li>
+<li>前端知识： html + css + Javascript<ul>
+<li><a href="http://www.w3fools.com/" target="_blank" rel="external">w3Fools</a> –&gt; HTML + CSS</li>
+<li><a href="http://docs.jquery.com/Tutorials" target="_blank" rel="external">Javascript</a></li>
+</ul>
+</li>
+<li>版本控制 –&gt; Git<ul>
+<li><a href="https://learn.github.com/p/intro.html" target="_blank" rel="external">Git intro</a></li>
+<li><a href="http://www.gitimmersion.com/" target="_blank" rel="external">Git 进阶</a></li>
+<li><a href="http://rogerdudler.github.com/git-guide/" target="_blank" rel="external">Git 指南</a></li>
+<li><a href="http://book.git-scm.com/" target="_blank" rel="external">Git Bootks</a></li>
+</ul>
+</li>
+<li>部署 –&gt; Heroku<ul>
+<li><a href="http://devcenter.heroku.com/articles/rails3" target="_blank" rel="external">Heroku Rails3</a></li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>精简自<a href="http://blog.jobbole.com/15213/" target="_blank" rel="external">Web 开发：我希望得到的编程学习线路图</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;Web 框架的基础知识 –&amp;gt; Ruby on Rails&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.railstutorial.org/book/frontmatter&quot;&gt;Ruby-on-Rails-tutorial-book&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://railscasts.com/&quot;&gt;Railscasts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://guides.rubyonrails.org/getting_started.html&quot;&gt;Railsguild&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Ruby Learning&lt;ul&gt;
+&lt;li&gt;Codecademy –&amp;gt; 编程基本元素（循环、数据结构等）&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.rubyist.net/~slagell/ruby/backtoexamples.html&quot;&gt;Ruby tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Download and read &lt;a href=&quot;http://rubykoans.com/&quot;&gt;Ryby Koas&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.amazon.com/Eloquent-Ruby-Addison-Wesley-Professional-Series/dp/0321584104/ref=sr_1_1?ie=UTF8&amp;amp;qid=1330902043&amp;amp;sr=8-1&quot;&gt;Eloquent Ruby&lt;/a&gt;–进阶
+    
+    </summary>
+    
+    
+      <category term="web" scheme="http://www.leyar.me/tags/web/"/>
+    
+      <category term="ruby" scheme="http://www.leyar.me/tags/ruby/"/>
+    
+      <category term="css" scheme="http://www.leyar.me/tags/css/"/>
+    
+      <category term="html" scheme="http://www.leyar.me/tags/html/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GIT 常用命令</title>
+    <link href="http://www.leyar.me/common-commands-for-git/"/>
+    <id>http://www.leyar.me/common-commands-for-git/</id>
+    <published>2016-03-18T23:41:50.000Z</published>
+    <updated>2017-02-19T04:03:01.149Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>虽然说这个网上一抓一大把，但毕竟自己经常用到，还是做个记录好查阅。关于 Git，不多做介绍。反正也是给自己看的。</p>
+<p><em>注：以下内容转载自阮一峰的<a href="http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html" target="_blank" rel="external">《常用 Git 命令清单》</a></em></p>
+<hr>
+<p><img src="/images/bg2015120901.png" alt=""></p>
+<p>图解：</p>
+<ul>
+<li>Workspace： 工作区</li>
+<li>Index/Stage：暂存区</li>
+<li>Repository：仓库区（或本地仓库）</li>
+<li>Remote：远程仓库</li>
+</ul>
+<a id="more"></a>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><h3 id="一、新建代码库"><a href="#一、新建代码库" class="headerlink" title="一、新建代码库"></a>一、新建代码库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 在当前目录新建一个Git代码库</span></div><div class="line">$ git init</div><div class="line"></div><div class="line"><span class="comment"># 新建一个目录，将其初始化为Git代码库</span></div><div class="line">$ git init [project-name]</div><div class="line"></div><div class="line"><span class="comment"># 下载一个项目和它的整个代码历史</span></div><div class="line">$ git <span class="built_in">clone</span> [url]</div></pre></td></tr></table></figure>
+<h3 id="二、配置"><a href="#二、配置" class="headerlink" title="二、配置"></a>二、配置</h3><p>Git的设置文件为<code>.gitconfig</code>，它可以在用户住目录下（全局配置），也可以在项目目录下（项目配置）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 显示当前的Git配置</span></div><div class="line">$ git config --list</div><div class="line"></div><div class="line"><span class="comment"># 编辑Git配置文件</span></div><div class="line">$ git config <span class="_">-e</span> [--global]</div><div class="line"></div><div class="line"><span class="comment"># 设置提交代码时的用户信息</span></div><div class="line">$ git config [--global] user.name <span class="string">"[name]"</span></div><div class="line">$ git config [--global] user.email <span class="string">"[email address]"</span></div></pre></td></tr></table></figure></p>
+<h3 id="三、增加-删除文件"><a href="#三、增加-删除文件" class="headerlink" title="三、增加/删除文件"></a>三、增加/删除文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 添加指定文件到暂存区</span></div><div class="line">$ git add [file1] [file2] ...</div><div class="line"></div><div class="line"><span class="comment"># 添加指定目录到暂存区，包括子目录</span></div><div class="line">$ git add [dir]</div><div class="line"></div><div class="line"><span class="comment"># 添加当前目录的所有文件到暂存区</span></div><div class="line">$ git add .</div><div class="line"></div><div class="line"><span class="comment"># 添加每个变化前，都会要求确认</span></div><div class="line"><span class="comment"># 对于同一个文件的多处变化，可以实现分次提交</span></div><div class="line">$ git add -p</div><div class="line"></div><div class="line"><span class="comment"># 删除工作区文件，并且将这次删除放入暂存区</span></div><div class="line">$ git rm [file1] [file2] ...</div><div class="line"></div><div class="line"><span class="comment"># 停止追踪指定文件，但该文件会保留在工作区</span></div><div class="line">$ git rm --cached [file]</div><div class="line"></div><div class="line"><span class="comment"># 改名文件，并且将这个改名放入暂存区</span></div><div class="line">$ git mv [file-original] [file-renamed]</div></pre></td></tr></table></figure>
+<h3 id="四、代码提交"><a href="#四、代码提交" class="headerlink" title="四、代码提交"></a>四、代码提交</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 提交暂存区到仓库区</span></div><div class="line">$ git commit -m [message]</div><div class="line"></div><div class="line"><span class="comment"># 提交暂存区的指定文件到仓库区</span></div><div class="line">$ git commit [file1] [file2] ... -m [message]</div><div class="line"></div><div class="line"><span class="comment"># 提交工作区自上次commit之后的变化，直接到仓库区</span></div><div class="line">$ git commit <span class="_">-a</span></div><div class="line"></div><div class="line"><span class="comment"># 提交时显示所有diff信息</span></div><div class="line">$ git commit -v</div><div class="line"></div><div class="line"><span class="comment"># 使用一次新的commit，替代上一次提交</span></div><div class="line"><span class="comment"># 如果代码没有任何新变化，则用来改写上一次commit的提交信息</span></div><div class="line">$ git commit --amend -m [message]</div><div class="line"></div><div class="line"><span class="comment"># 重做上一次commit，并包括指定文件的新变化</span></div><div class="line">$ git commit --amend [file1] [file2] ...</div></pre></td></tr></table></figure>
+<h3 id="五、分支"><a href="#五、分支" class="headerlink" title="五、分支"></a>五、分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列出所有本地分支</span></div><div class="line">$ git branch</div><div class="line"></div><div class="line"><span class="comment"># 列出所有远程分支</span></div><div class="line">$ git branch -r</div><div class="line"></div><div class="line"><span class="comment"># 列出所有本地分支和远程分支</span></div><div class="line">$ git branch <span class="_">-a</span></div><div class="line"></div><div class="line"><span class="comment"># 新建一个分支，但依然停留在当前分支</span></div><div class="line">$ git branch [branch-name]</div><div class="line"></div><div class="line"><span class="comment"># 新建一个分支，并切换到该分支</span></div><div class="line">$ git checkout -b [branch]</div><div class="line"></div><div class="line"><span class="comment"># 新建一个分支，指向指定commit</span></div><div class="line">$ git branch [branch] [commit]</div><div class="line"></div><div class="line"><span class="comment"># 新建一个分支，与指定的远程分支建立追踪关系</span></div><div class="line">$ git branch --track [branch] [remote-branch]</div><div class="line"></div><div class="line"><span class="comment"># 切换到指定分支，并更新工作区</span></div><div class="line">$ git checkout [branch-name]</div><div class="line"></div><div class="line"><span class="comment"># 切换到上一个分支</span></div><div class="line">$ git checkout -</div><div class="line"></div><div class="line"><span class="comment"># 建立追踪关系，在现有分支与指定的远程分支之间</span></div><div class="line">$ git branch --set-upstream [branch] [remote-branch]</div><div class="line"></div><div class="line"><span class="comment"># 合并指定分支到当前分支</span></div><div class="line">$ git merge [branch]</div><div class="line"></div><div class="line"><span class="comment"># 选择一个commit，合并进当前分支</span></div><div class="line">$ git cherry-pick [commit]</div><div class="line"></div><div class="line"><span class="comment"># 删除分支</span></div><div class="line">$ git branch <span class="_">-d</span> [branch-name]</div><div class="line"></div><div class="line"><span class="comment"># 删除远程分支</span></div><div class="line">$ git push origin --delete [branch-name]</div><div class="line">$ git branch -dr [remote/branch]</div></pre></td></tr></table></figure>
+<h3 id="六、标签"><a href="#六、标签" class="headerlink" title="六、标签"></a>六、标签</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 列出所有tag</span></div><div class="line">$ git tag</div><div class="line"></div><div class="line"><span class="comment"># 新建一个tag在当前commit</span></div><div class="line">$ git tag [tag]</div><div class="line"></div><div class="line"><span class="comment"># 新建一个tag在指定commit</span></div><div class="line">$ git tag [tag] [commit]</div><div class="line"></div><div class="line"><span class="comment"># 删除本地tag</span></div><div class="line">$ git tag <span class="_">-d</span> [tag]</div><div class="line"></div><div class="line"><span class="comment"># 删除远程tag</span></div><div class="line">$ git push origin :refs/tags/[tagName]</div><div class="line"></div><div class="line"><span class="comment"># 查看tag信息</span></div><div class="line">$ git show [tag]</div><div class="line"></div><div class="line"><span class="comment"># 提交指定tag</span></div><div class="line">$ git push [remote] [tag]</div><div class="line"></div><div class="line"><span class="comment"># 提交所有tag</span></div><div class="line">$ git push [remote] --tags</div><div class="line"></div><div class="line"><span class="comment"># 新建一个分支，指向某个tag</span></div><div class="line">$ git checkout -b [branch] [tag]</div></pre></td></tr></table></figure>
+<h3 id="七、查看信息"><a href="#七、查看信息" class="headerlink" title="七、查看信息"></a>七、查看信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 显示有变更的文件</span></div><div class="line">$ git status</div><div class="line"></div><div class="line"><span class="comment"># 显示当前分支的版本历史</span></div><div class="line">$ git <span class="built_in">log</span></div><div class="line"></div><div class="line"><span class="comment"># 显示commit历史，以及每次commit发生变更的文件</span></div><div class="line">$ git <span class="built_in">log</span> --stat</div><div class="line"></div><div class="line"><span class="comment"># 搜索提交历史，根据关键词</span></div><div class="line">$ git <span class="built_in">log</span> -S [keyword]</div><div class="line"></div><div class="line"><span class="comment"># 显示某个commit之后的所有变动，每个commit占据一行</span></div><div class="line">$ git <span class="built_in">log</span> [tag] HEAD --pretty=format:%s</div><div class="line"></div><div class="line"><span class="comment"># 显示某个commit之后的所有变动，其"提交说明"必须符合搜索条件</span></div><div class="line">$ git <span class="built_in">log</span> [tag] HEAD --grep feature</div><div class="line"></div><div class="line"><span class="comment"># 显示某个文件的版本历史，包括文件改名</span></div><div class="line">$ git <span class="built_in">log</span> --follow [file]</div><div class="line">$ git whatchanged [file]</div><div class="line"></div><div class="line"><span class="comment"># 显示指定文件相关的每一次diff</span></div><div class="line">$ git <span class="built_in">log</span> -p [file]</div><div class="line"></div><div class="line"><span class="comment"># 显示过去5次提交</span></div><div class="line">$ git <span class="built_in">log</span> -5 --pretty --oneline</div><div class="line"></div><div class="line"><span class="comment"># 显示所有提交过的用户，按提交次数排序</span></div><div class="line">$ git shortlog -sn</div><div class="line"></div><div class="line"><span class="comment"># 显示指定文件是什么人在什么时间修改过</span></div><div class="line">$ git blame [file]</div><div class="line"></div><div class="line"><span class="comment"># 显示暂存区和工作区的差异</span></div><div class="line">$ git diff</div><div class="line"></div><div class="line"><span class="comment"># 显示暂存区和上一个commit的差异</span></div><div class="line">$ git diff --cached [file]</div><div class="line"></div><div class="line"><span class="comment"># 显示工作区与当前分支最新commit之间的差异</span></div><div class="line">$ git diff HEAD</div><div class="line"></div><div class="line"><span class="comment"># 显示两次提交之间的差异</span></div><div class="line">$ git diff [first-branch]...[second-branch]</div><div class="line"></div><div class="line"><span class="comment"># 显示今天你写了多少行代码</span></div><div class="line">$ git diff --shortstat <span class="string">"@&#123;0 day ago&#125;"</span></div><div class="line"></div><div class="line"><span class="comment"># 显示某次提交的元数据和内容变化</span></div><div class="line">$ git show [commit]</div><div class="line"></div><div class="line"><span class="comment"># 显示某次提交发生变化的文件</span></div><div class="line">$ git show --name-only [commit]</div><div class="line"></div><div class="line"><span class="comment"># 显示某次提交时，某个文件的内容</span></div><div class="line">$ git show [commit]:[filename]</div><div class="line"></div><div class="line"><span class="comment"># 显示当前分支的最近几次提交</span></div><div class="line">$ git reflog</div></pre></td></tr></table></figure>
+<h3 id="八、远程同步"><a href="#八、远程同步" class="headerlink" title="八、远程同步"></a>八、远程同步</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 下载远程仓库的所有变动</span></div><div class="line">$ git fetch [remote]</div><div class="line"></div><div class="line"><span class="comment"># 显示所有远程仓库</span></div><div class="line">$ git remote -v</div><div class="line"></div><div class="line"><span class="comment"># 显示某个远程仓库的信息</span></div><div class="line">$ git remote show [remote]</div><div class="line"></div><div class="line"><span class="comment"># 增加一个新的远程仓库，并命名</span></div><div class="line">$ git remote add [shortname] [url]</div><div class="line"></div><div class="line"><span class="comment"># 取回远程仓库的变化，并与本地分支合并</span></div><div class="line">$ git pull [remote] [branch]</div><div class="line"></div><div class="line"><span class="comment"># 上传本地指定分支到远程仓库</span></div><div class="line">$ git push [remote] [branch]</div><div class="line"></div><div class="line"><span class="comment"># 强行推送当前分支到远程仓库，即使有冲突</span></div><div class="line">$ git push [remote] --force</div><div class="line"></div><div class="line"><span class="comment"># 推送所有分支到远程仓库</span></div><div class="line">$ git push [remote] --all</div></pre></td></tr></table></figure>
+<h3 id="九、撤销"><a href="#九、撤销" class="headerlink" title="九、撤销"></a>九、撤销</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 恢复暂存区的指定文件到工作区</span></div><div class="line">$ git checkout [file]</div><div class="line"></div><div class="line"><span class="comment"># 恢复某个commit的指定文件到暂存区和工作区</span></div><div class="line">$ git checkout [commit] [file]</div><div class="line"></div><div class="line"><span class="comment"># 恢复暂存区的所有文件到工作区</span></div><div class="line">$ git checkout .</div><div class="line"></div><div class="line"><span class="comment"># 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变</span></div><div class="line">$ git reset [file]</div><div class="line"></div><div class="line"><span class="comment"># 重置暂存区与工作区，与上一次commit保持一致</span></div><div class="line">$ git reset --hard</div><div class="line"></div><div class="line"><span class="comment"># 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变</span></div><div class="line">$ git reset [commit]</div><div class="line"></div><div class="line"><span class="comment"># 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致</span></div><div class="line">$ git reset --hard [commit]</div><div class="line"></div><div class="line"><span class="comment"># 重置当前HEAD为指定commit，但保持暂存区和工作区不变</span></div><div class="line">$ git reset --keep [commit]</div><div class="line"></div><div class="line"><span class="comment"># 新建一个commit，用来撤销指定commit</span></div><div class="line"><span class="comment"># 后者的所有变化都将被前者抵消，并且应用到当前分支</span></div><div class="line">$ git revert [commit]</div><div class="line"></div><div class="line"><span class="comment"># 暂时将未提交的变化移除，稍后再移入</span></div><div class="line">$ git stash</div><div class="line">$ git stash pop</div></pre></td></tr></table></figure>
+<h3 id="十、其他"><a href="#十、其他" class="headerlink" title="十、其他"></a>十、其他</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 生成一个可供发布的压缩包</span></div><div class="line">$ git archive</div></pre></td></tr></table></figure>
+<p>扩展阅读：</p>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html" target="_blank" rel="external">《Git 工作流程 - 阮一峰》</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;虽然说这个网上一抓一大把，但毕竟自己经常用到，还是做个记录好查阅。关于 Git，不多做介绍。反正也是给自己看的。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;注：以下内容转载自阮一峰的&lt;a href=&quot;http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html&quot;&gt;《常用 Git 命令清单》&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/images/bg2015120901.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;图解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Workspace： 工作区&lt;/li&gt;
+&lt;li&gt;Index/Stage：暂存区&lt;/li&gt;
+&lt;li&gt;Repository：仓库区（或本地仓库）&lt;/li&gt;
+&lt;li&gt;Remote：远程仓库&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="git" scheme="http://www.leyar.me/tags/git/"/>
+    
+      <category term="command" scheme="http://www.leyar.me/tags/command/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Archlinux 下踩过的坑（持续更新）</title>
+    <link href="http://www.leyar.me/some-pit/"/>
+    <id>http://www.leyar.me/some-pit/</id>
+    <published>2016-03-18T22:53:52.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>今天又给一台台式装上了 Archlinux。发觉每新安装一次 Arch，对这个系统的了解就y更深入一点，解决起问题来也没以前那么茫然了，对它的喜爱又多了一些，甚至有赶超 MAC OSX 的倾向。</p>
+<p>这里就记录一些安装过程遇到的坑。以减少以后掉坑的次数。<br><a id="more"></a></p>
+<h3 id="那些踩过的坑"><a href="#那些踩过的坑" class="headerlink" title="那些踩过的坑"></a>那些踩过的坑</h3><h4 id="GDM-登出黑屏现象"><a href="#GDM-登出黑屏现象" class="headerlink" title="GDM 登出黑屏现象"></a>GDM 登出黑屏现象</h4><blockquote>
+<p>为了屏保，就选择了 GDM + GNOME3 的桌面环境组合。然遇到个问题，在点击 Logout<br>想注销用户时，会出现黑屏现象。无法唤醒，只能强制关机。<br><strong>解决：</strong>编辑<code>/etc/gdm/custom.conf</code>文件，将<code>WaylandEnable=false</code>前面的注释去掉。原因参考<a href="https://bbs.archlinux.org/viewtopic.php?pid=1582893#p1582893" target="_blank" rel="external">这里</a></p>
+</blockquote>
+<h4 id="gnome-terminal-无法启动"><a href="#gnome-terminal-无法启动" class="headerlink" title="gnome-terminal 无法启动"></a>gnome-terminal 无法启动</h4><blockquote>
+<p>刚安装完桌面环境，想启动 terminal ，结果点击图标，转了一会圈圈就没了。启动不起来。<br><strong>解决：</strong>这是由于登录用户 - Acconts settings 里面的 language 不正确导致的。编辑 <code>/etc/locale.gen</code>时，反注释 <code>en_US.UTF-8</code>，执行<code>locale-gen</code>，使语言生效。并且执行<code>echo LANG=en_US.UTF-8 &gt; /etc/locale.conf</code> 添加配置文件。</p>
+</blockquote>
+<h4 id="gnome-terminal-中无法调出-fctix-中文输入"><a href="#gnome-terminal-中无法调出-fctix-中文输入" class="headerlink" title="gnome-terminal 中无法调出 fctix 中文输入"></a>gnome-terminal 中无法调出 fctix 中文输入</h4><blockquote>
+<p>这个在<a href="https://wiki.archlinux.org/index.php/Fcitx_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87" target="_blank" rel="external">官方文档</a>)有解决方法。照搬过来。<br><strong>解决：</strong>修改 GSettings 配置，执行如下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; gsettings <span class="built_in">set</span> \</div><div class="line">&gt;   org.gnome.settings-daemon.plugins.xsettings overrides \</div><div class="line">&gt;   <span class="string">"&#123;'Gtk/IMModule':&lt;'fcitx'&gt;&#125;"</span></div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>暂时遇到的问题就这么多，后续遇到在慢慢添加。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;今天又给一台台式装上了 Archlinux。发觉每新安装一次 Arch，对这个系统的了解就y更深入一点，解决起问题来也没以前那么茫然了，对它的喜爱又多了一些，甚至有赶超 MAC OSX 的倾向。&lt;/p&gt;
+&lt;p&gt;这里就记录一些安装过程遇到的坑。以减少以后掉坑的次数。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="arch" scheme="http://www.leyar.me/tags/arch/"/>
+    
+      <category term="gnome" scheme="http://www.leyar.me/tags/gnome/"/>
+    
+      <category term="gdm" scheme="http://www.leyar.me/tags/gdm/"/>
+    
+      <category term="fctix" scheme="http://www.leyar.me/tags/fctix/"/>
+    
+      <category term="terminal" scheme="http://www.leyar.me/tags/terminal/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于博客一些整改</title>
+    <link href="http://www.leyar.me/something-new-about-blog/"/>
+    <id>http://www.leyar.me/something-new-about-blog/</id>
+    <published>2016-03-18T22:08:05.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实一直想给博客换一个主题，顺便也将多说评论迁移到 Disqus，原因之一是为了与主博客统一。原因之二是多说的评论提醒功能形同虚设，经常性收不到邮件提示，再加上现在多说几乎没有人在维护了，以防万一，还是早点迁移出来。</p>
+<blockquote>
+<p>计划整改内容：</p>
+<ul>
+<li><del>主题由 <a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">Yilia</a> 更换为 <a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">Next</a>;</del></li>
+<li><del>评论从多说迁移至 Disqus;</del></li>
+<li>博客添加 SSL;</li>
+<li>邮箱服务搭建;</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><h3 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h3><p>看大家对 Next 的评价很高，就心痒痒给这个博客也换上了。不过发现似乎大部分功能自己也用不上，还有点多余。但整个页面看着也还可以，适合用来做生活博客，貌似不太适合用来存放技术笔记？等找到更好的主题，再换着玩。</p>
+<p>给 blog 也重新换了一个 favicon，看着感觉还行。这样也好区分我的生活博跟笔记博了。毕竟两个都存了书签，经常性出误点的情况，囧…</p>
+<h3 id="评论"><a href="#评论" class="headerlink" title="评论"></a>评论</h3><p>将多说评论转到 Disqus, Google 到的方法有两个，一个是通过 Python 2.x 来进行转换，一个是通过 php，因为没有装 Python 2，于是我选择了通过 php 转换。由于评论没几条，所以操作也很快。具体方法详见<a href="http://urouge.github.io/migrate-to-disqus/" target="_blank" rel="external">多说评论迁移至Disqus</a></p>
+<p>当然也因为用了 Disqus，这个主题的一些特色功能也用不上了。比如多说评论显示 UA，还有 jiathis 之类的。不过自己也不会用到，也就无所谓了。</p>
+<h3 id="SSL-amp-amp-邮箱"><a href="#SSL-amp-amp-邮箱" class="headerlink" title="SSL &amp;&amp; 邮箱"></a>SSL &amp;&amp; 邮箱</h3><p>SSL 因为生活博客已经换上，这个博客要添加上也很快。自建邮箱功能还在研究中，预备使用 Postfix。打算给生活博客换域名，到时候会用到群发功能。</p>
+<p>暂时，就先这样。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;其实一直想给博客换一个主题，顺便也将多说评论迁移到 Disqus，原因之一是为了与主博客统一。原因之二是多说的评论提醒功能形同虚设，经常性收不到邮件提示，再加上现在多说几乎没有人在维护了，以防万一，还是早点迁移出来。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;计划整改内容：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;del&gt;主题由 &lt;a href=&quot;https://github.com/litten/hexo-theme-yilia&quot;&gt;Yilia&lt;/a&gt; 更换为 &lt;a href=&quot;https://github.com/iissnan/hexo-theme-next&quot;&gt;Next&lt;/a&gt;;&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;评论从多说迁移至 Disqus;&lt;/del&gt;&lt;/li&gt;
+&lt;li&gt;博客添加 SSL;&lt;/li&gt;
+&lt;li&gt;邮箱服务搭建;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://www.leyar.me/tags/hexo/"/>
+    
+      <category term="blog" scheme="http://www.leyar.me/tags/blog/"/>
+    
+      <category term="theme" scheme="http://www.leyar.me/tags/theme/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MariaDB 一些使用命令</title>
+    <link href="http://www.leyar.me/usage-of-mysql/"/>
+    <id>http://www.leyar.me/usage-of-mysql/</id>
+    <published>2016-03-10T17:04:00.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>涉及到数据库，偶尔会用到一些命令。这里记录一下用作备忘。</p>
+<h3 id="初始操作"><a href="#初始操作" class="headerlink" title="初始操作"></a>初始操作</h3><p>初始化数据库服务程序<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql_secure_installation</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>防火墙允许策略<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --permanent --add-service=mysql</div><div class="line">firewall-cmd --reload</div></pre></td></tr></table></figure></p>
+<p>登陆操作<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p	# 登陆 root 账号</div><div class="line">show databases;		# 查看已有数据库</div><div class="line">set password = password('123456')	# 修改当前用户在数据库中的密码为 123456</div><div class="line">exit			# 登出</div></pre></td></tr></table></figure></p>
+<h3 id="管理数据库与表单"><a href="#管理数据库与表单" class="headerlink" title="管理数据库与表单"></a>管理数据库与表单</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">create user name@localhost IDENTIFIED BY 'password';	# name 用户名 localhost 主机名 password 密码</div><div class="line">use mysql;		# 进入 mysql 数据库</div><div class="line">select host,user,password from user where user="name";	# 查看新建的用户、主机、姓名与密码信息</div></pre></td></tr></table></figure>
+<h4 id="授权与取消授权"><a href="#授权与取消授权" class="headerlink" title="授权与取消授权"></a>授权与取消授权</h4><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GRANT 权限 ON 数据库.表单名称 TO 用户名@主机名	# 授权特定数据库表单</div><div class="line">GRANT 权限 ON 数据库.* TO 用户名@主机名		# 授权特定数据库所有表单</div><div class="line">GRANT 权限 ON *.* TO 用户名@主机名			# 授权所有数据库及表单</div><div class="line">GRANT 权限1,权限2 ON 数据库.* TO 用户名@主机名	# 多个授权特定数据库所有表单</div><div class="line">GRANT ALL PRIVILEGES ON *。* TO 用户名@主机名	# 全部授权所有数据库表单</div><div class="line">GRANT SELECT,UPDATE,DELETE,INSERT on mysql.user to name@localhost;	# 给name用户对 user 表单的查询、更新、删除、插入权限</div><div class="line">show grants for name@localhost;			# 查看 name用户的权限</div><div class="line">revoke SELECT,UPDATE,DELETE,INSERT on mysql.user from name@localhost;	# 取消 name 用户对 user 表单的查询、更新、删除、插入权限</div></pre></td></tr></table></figure>
+<h4 id="表单"><a href="#表单" class="headerlink" title="表单"></a>表单</h4><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show tables;	# 查看表单</div></pre></td></tr></table></figure>
+<p>创建表单示例<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> books(<span class="keyword">name</span>,price,pages) <span class="keyword">VALUES</span>(<span class="string">'secrets'</span>,<span class="string">'60'</span>,<span class="number">518</span>);</div><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> books;</div><div class="line"><span class="keyword">update</span> books <span class="keyword">set</span> price=<span class="number">55</span> ;</div><div class="line"><span class="keyword">select</span> <span class="keyword">name</span>,price <span class="keyword">from</span> books;</div><div class="line"><span class="keyword">delete</span> <span class="keyword">from</span> books;</div></pre></td></tr></table></figure></p>
+<p>where 查找<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> * <span class="keyword">from</span> books <span class="keyword">where</span> price! =<span class="number">90</span></div></pre></td></tr></table></figure></p>
+<p>关于表单的操作，可以查看<a href="http://www.linuxprobe.com/chapter-18/#182_ma" target="_blank" rel="external">这里</a></p>
+<h3 id="备份与恢复"><a href="#备份与恢复" class="headerlink" title="备份与恢复"></a>备份与恢复</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqldump -u root -p mysql &gt; /root/mysql.dump		<span class="comment"># 导出数据库， mysql 数据库名</span></div><div class="line">mysql -u root -p mysql &lt; /root/mysql.dump		<span class="comment"># 导入数据库</span></div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">drop database mysql;		# 删除数据库 mysql</div><div class="line">create database mysql;		# 创建数据库 mysql1</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;涉及到数据库，偶尔会用到一些命令。这里记录一下用作备忘。&lt;/p&gt;
+&lt;h3 id=&quot;初始操作&quot;&gt;&lt;a href=&quot;#初始操作&quot; class=&quot;headerlink&quot; title=&quot;初始操作&quot;&gt;&lt;/a&gt;初始操作&lt;/h3&gt;&lt;p&gt;初始化数据库服务程序&lt;br&gt;&lt;figure class=&quot;highlight sql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;mysql_secure_installation&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="mysql" scheme="http://www.leyar.me/tags/mysql/"/>
+    
+      <category term="mariadb" scheme="http://www.leyar.me/tags/mariadb/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>为 Hexo 博客添加 404 页面</title>
+    <link href="http://www.leyar.me/create-404-page/"/>
+    <id>http://www.leyar.me/create-404-page/</id>
+    <published>2016-03-09T16:14:00.000Z</published>
+    <updated>2017-02-19T04:03:01.149Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一直想为自己的 hexo 博客添加 404 页面来着。 Google 搜到的很多方法，貌似都不是特别完美。这里记录下自己的创建方法。</p>
+<blockquote>
+<p>大致思路如下</p>
+<ul>
+<li>创建<code>404.md</code>页面</li>
+<li>通过编辑<code>Front-matter</code>来定义页面的布局，固定链接； </li>
+<li>编辑 nginx 配置文件</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="创建页面"><a href="#创建页面" class="headerlink" title="创建页面"></a>创建页面</h3><p>首先，创建一个<code>404.md</code> 文件放到 <code>source</code> 目录下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">touch ~/hexo/<span class="built_in">source</span>/404.md</div></pre></td></tr></table></figure>
+<p>接下来，编辑 404 页面的内容，你可以自己修改成自己喜欢的样式嵌套在主题下面，也可以使用公益 404 页面，或者 google 的 404 小游戏，也不错。</p>
+<p>我这里选择了 404 公益。有两个选择：</p>
+<ul>
+<li><a href="http://www.qq.com/404/" target="_blank" rel="external">腾讯404</a></li>
+<li><a href="http://yibo.iyiyun.com/Home/Index/web404" target="_blank" rel="external">益播</a></li>
+</ul>
+<p>我用的是腾讯 404。 编辑 <code>404.md</code> 文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi ~/hexo/<span class="built_in">source</span>/404.md</div></pre></td></tr></table></figure>
+<p>编辑 Front-matter ，并添加腾讯 404 页面代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">layout: false </div><div class="line">comments: false</div><div class="line">permalink: /404.html</div><div class="line"></div><div class="line">---</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"http://www.qq.com/404/search_children.js"</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span> <span class="attr">homePageUrl</span>=<span class="string">"http://leyar.me"</span> <span class="attr">homePageName</span>=<span class="string">"返回主页"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li>将<code>homePageUrl=&quot;&quot;</code> 引号内的内容改成你的网址；</li>
+<li>如果你是自定义 404，并且搭配主题，则需要去掉 <code>layout: false</code> 这行。</li>
+</ul>
+<h3 id="编辑-NGINX-配置文件"><a href="#编辑-NGINX-配置文件" class="headerlink" title="编辑 NGINX 配置文件"></a>编辑 NGINX 配置文件</h3><p>在 server 区块内添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error_page   404   /404.html;</div></pre></td></tr></table></figure>
+<p>现在 deploy 再刷新网页随便打开一个不存在的页面看看你的 404 页面是不是添加成功啦？</p>
+<p>你可以试试我的404：<a href="http://www.leyar.me/none">http://www.leyar.me/none</a></p>
+<h2 id="相关资料："><a href="#相关资料：" class="headerlink" title="相关资料："></a>相关资料：</h2><ul>
+<li><a href="http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/">关于在 Ubuntu 上部署 Hexo 到 Github</a></li>
+<li><a href="http://www.leyar.me/After-installing-Hexo/">Hexo 之后续篇</a></li>
+<li><a href="http://www.leyar.me/Digitalocean-vps-nginx-setup/">通过 rsync 将 Hexo 部署到 Digitalocean vps</a></li>
+<li><a href="http://www.leyar.me/hexo-deploy-to-git-error/">Hexo 部署到 GitHub 出错</a></li>
+<li><a href="http://www.leyar.me/hexo-nginx-403-forbidden/">Hexo 出现 Nginx 403 错误</a></li>
+<li><a href="http://www.leyar.me/backup-your-blog-to-github/">备份 Hexo 源文件至 GitHub</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;一直想为自己的 hexo 博客添加 404 页面来着。 Google 搜到的很多方法，貌似都不是特别完美。这里记录下自己的创建方法。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;大致思路如下&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建&lt;code&gt;404.md&lt;/code&gt;页面&lt;/li&gt;
+&lt;li&gt;通过编辑&lt;code&gt;Front-matter&lt;/code&gt;来定义页面的布局，固定链接； &lt;/li&gt;
+&lt;li&gt;编辑 nginx 配置文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://www.leyar.me/tags/hexo/"/>
+    
+      <category term="nginx" scheme="http://www.leyar.me/tags/nginx/"/>
+    
+      <category term="404" scheme="http://www.leyar.me/tags/404/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>备份 Hexo 源文件至 GitHub</title>
+    <link href="http://www.leyar.me/backup-your-blog-to-github/"/>
+    <id>http://www.leyar.me/backup-your-blog-to-github/</id>
+    <published>2016-03-09T10:34:08.000Z</published>
+    <updated>2017-02-18T20:23:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这个博客一开始是部署到 GitHub 的，但是每次 Deploy 只是将生成的 html 文件部署进去。根目录文件还是在本机子，这样在换机子之后还得把整个 hexo 目录打包到新电脑，比较麻烦。我前面的操作方式是将真个根目录 push 到同仓库的一个 blog 分支下，当时没有记录操作方法。恰逢自己的生活博客也迁移到了 hexo 上，计划也将他备份到 GitHub，这里将过程在这里记录一下。</p>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h3><p>已创建有 GitHub 仓库，并且已使用 <code>hexo-deployer-git</code> 部署到 master 分支。<br>如果不满足请自行 google hexo 部署到 GitHub 的操作方法。</p>
+<a id="more"></a>
+<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><p>首先在官网新建一个仓库，比如我新建的仓库名为<code>ileyar.com</code></p>
+<p>在本地 hexo <strong>根目录</strong>下，初始化 git 仓库<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git init</div></pre></td></tr></table></figure></p>
+<p>创建并切换到名为“blog” 的分支<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout -b blog</div></pre></td></tr></table></figure></p>
+<p>添加 README，并填写相关的说明，此步骤可略过<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git add README.md</div></pre></td></tr></table></figure></p>
+<p>创建忽略规则文件 <code>.gitignore</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi .gitignore</div></pre></td></tr></table></figure></p>
+<p>按需添加如下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.DS_Store </div><div class="line">Thumbs.db</div><div class="line">db.json  </div><div class="line">*.log</div><div class="line">.deploy*/</div><div class="line">node_modules/</div><div class="line">.npmignore</div><div class="line">public/</div></pre></td></tr></table></figure></p>
+<p>上面最后一行忽略 public 目录，因其已被 hexo 插件同步到 master 分支里，因此不需要再同步，deploy 是 hexo 的 git 配置存放目录，也不需要同步。其他内容可选择忽略也可以选择同步。</p>
+<blockquote>
+<p>备注： 如果后面要修改 <code>.gitignore</code> 文件，为使其忽略规则生效，需要先通过<br><code>git rm --cached file</code>, 然后修改 <code>.gitignore</code> 文件，再<code>git commit -am &quot;xxx&quot;</code>进行提交即可。</p>
+</blockquote>
+<p>添加内容到仓库并提交到远程仓库<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git add .				<span class="comment"># git add -A</span></div><div class="line">git commit -m <span class="string">"first commit"</span></div><div class="line">git remote add origin git@github.com:iLeyar/ileyar.com.git		<span class="comment"># 后面仓库目录改成自己新建的。</span></div><div class="line">git push -u origin hexo</div></pre></td></tr></table></figure></p>
+<h2 id="通过-git-submodule-来同步第三方主题"><a href="#通过-git-submodule-来同步第三方主题" class="headerlink" title="通过 git submodule 来同步第三方主题"></a>通过 git submodule 来同步第三方主题</h2><p>首先先将主题 fork 到自己仓库，例如我目前在用的主题<a href="https://github.com/iLeyar/hexo-theme-apollo" target="_blank" rel="external">hexo-theme-apollo</a></p>
+<p>然后执行<code>git submodule</code>:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git submodule add git@github.com:iLeyar/hexo-theme-apollo.git themes/apollo</div></pre></td></tr></table></figure></p>
+<p>当主题下载下来并且修改完成后，可以通过<code>git submodule push</code>来提交到远程仓库。也可以执行如下命令来操作：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git commit -am <span class="string">"update theme"</span></div><div class="line">git push origin blog</div></pre></td></tr></table></figure></p>
+<p>在其他电脑同步源文件时，需要执行如下命令来同步主题<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git submodule init</div><div class="line">git submodule update</div></pre></td></tr></table></figure></p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>按照以上的步骤就进行了 hexo 源文件的初次备份。<br>以后每次修改了内容之后，都可通过以下几条命令实现同步。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add .</div><div class="line">git commit -m <span class="string">"..."</span>	 <span class="comment"># 双引号内填写更新内容</span></div><div class="line">git push origin hexo	<span class="comment"># 或者 git push</span></div></pre></td></tr></table></figure>
+<p>另外刚在 <a href="http://stackoverflow.com/questions/572549/difference-between-git-add-a-and-git-add" target="_blank" rel="external">stackoverflow</a> 上看到一个关于 <code>git add .</code> , <code>git add -u</code> 以及 <code>git add -A</code> 的区别。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add -A	<span class="comment"># stages **ALL**</span></div><div class="line">git add .	<span class="comment"># stages new and modified, **without deleted**</span></div><div class="line">git add -u	<span class="comment"># stages modified and deleted, **without new**</span></div></pre></td></tr></table></figure></p>
+<p>相关资料：</p>
+<ul>
+<li><a href="http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/">关于在 Ubuntu 上部署 Hexo 到 Github</a></li>
+<li><a href="http://www.leyar.me/After-installing-Hexo/">Hexo 之后续篇</a></li>
+<li><a href="http://www.leyar.me/Digitalocean-vps-nginx-setup/">通过 rsync 将 Hexo 部署到 Digitalocean vps</a></li>
+<li><a href="http://www.leyar.me/hexo-deploy-to-git-error/">Hexo 部署到 GitHub 出错</a></li>
+<li><a href="http://www.leyar.me/hexo-nginx-403-forbidden/">Hexo 出现 Nginx 403 错误</a></li>
+<li><a href="http://www.leyar.me/create-404-page">为 Hexo 博客添加404 页面</a></li>
+</ul>
+<p><em>本文最后更新：2017-2-19</em></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;这个博客一开始是部署到 GitHub 的，但是每次 Deploy 只是将生成的 html 文件部署进去。根目录文件还是在本机子，这样在换机子之后还得把整个 hexo 目录打包到新电脑，比较麻烦。我前面的操作方式是将真个根目录 push 到同仓库的一个 blog 分支下，当时没有记录操作方法。恰逢自己的生活博客也迁移到了 hexo 上，计划也将他备份到 GitHub，这里将过程在这里记录一下。&lt;/p&gt;
+&lt;h2 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h2&gt;&lt;h3 id=&quot;前提&quot;&gt;&lt;a href=&quot;#前提&quot; class=&quot;headerlink&quot; title=&quot;前提&quot;&gt;&lt;/a&gt;前提&lt;/h3&gt;&lt;p&gt;已创建有 GitHub 仓库，并且已使用 &lt;code&gt;hexo-deployer-git&lt;/code&gt; 部署到 master 分支。&lt;br&gt;如果不满足请自行 google hexo 部署到 GitHub 的操作方法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://www.leyar.me/tags/hexo/"/>
+    
+      <category term="git" scheme="http://www.leyar.me/tags/git/"/>
+    
+      <category term="backup" scheme="http://www.leyar.me/tags/backup/"/>
+    
+      <category term="github" scheme="http://www.leyar.me/tags/github/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Archlinux 下为 wndr4300 编译 OpenWrt trunk 版固件</title>
+    <link href="http://www.leyar.me/openwrt-buildroot-for-wndr4300/"/>
+    <id>http://www.leyar.me/openwrt-buildroot-for-wndr4300/</id>
+    <published>2016-02-24T04:46:00.000Z</published>
+    <updated>2016-12-15T04:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间一直想给我的 wndr4300 接个 USB 移动硬盘实现网络共享，然而一直未能成功，针对遇见的问题 Google 了许久并且也曾试图在<a href="https://v2ex.com/t/258234#reply19" target="_blank" rel="external">V2EX</a>上寻求过帮助，未果。后来在 <a href="https://forum.openwrt.org/viewtopic.php?id=52504" target="_blank" rel="external">openwrt</a> 论坛上搜到个跟我出现问题一模一样的人，他的解决办法是重新刷固件，如此也让我有了重新刷固件的念头。</p>
+<blockquote>
+<p><a href="https://wiki.openwrt.org/doc/howto/obtain.firmware" target="_blank" rel="external">官方</a>获取固件的 5 种方式：</p>
+<ol>
+<li>从官网下载服务器下载预编译好的固件；</li>
+<li>使用<a href="https://wiki.openwrt.org/doc/howto/obtain.firmware.generate" target="_blank" rel="external">Image Generator</a> 生成固件镜像文件再自行定制编译；</li>
+<li>使用 OpenWrt 的 <a href="https://wiki.openwrt.org/doc/howto/obtain.firmware.sdk" target="_blank" rel="external">SDK</a> 工具交叉编译包；</li>
+<li>通过<a href="https://wiki.openwrt.org/about/toolchain" target="_blank" rel="external">OpenWrt Buildroot</a>从源代码进行编译；</li>
+<li>通过已做好的<a href="https://wiki.openwrt.org/doc/howto/obtain.firmware.docker" target="_blank" rel="external">Docker Image</a>定制自己的固件</li>
+</ol>
+</blockquote>
+<p>在<a href="http://aiyou.im" target="_blank" rel="external">Ariane</a>的鼓励下，我决定从源文件编译一个固件。那么先把<a href="https://wiki.openwrt.org/about/toolchain" target="_blank" rel="external">官方文档</a>啃几遍。</p>
+<h2 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h2><p>条件：</p>
+<ul>
+<li>Linux 系统（我用的 Arch Linux）；</li>
+<li>至少 5G 的硬盘空间;</li>
+<li>联网;</li>
+<li>设置环境变量<a id="more"></a>
+</li>
+</ul>
+<h3 id="预编译"><a href="#预编译" class="headerlink" title="预编译"></a>预编译</h3><p>Arch Linux 下安装 OpenWrt 编译环境相关依赖；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo pacman -Su &amp;&amp; sudo pacman -Syy</div><div class="line">sudo pacman -S --needed subversion asciidoc bash bc binutils bzip2 fastjar flex git gcc util-linux gawk intltool zlib make cdrkit ncurses openssl patch perl-extutils-makemaker rsync sdcc unzip wget gettext libxslt boost libusb bin86 sharutils b43-fwcutter findutils</div></pre></td></tr></table></figure>
+<p>安装 <code>subversion</code> 以及 <code>mercurial</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo pacman -S install subversion mercurial</div></pre></td></tr></table></figure>
+<p>下载 OpenWrt trunk 版本源码，更多版本参考<a href="https://wiki.openwrt.org/doc/howto/buildroot.exigence#downloading_sources" target="_blank" rel="external">Download Sources</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir openwrt</div><div class="line"><span class="built_in">cd</span> openwrt</div><div class="line">git <span class="built_in">clone</span> git://git.openwrt.org/openwrt.git trunk/</div></pre></td></tr></table></figure>
+<p>更新下载并安装所有可用的 <code>feeds</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> trunk</div><div class="line">./scripts/feeds update <span class="_">-a</span></div><div class="line">./scripts/feeds install <span class="_">-a</span></div></pre></td></tr></table></figure>
+<h3 id="构建基础环境"><a href="#构建基础环境" class="headerlink" title="构建基础环境"></a>构建基础环境</h3><p>通过图形界面选择路由器型号，检测缺失包添加自己想要的包并构建基础环境。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make menuconfig</div></pre></td></tr></table></figure>
+<p>如图：</p>
+<p><img src="http://www.leyar.me/images/Screenshot_2016-02-24_14-42-35.png" alt=""></p>
+<ul>
+<li><code>Target System</code> 选中’(Atheros AR7xxx/AR9xxx)’</li>
+<li><code>Subtarget</code> 选中 ‘(Genaric devices with NAND flsh)’</li>
+<li><code>Target Profile</code> 选中’(NETGEAR WNDR3700v4/WNDR4300)’</li>
+</ul>
+<p>简单操作指令：<br>【Enter】进入下级菜单；【Y】编译进固件包；【M】编译成单独的安装文件；【N】取消选择；按两次【Esc】退出或者返回上级菜单；【？】帮助；【/】搜索</p>
+<p>标记说明：<br>【*】表示编译进固件包，【M】表示编译成安装文件，【】为不做操作。</p>
+<p>选择好路由器型号之后，则可以执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make defconfig</div></pre></td></tr></table></figure></p>
+<h3 id="可选配置"><a href="#可选配置" class="headerlink" title="可选配置"></a>可选配置</h3><p>再次执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make menuconfig</div></pre></td></tr></table></figure></p>
+<p>选择自己所需要安装的包。</p>
+<p>这里列一些我的选择：</p>
+<p><strong>Base system –&gt;</strong></p>
+<ul>
+<li>block-mount  # 挂载设备需要</li>
+<li>取消 dnsmasq，选择 dnsmasq-full</li>
+</ul>
+<p><strong>Kernel modulesi –&gt;</strong></p>
+<ul>
+<li>Block Devices –&gt; kmod-scsi-core  # 内核对 SCSI 设备的支持</li>
+<li>Filesystems –&gt; kmod-fs-ext4    # 我的移动硬盘是 ext4, 额外可选 ntfs,exfat等</li>
+<li>LED modules –&gt; kmod-ledtrig-usbdev        # USB 设备闪灯</li>
+<li>Native Language Support –&gt; kmod-nls-utf8    # utf8 编码格式的支持</li>
+<li>USB Support –&gt; kmod-usb-core kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci kmod-usb2 </li>
+</ul>
+<p><strong>Libraries –&gt;</strong></p>
+<ul>
+<li>SSL –&gt; libopenssl</li>
+</ul>
+<p><strong>LuCI –&gt;</strong></p>
+<ul>
+<li>Collections –&gt; luci</li>
+<li>Applications –&gt; luci-adblock luci-app-aria2 luci-ddns luci-app-mwan3 luci-app-samba luci-app-shadowsocks</li>
+</ul>
+<p><strong>Network –&gt;</strong></p>
+<ul>
+<li>ChinaDNS</li>
+<li>Download Manager –&gt; webui-aria2 yaaw</li>
+<li>Fire Transfer –&gt; curl wget</li>
+<li>shadowsocks-libev (官方源版本较低，可以自行编译一个，后面附方法)</li>
+</ul>
+<p><strong>Utilities –&gt;</strong></p>
+<ul>
+<li>compression –&gt; bzip2 unrar unzip zip    #压缩解压缩工具</li>
+<li>Editors –&gt; vim</li>
+<li>Filesystem –&gt; e2fsprogs    # 支持ext2、ext3、ext4 等分区工具(可选ntfs-3g ntfs-3g-utils)</li>
+<li>disc –&gt; blkid fdisk lsblk    </li>
+<li>zoneinfo –&gt; zoninfo-asia</li>
+<li>dmesg    # 可使用 dmesg 命令</li>
+<li>file    # 可使用 file 命令</li>
+<li>mount-utils        # 挂载助手</li>
+</ul>
+<p>执行<code>scripts/diffconfig.sh &gt; diffconfig</code> 保存修改内容至<code>diffconfig</code>文件。</p>
+<h3 id="移除保留空间"><a href="#移除保留空间" class="headerlink" title="移除保留空间"></a>移除保留空间</h3><p>修改文件将 wndr4300 被 Openwrt 留的 96M 空间完全利用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cp ./target/linux/ar71xx/image/Makefile ./target/linux/ar71xx/image/Makefile.bak	<span class="comment"># 备份文件</span></div><div class="line">vi ./target/linux/ar71xx/image/Makefile</div></pre></td></tr></table></figure>
+<p>搜索 wndr4300，找到其后面的 <code>(ubi)</code>以及<code>(firmware)</code> ，</p>
+<p>将<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">23552k(ubi),25600k@0x6c0000(firmware)</div></pre></td></tr></table></figure></p>
+<p>修改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">121856k(ubi),123904k@0x6c0000(firmware)</div></pre></td></tr></table></figure></p>
+<p>使整个语段变为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wndr4300_mtdlayout=mtdparts=ar934x-nfc:256k(u-boot)ro,256k(u-boot-env)ro,256k(caldata),512k(pot),2048k(language),512k(config),3072k(traffic_meter),2048k(kernel),121856k(ubi),123904k@0x6c0000(firmware),256k(caldata_backup),-(reserved)</div></pre></td></tr></table></figure></p>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>ok, 现在开始编译：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make -j 3 V=s  <span class="comment"># j 后面数字改为你的 cpu 数量 +1</span></div></pre></td></tr></table></figure></p>
+<p>初次编译，大概需要花一个多小时左右。期间可以好好看看教程，睡个午觉。</p>
+<p>编译完成之后，就会生成新的刷机包在<code>~/openwrt/trunk/bin/ar71xx/</code>目录下，文件名为<code>openwrt-ar71xx-nand-wndr4300-squashfs-sysupgrade.tar</code> ，在路由器中刷进去即可。(需要注意的是，只有已经刷了 Openwrt 之后才能刷这个包，如果你还是路由器出厂界面，请先刷同目录下的 .img 文件后，再刷这个更新包。）</p>
+<h2 id="编译-shadowsocks-libev"><a href="#编译-shadowsocks-libev" class="headerlink" title="编译 shadowsocks-libev"></a>编译 shadowsocks-libev</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./scripts/feeds update packages</div><div class="line">./scripts/feeds install libpcre</div><div class="line">git <span class="built_in">clone</span> https://github.com/shadowsocks/openwrt-shadowsocks.git package/shadowsocks-libev</div><div class="line">make menuconfig</div></pre></td></tr></table></figure>
+<p>编译：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make V=s -j 3</div></pre></td></tr></table></figure></p>
+<p>也可以单独编译包：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make V=99 package/shadowsocks-libev/openwrt/compile</div></pre></td></tr></table></figure></p>
+<p>其他需要额外编译的软件：</p>
+<ul>
+<li><a href="https://github.com/shadowsocks/luci-app-shadowsocks" target="_blank" rel="external">luci-app-shadowsocks</a></li>
+<li><a href="https://github.com/aa65535/openwrt-dist-luci" target="_blank" rel="external">OpenWrt-dist Luci</a> - 包含了chinadns，dns-forwarder,redsocks2,shadowvpn 的 Luci 可选包</li>
+<li><a href="https://github.com/aa65535/openwrt-dns-forwarder" target="_blank" rel="external">DNS-Forwarder</a></li>
+<li><a href="https://github.com/aa65535/openwrt-chinadns" target="_blank" rel="external">ChinaDNS</a></li>
+</ul>
+<p>具体编译方法参考链接，基本同上。</p>
+<p>其他<code>make</code>相关指令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">make clean		<span class="comment"># 移除目录下的 /bin 和 /build_dir 文件夹</span></div><div class="line">make dirclean	<span class="comment"># 移除目录下的 /bin 和 /build_dir 以及 /staging_dir ，/toolchain，/logs 文件夹</span></div><div class="line">make distclean  <span class="comment"># 移除所有产生的配置编译文件及feeds 下载的内容。</span></div><div class="line">make package/luci/clean  <span class="comment"># 移除 luci 目录下的内容</span></div></pre></td></tr></table></figure></p>
+<h3 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h3><p>配置文件可以备份到 <code>~/openwrt/trunk/files</code> 目录下，新编译的固件会自动将这些配置打包到固件里，这样你刷完固件就不需要再次配置文件啦！特别要注意路径的放置问题，例如<br>路由器路径： <code>/etc/config/network</code><br>备份路径：   <code>~/openwrt/trunk/files/etc/config/network</code></p>
+<p>最好别弄错啦！这里截个图，我目前备份的了的配置文件：</p>
+<p><img src="http://www.leyar.me/images/Screenshot_2016-02-24_17-05-09.png" alt=""></p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>经过这一番折腾，对于编译这个名词总算不至于特别陌生了。而我的路由器也弄好了，移动硬盘也能挂载上去了。准备研究一下 Samba，实现网络共享就在眼前…</p>
+<p>参考文档：</p>
+<ul>
+<li><a href="https://wiki.openwrt.org/doc/howto/buildroot.exigence" target="_blank" rel="external">OpenWrt build system - Installation</a></li>
+<li><a href="https://wiki.openwrt.org/doc/howto/build" target="_blank" rel="external">OpenWrt build system -Usage</a></li>
+</ul>
+<p><em>本文最后更新：2016-12-15</em></p>
+<ul>
+<li>已额外添加功能 samba, aria3, 硬盘休眠（hd-idle), 动态DNS (DDNS), mwan3, SQM Qos, UPNP 等。</li>
+<li>科学上网方案 shadowsocks-libev + ChinaDNS </li>
+<li>DNS 防污染方案：dnsmasq-full (dnsmasq.d) + ChinaDNS + DNS Forward( TCP 查询）</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;前段时间一直想给我的 wndr4300 接个 USB 移动硬盘实现网络共享，然而一直未能成功，针对遇见的问题 Google 了许久并且也曾试图在&lt;a href=&quot;https://v2ex.com/t/258234#reply19&quot;&gt;V2EX&lt;/a&gt;上寻求过帮助，未果。后来在 &lt;a href=&quot;https://forum.openwrt.org/viewtopic.php?id=52504&quot;&gt;openwrt&lt;/a&gt; 论坛上搜到个跟我出现问题一模一样的人，他的解决办法是重新刷固件，如此也让我有了重新刷固件的念头。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://wiki.openwrt.org/doc/howto/obtain.firmware&quot;&gt;官方&lt;/a&gt;获取固件的 5 种方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;从官网下载服务器下载预编译好的固件；&lt;/li&gt;
+&lt;li&gt;使用&lt;a href=&quot;https://wiki.openwrt.org/doc/howto/obtain.firmware.generate&quot;&gt;Image Generator&lt;/a&gt; 生成固件镜像文件再自行定制编译；&lt;/li&gt;
+&lt;li&gt;使用 OpenWrt 的 &lt;a href=&quot;https://wiki.openwrt.org/doc/howto/obtain.firmware.sdk&quot;&gt;SDK&lt;/a&gt; 工具交叉编译包；&lt;/li&gt;
+&lt;li&gt;通过&lt;a href=&quot;https://wiki.openwrt.org/about/toolchain&quot;&gt;OpenWrt Buildroot&lt;/a&gt;从源代码进行编译；&lt;/li&gt;
+&lt;li&gt;通过已做好的&lt;a href=&quot;https://wiki.openwrt.org/doc/howto/obtain.firmware.docker&quot;&gt;Docker Image&lt;/a&gt;定制自己的固件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在&lt;a href=&quot;http://aiyou.im&quot;&gt;Ariane&lt;/a&gt;的鼓励下，我决定从源文件编译一个固件。那么先把&lt;a href=&quot;https://wiki.openwrt.org/about/toolchain&quot;&gt;官方文档&lt;/a&gt;啃几遍。&lt;/p&gt;
+&lt;h2 id=&quot;具体步骤&quot;&gt;&lt;a href=&quot;#具体步骤&quot; class=&quot;headerlink&quot; title=&quot;具体步骤&quot;&gt;&lt;/a&gt;具体步骤&lt;/h2&gt;&lt;p&gt;条件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Linux 系统（我用的 Arch Linux）；&lt;/li&gt;
+&lt;li&gt;至少 5G 的硬盘空间;&lt;/li&gt;
+&lt;li&gt;联网;&lt;/li&gt;
+&lt;li&gt;设置环境变量
+    
+    </summary>
+    
+    
+      <category term="openwrt" scheme="http://www.leyar.me/tags/openwrt/"/>
+    
+      <category term="Arch" scheme="http://www.leyar.me/tags/Arch/"/>
+    
+      <category term="wndr4300" scheme="http://www.leyar.me/tags/wndr4300/"/>
+    
+      <category term="trunk" scheme="http://www.leyar.me/tags/trunk/"/>
+    
+      <category term="compile" scheme="http://www.leyar.me/tags/compile/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用密钥登陆 OpenWrt</title>
+    <link href="http://www.leyar.me/openwrt-ssh-key/"/>
+    <id>http://www.leyar.me/openwrt-ssh-key/</id>
+    <published>2016-02-19T09:05:43.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近 ss 线路总是不稳定，时不时需要 ssh 到路由器检查系统日志，这就增加了密码输入的次数，这对于享受惯了 ssh-key 便利性的我来说简直不要太麻烦。遂决定路由器上也使用 ssh-key。</p>
+<blockquote>
+<p>使用 key 验证登陆的优点：（这里引用 <a href="https://wiki.openwrt.org/oldwiki/dropbearpublickeyauthenticationhowto" target="_blank" rel="external">OpenWrt官方</a>的描述）</p>
+<ul>
+<li>you no longer have to type the password,</li>
+<li>less effort to log in,</li>
+<li>less times for it to be seen on your fingers by others,</li>
+<li>easier to automate things like SCP or remote commands,</li>
+<li>the password is no longer sent encrypted to OpenWrt,</li>
+<li>less likely for an eavesdropper to capture it,</li>
+<li>allows you to turn off password authentication,</li>
+<li>impossible for an attacker to guess your password on OpenWrt.</li>
+</ul>
+</blockquote>
+<p>优点这么多，赶紧来试试吧～</p>
+<a id="more"></a>
+<h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><p>首先需要注意的是，不用于其他版本的 linux,OpenWrt 所使用的 SSH server 是 Dropbear，它可以支持 RSA Keys，但是验证路径位于<code>/etc/dropbear/authorized_keys</code> 操作时只需要注意公钥的放置路径即可。</p>
+<p>这里记录下我的操作步骤：</p>
+<p>在本机 linux 下：</p>
+<p>生成密钥：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen</div></pre></td></tr></table></figure></p>
+<p>接下来需要输入存放路径时，输入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">~/.ssh/openwrt_rsa		<span class="comment"># 随自己喜好命名</span></div></pre></td></tr></table></figure></p>
+<p>配置<code>~/.ssh/config</code>文件，添加如下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># route</div><div class="line">Host ss</div><div class="line">HostName 192.168.1.1</div><div class="line">IdentityFile ~/.ssh/openwrt_rsa</div><div class="line">User root</div></pre></td></tr></table></figure></p>
+<p>将公钥上传到 openwrt 相应目录下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat ~/.ssh/openwrt_rsa.pub \ | ssh root@192.168.1.1 <span class="string">"cat &gt;&gt; /etc/dropbear/authorized_keys"</span></div></pre></td></tr></table></figure></p>
+<p>也可以使用如下命令（两者选其一）：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh root@192.168.1.1 <span class="string">"tee -a /etc/dropbear/authorized_keys"</span> &lt; ~/.ssh/openwrt_rsa.pub</div></pre></td></tr></table></figure></p>
+<p>登陆路由器，设置权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh ss</div><div class="line">chmod 700 /etc/dropbear</div><div class="line">chmod 600 /etc/dropbear/authorized_keys</div></pre></td></tr></table></figure></p>
+<p>此时就可以通过 <code>ssh ss</code> 直接无密码直接登陆路由器了。</p>
+<p>Enjow～</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;最近 ss 线路总是不稳定，时不时需要 ssh 到路由器检查系统日志，这就增加了密码输入的次数，这对于享受惯了 ssh-key 便利性的我来说简直不要太麻烦。遂决定路由器上也使用 ssh-key。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;使用 key 验证登陆的优点：（这里引用 &lt;a href=&quot;https://wiki.openwrt.org/oldwiki/dropbearpublickeyauthenticationhowto&quot;&gt;OpenWrt官方&lt;/a&gt;的描述）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;you no longer have to type the password,&lt;/li&gt;
+&lt;li&gt;less effort to log in,&lt;/li&gt;
+&lt;li&gt;less times for it to be seen on your fingers by others,&lt;/li&gt;
+&lt;li&gt;easier to automate things like SCP or remote commands,&lt;/li&gt;
+&lt;li&gt;the password is no longer sent encrypted to OpenWrt,&lt;/li&gt;
+&lt;li&gt;less likely for an eavesdropper to capture it,&lt;/li&gt;
+&lt;li&gt;allows you to turn off password authentication,&lt;/li&gt;
+&lt;li&gt;impossible for an attacker to guess your password on OpenWrt.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;优点这么多，赶紧来试试吧～&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="ssh" scheme="http://www.leyar.me/tags/ssh/"/>
+    
+      <category term="openwrt" scheme="http://www.leyar.me/tags/openwrt/"/>
+    
+      <category term="key" scheme="http://www.leyar.me/tags/key/"/>
+    
+      <category term="dropbear" scheme="http://www.leyar.me/tags/dropbear/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 出现 Nginx 403 错误</title>
+    <link href="http://www.leyar.me/hexo-nginx-403-forbidden/"/>
+    <id>http://www.leyar.me/hexo-nginx-403-forbidden/</id>
+    <published>2016-02-15T12:45:34.000Z</published>
+    <updated>2017-02-19T04:03:01.149Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>2.14 号情人节那天正式将生活博客迁移到 Hexo 上。根据官方文档操作一路都很顺畅没有出现大的问题。现在就差将评论也迁移到 Disqus 上了。</p>
+<p>将域名解析过来并配置好了 Ngix 之后，新博客也正常启动起来。但问题来了，这个博客却无法访问了。提示 403 错误。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>Google 了下出现这个错误的可能原因主要有两点：</p>
+<ul>
+<li>索引文件（例如 index.html）缺失</li>
+<li>权限配置问题<a id="more"></a>
+</li>
+</ul>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>检查博客文件存放目录，索引文件并没有缺少。域名目录下 public_html 文件夹权限用户与组为 leyar。</p>
+<p>检查配置文件<code>/etc/nginx/nginx.conf</code>, 发现第一行 user 为 nginx，尝试将其改为 leyar, 重启 nginx <code>sudo systemctl restart nginx</code>，依然 403。</p>
+<p>尝试改为 root 并重启 nginx, 再次刷新网页，问题解决。<br>猜想原因应该是使用 sudo 安装的 nginx，故 user 为 root.</p>
+<p>相关资料：</p>
+<ul>
+<li><a href="http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/">关于在 Ubuntu 上部署 Hexo 到 Github</a></li>
+<li><a href="http://www.leyar.me/After-installing-Hexo/">Hexo 之后续篇</a></li>
+<li><a href="http://www.leyar.me/Digitalocean-vps-nginx-setup/">通过 rsync 将 Hexo 部署到 Digitalocean vps</a></li>
+<li><a href="http://www.leyar.me/hexo-deploy-to-git-error/">Hexo 部署到 GitHub 出错</a></li>
+<li><a href="http://www.leyar.me/backup-your-blog-to-github/">备份 Hexo 源文件至 GitHub</a></li>
+<li><a href="http://www.leyar.me/create-404-page">为 Hexo 博客添加404 页面</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;2.14 号情人节那天正式将生活博客迁移到 Hexo 上。根据官方文档操作一路都很顺畅没有出现大的问题。现在就差将评论也迁移到 Disqus 上了。&lt;/p&gt;
+&lt;p&gt;将域名解析过来并配置好了 Ngix 之后，新博客也正常启动起来。但问题来了，这个博客却无法访问了。提示 403 错误。&lt;/p&gt;
+&lt;h2 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h2&gt;&lt;p&gt;Google 了下出现这个错误的可能原因主要有两点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;索引文件（例如 index.html）缺失&lt;/li&gt;
+&lt;li&gt;权限配置问题
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://www.leyar.me/tags/hexo/"/>
+    
+      <category term="nginx" scheme="http://www.leyar.me/tags/nginx/"/>
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo 部署到 GitHub 出错</title>
+    <link href="http://www.leyar.me/hexo-deploy-to-git-error/"/>
+    <id>http://www.leyar.me/hexo-deploy-to-git-error/</id>
+    <published>2016-02-15T07:36:08.000Z</published>
+    <updated>2017-02-19T04:03:01.149Z</updated>
+    
+    <content type="html"><![CDATA[<p>我在新的笔记本上安装了 Arch，并且将个人文件夹备份了过来，其中包含 ssh 的配置文件以及 hexo 的文件夹。</p>
+<h2 id="简易安装"><a href="#简易安装" class="headerlink" title="简易安装"></a>简易安装</h2><p>经过安装 Git，通过<code>nvm</code> 安装 Node.js，然后安装 Hexo，并且配置 Git ，简略步骤如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ sudo pacman -S git</div><div class="line">$ git config --global user.name <span class="string">"leyar"</span></div><div class="line">$ git config --global user.email <span class="string">"leyar.me@gmail.com"</span></div><div class="line">$ git <span class="built_in">clone</span> https://github.com/creationix/nvm.git ~/.nvm &amp;&amp; <span class="built_in">cd</span> ~/.nvm &amp;&amp; git checkout `git describe --abbrev=0 --tags`</div><div class="line">. ~/.nvm/nvm.sh</div></pre></td></tr></table></figure>
+<p>将以下内容添加进<code>~/.zshrc</code><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> NVM_DIR=<span class="string">"<span class="variable">$HOME</span>/.nvm"</span></div><div class="line">[ <span class="_">-s</span> <span class="string">"<span class="variable">$NVM_DIR</span>/nvm.sh"</span> ] &amp;&amp; . <span class="string">"<span class="variable">$NVM_DIR</span>/nvm.sh"</span> <span class="comment"># This loads nvm</span></div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>(可选备份操作）<br>手动更新 <code>nvm</code>:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> <span class="string">"<span class="variable">$NVM_DIR</span>"</span> &amp;&amp; git pull origin master &amp;&amp; git checkout `git describe --abbrev=0 --tags`</div><div class="line">. <span class="string">"<span class="variable">$NVM_DIR</span>/nvm.sh"</span></div></pre></td></tr></table></figure></p>
+<p>重启 Terminal, 之后可通过 nvm 来控制管理 nodejs 版本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ nvm install 4</div><div class="line">$ nvm use 4</div></pre></td></tr></table></figure>
+<p>安装 hexo<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">npm install -g hexo-cli</div><div class="line"><span class="built_in">cd</span> hexo</div><div class="line">npm install</div></pre></td></tr></table></figure></p>
+<p>经过如上操作，理论上是可以直接使用<code>hexo g -d</code> 命令来提交并部署更新了。</p>
+<h2 id="git-部署错误"><a href="#git-部署错误" class="headerlink" title="git 部署错误"></a>git 部署错误</h2><p>然而，在 deploy 到 git 时，这里出现了错误，提示如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">INFO  Files loaded in 898 ms</div><div class="line">INFO  0 files generated in 957 ms</div><div class="line">INFO  Deploying: git</div><div class="line">INFO  Clearing .deploy folder...</div><div class="line">INFO  Copying files from public folder...</div><div class="line">On branch master</div><div class="line">nothing to commit, working directory clean</div><div class="line">Permission denied (publickey).</div><div class="line">fatal: Could not read from remote repository.</div><div class="line"></div><div class="line">Please make sure you have the correct access rights</div><div class="line">and the repository exists.</div><div class="line">FATAL Something&apos;s wrong. Maybe you can find the solution here: http://hexo.io/docs/troubleshooting.html</div><div class="line">Error: Permission denied (publickey).</div><div class="line">fatal: Could not read from remote repository.</div><div class="line"></div><div class="line">Please make sure you have the correct access rights</div><div class="line">and the repository exists.</div><div class="line"></div><div class="line">    at ChildProcess.&lt;anonymous&gt; (/home/leyar/hexo/node_modules/hexo-deployer-git/node_modules/hexo-util/lib/spawn.js:42:17)</div><div class="line">    at emitTwo (events.js:87:13)</div><div class="line">    at ChildProcess.emit (events.js:172:7)</div><div class="line">    at maybeClose (internal/child_process.js:821:16)</div><div class="line">    at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)</div><div class="line">FATAL Error: Permission denied (publickey).</div><div class="line">fatal: Could not read from remote repository.</div><div class="line"></div><div class="line">Please make sure you have the correct access rights</div><div class="line">and the repository exists.</div><div class="line"></div><div class="line">    at ChildProcess.&lt;anonymous&gt; (/home/leyar/hexo/node_modules/hexo-deployer-git/node_modules/hexo-util/lib/spawn.js:42:17)</div><div class="line">    at emitTwo (events.js:87:13)</div><div class="line">    at ChildProcess.emit (events.js:172:7)</div><div class="line">    at maybeClose (internal/child_process.js:821:16)</div><div class="line">    at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)</div></pre></td></tr></table></figure>
+<p>错误重点就在 <code>Permission denied (publickey)</code> 这里，git 本身我配置了非默认名的 key，即<code>github_rsa</code>和<code>github_rsa.pub</code>并且指定了验证文件。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host ileyar.github.com</div><div class="line">HostName github.com</div><div class="line">PreferredAuthentications publickey</div><div class="line">IdentityFile ~/.ssh/github_rsa</div><div class="line">User git</div></pre></td></tr></table></figure>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>通过 google 搜索到官方的解决办法：<a href="https://help.github.com/articles/error-permission-denied-publickey/" target="_blank" rel="external">Error: Permission denied (publickey)</a></p>
+<p>在尝试了如下操作之后问题解决：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-add ~/.ssh/github_rsa</div></pre></td></tr></table></figure></p>
+<p>相关资料：</p>
+<ul>
+<li><a href="http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/">关于在 Ubuntu 上部署 Hexo 到 Github</a></li>
+<li><a href="http://www.leyar.me/After-installing-Hexo/">Hexo 之后续篇</a></li>
+<li><a href="http://www.leyar.me/Digitalocean-vps-nginx-setup/">通过 rsync 将 Hexo 部署到 Digitalocean vps</a></li>
+<li><a href="http://www.leyar.me/hexo-nginx-403-forbidden/">Hexo 出现 Nginx 403 错误</a></li>
+<li><a href="http://www.leyar.me/backup-your-blog-to-github/">备份 Hexo 源文件至 GitHub</a></li>
+<li><a href="http://www.leyar.me/create-404-page/">为 Hexo 博客添加404 页面</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我在新的笔记本上安装了 Arch，并且将个人文件夹备份了过来，其中包含 ssh 的配置文件以及 hexo 的文件夹。&lt;/p&gt;
+&lt;h2 id=&quot;简易安装&quot;&gt;&lt;a href=&quot;#简易安装&quot; class=&quot;headerlink&quot; title=&quot;简易安装&quot;&gt;&lt;/a&gt;简易安装&lt;/h2&gt;&lt;p&gt;经过安装 Git，通过&lt;code&gt;nvm&lt;/code&gt; 安装 Node.js，然后安装 Hexo，并且配置 Git ，简略步骤如下：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;$ sudo pacman -S git&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ git config --global user.name &lt;span class=&quot;string&quot;&gt;&quot;leyar&quot;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ git config --global user.email &lt;span class=&quot;string&quot;&gt;&quot;leyar.me@gmail.com&quot;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ git &lt;span class=&quot;built_in&quot;&gt;clone&lt;/span&gt; https://github.com/creationix/nvm.git ~/.nvm &amp;amp;&amp;amp; &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; ~/.nvm &amp;amp;&amp;amp; git checkout `git describe --abbrev=0 --tags`&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;. ~/.nvm/nvm.sh&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;将以下内容添加进&lt;code&gt;~/.zshrc&lt;/code&gt;&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;export&lt;/span&gt; NVM_DIR=&lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$HOME&lt;/span&gt;/.nvm&quot;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;[ &lt;span class=&quot;_&quot;&gt;-s&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$NVM_DIR&lt;/span&gt;/nvm.sh&quot;&lt;/span&gt; ] &amp;amp;&amp;amp; . &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$NVM_DIR&lt;/span&gt;/nvm.sh&quot;&lt;/span&gt; &lt;span class=&quot;comment&quot;&gt;# This loads nvm&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="http://www.leyar.me/tags/hexo/"/>
+    
+      <category term="github" scheme="http://www.leyar.me/tags/github/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于 Archlinux 下使用 fcitx 拼音输入法失效的解决办法</title>
+    <link href="http://www.leyar.me/about-fcitx-pinyin-input/"/>
+    <id>http://www.leyar.me/about-fcitx-pinyin-input/</id>
+    <published>2015-11-08T16:55:00.000Z</published>
+    <updated>2017-02-19T04:03:01.149Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在 Arch 上通过 fcitx 使用拼音输入法有时候会出现快捷键”Ctrl + space” 切换不到拼音输入的情况,或者是有时候修改了下配置,输入法就又无法正常工作.重启也无法解决.</p>
+<p>当<code>locale</code>为英文的时候,这种情况会比较普遍. 下面针对几种情况记录一下我的解决办法.</p>
+<ol>
+<li><p>GTK2 程序中(例如 Firefox, Chromium 等)拼音输入法无法正常启用:</p>
+<blockquote>
+<p>解决办法就是安装 <code>fcitx-gtk2</code> 并且设置 <code>GTK_IM_MODULE</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo pacman install fcitx-gtk2</div><div class="line"><span class="built_in">export</span> GTK_IM_MODULE=fcitx</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>gnome-terminal 中拼音输入法无法正常启用:</p>
+<blockquote>
+<p>修改 GSetting 配置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">  gsettings <span class="built_in">set</span> \</div><div class="line">  	org.gnome.settings-daemon.plugins.xsettings overrides \</div><div class="line"><span class="string">"&#123;'Gtk/IMModule':&lt;'fcitx'&gt;&#125;"</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ol>
+<p>通过如上的设置,麻麻再也不用担心我打不出中文拉:)</p>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Fcitx_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29#.E5.9C.A8_gnome-terminal.E4.B8.AD_Ctrl_.2B_Space_.E4.B8.8D.E8.83.BD.E8.B0.83.E5.87.BA.E8.BE.93.E5.85.A5.E6.B3.95" target="_blank" rel="external">Arch Wiki</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;在 Arch 上通过 fcitx 使用拼音输入法有时候会出现快捷键”Ctrl + space” 切换不到拼音输入的情况,或者是有时候修改了下
+    
+    </summary>
+    
+    
+      <category term="fcitx" scheme="http://www.leyar.me/tags/fcitx/"/>
+    
+      <category term="pinyin" scheme="http://www.leyar.me/tags/pinyin/"/>
+    
+      <category term="input" scheme="http://www.leyar.me/tags/input/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS 7 新建用户密钥验证问题</title>
+    <link href="http://www.leyar.me/resolve-the-issue-about-Permission-denied/"/>
+    <id>http://www.leyar.me/resolve-the-issue-about-Permission-denied/</id>
+    <published>2015-08-01T15:57:00.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>之前一直使用的 root 帐号来登录管理我的其中一个 vps，虽然开启了仅密钥验证，但这也只是一道锁，不知道哪天密钥就被破了。遂决定把这个安全隐患先解决掉。<br>VPS 系统：CentOS 7 64bit</p>
+</blockquote>
+<h2 id="新建用户并加进管理组"><a href="#新建用户并加进管理组" class="headerlink" title="新建用户并加进管理组"></a>新建用户并加进管理组</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">adduser *username*</div><div class="line">passwd *username*</div><div class="line">gpasswd <span class="_">-a</span> *username* wheel</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="拷贝公钥到个人目录下"><a href="#拷贝公钥到个人目录下" class="headerlink" title="拷贝公钥到个人目录下"></a>拷贝公钥到个人目录下</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /home/*username*</div><div class="line">mkdir .ssh</div><div class="line"><span class="built_in">cd</span> .ssh</div><div class="line">cp /root/.ssh/authorized_keys .</div></pre></td></tr></table></figure>
+<h2 id="尝试登录"><a href="#尝试登录" class="headerlink" title="尝试登录"></a>尝试登录</h2><p>保留当前终端，在新终端登录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh *username*@*server-ip* -p *port*</div></pre></td></tr></table></figure>
+<p>出现登录失败提示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Permission denied (publickey,gssapi-keyex,gssapi-with-mic).</div></pre></td></tr></table></figure>
+<p>尝试修改<code>.ssh</code>文件夹的用户及用户组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /home/*username*/</div><div class="line">chown *username* .ssh</div><div class="line">chgrp *username* .ssh</div></pre></td></tr></table></figure>
+<p>再次尝试登录，登录成功。</p>
+<h2 id="禁止-root-登录"><a href="#禁止-root-登录" class="headerlink" title="禁止 root 登录"></a>禁止 root 登录</h2><p>此时可以取消 root 登录了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi /etc/ssh/sshd_config</div></pre></td></tr></table></figure>
+<p>查找并修改为如下参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PermitRootLogin no</div></pre></td></tr></table></figure></p>
+<p>之前已经编辑过一些内容，具体查看<a href="http://www.leyar.me/SecuringSSH/">Vps的一些安全设置</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;之前一直使用的 root 帐号来登录管理我的其中一个 vps，虽然开启了仅密钥验证，但这也只是一道锁，不知道哪天密钥就被破了。遂决定把这个安全隐患先解决掉。&lt;br&gt;VPS 系统：CentOS 7 64bit&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;新建用户并加进管理组&quot;&gt;&lt;a href=&quot;#新建用户并加进管理组&quot; class=&quot;headerlink&quot; title=&quot;新建用户并加进管理组&quot;&gt;&lt;/a&gt;新建用户并加进管理组&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;adduser *username*&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;passwd *username*&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;gpasswd &lt;span class=&quot;_&quot;&gt;-a&lt;/span&gt; *username* wheel&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="CentOS" scheme="http://www.leyar.me/tags/CentOS/"/>
+    
+      <category term="SSH" scheme="http://www.leyar.me/tags/SSH/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Shadowsocks 之优化篇</title>
+    <link href="http://www.leyar.me/optimize-the-shadowsocks/"/>
+    <id>http://www.leyar.me/optimize-the-shadowsocks/</id>
+    <published>2015-08-01T06:40:00.000Z</published>
+    <updated>2017-02-19T01:59:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>优化 Shadowsocks server 的前提条件是内核版本在 3.5 以上，可通过<code>uname -ir</code>查看当前内核版本，如果版本过低，需要升级。</p>
+<p>以下我的 VPS 内核版本升级的简单步骤：</p>
+<blockquote>
+<p>   VPS ： Digitalocean and Linode<br>   系统版本： CentOS 7 64bit<br><a id="more"></a></p>
+</blockquote>
+<h2 id="更新内核"><a href="#更新内核" class="headerlink" title="更新内核"></a>更新内核</h2><p>查看当前内核版本信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">uname -ir</div><div class="line">3.10.0-123.8.1.el7.x86_64 x86_64</div></pre></td></tr></table></figure>
+<p>Digitalocean 关于 Kernels 的更新操作可参考<a href="https://www.digitalocean.com/community/tutorials/how-to-update-a-digitalocean-server-s-kernel" target="_blank" rel="external">这里</a></p>
+<p>更新并安装最新版本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">yum update</div><div class="line">yum list --showduplicates kernel	<span class="comment"># 列出可用的 kernel 版本</span></div><div class="line">--------------------------------</div><div class="line">yum install kernel-*(3.10.0-229.el7)*		<span class="comment"># 安装所需版本</span></div></pre></td></tr></table></figure>
+<p>验证安装及列出服务器上所有已安装的 kernels：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /boot</div><div class="line">ls vmlinuz*</div></pre></td></tr></table></figure>
+<p>记住版本信息,进入 <a href="https://www.digitalocean.com/community/tutorials/how-to-update-a-digitalocean-server-s-kernel-using-the-control-panel#changing-the-kernel-in-the-digitalocean-control-panel" target="_blank" rel="external">Digitalocean 控制面板</a> ,修改想要使用的内核版本。</p>
+<p>Poweroff then poweron.</p>
+<h2 id="Optimize-the-shadowsocks-server"><a href="#Optimize-the-shadowsocks-server" class="headerlink" title="Optimize the shadowsocks server"></a><a href="http://shadowsocks.org/en/config/advanced.html" target="_blank" rel="external">Optimize the shadowsocks server</a></h2><p>增加 TCP 连接数量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">'* soft nofile 51200</span></div><div class="line">* hard nofile 51200' &gt;&gt; /etc/security/limits.conf</div></pre></td></tr></table></figure>
+<p>编辑 <code>/etc/sysctl.conf</code> 文件，优化 TCP 参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/sysctl.conf</div></pre></td></tr></table></figure>
+<p>加入以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"># max open files</div><div class="line">fs.file-max = 51200</div><div class="line"># max read buffer</div><div class="line">net.core.rmem_max = 67108864</div><div class="line"># max write buffer</div><div class="line">net.core.wmem_max = 67108864</div><div class="line"># default read buffer</div><div class="line">net.core.rmem_default = 65536</div><div class="line"># default write buffer</div><div class="line">net.core.wmem_default = 65536</div><div class="line"># max processor input queue</div><div class="line">net.core.netdev_max_backlog = 4096</div><div class="line"># max backlog</div><div class="line">net.core.somaxconn = 4096</div><div class="line"></div><div class="line"># resist SYN flood attacks</div><div class="line">net.ipv4.tcp_syncookies = 1</div><div class="line"># reuse timewait sockets when safe</div><div class="line">net.ipv4.tcp_tw_reuse = 1</div><div class="line"># turn off fast timewait sockets recycling</div><div class="line">net.ipv4.tcp_tw_recycle = 0</div><div class="line"># short FIN timeout</div><div class="line">net.ipv4.tcp_fin_timeout = 30</div><div class="line"># short keepalive time</div><div class="line">net.ipv4.tcp_keepalive_time = 1200</div><div class="line"># outbound port range</div><div class="line">net.ipv4.ip_local_port_range = 10000 65000</div><div class="line"># max SYN backlog</div><div class="line">net.ipv4.tcp_max_syn_backlog = 4096</div><div class="line"># max timewait sockets held by system simultaneously</div><div class="line">net.ipv4.tcp_max_tw_buckets = 5000</div><div class="line"># turn on TCP Fast Open on both client and server side</div><div class="line">net.ipv4.tcp_fastopen = 3</div><div class="line"># TCP receive buffer</div><div class="line">net.ipv4.tcp_rmem = 4096 87380 67108864</div><div class="line"># TCP write buffer</div><div class="line">net.ipv4.tcp_wmem = 4096 65536 67108864</div><div class="line"># turn on path MTU discovery</div><div class="line">net.ipv4.tcp_mtu_probing = 1</div></pre></td></tr></table></figure></p>
+<p>刷新配置文件使之生效：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl --system</div></pre></td></tr></table></figure></p>
+<p>修改服务器中 shadowsocks 的 json 文件以开启 fast open:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fast_open: true</div></pre></td></tr></table></figure>
+<p>SSH 到路由器，进行如下操作:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> 3 &gt; /proc/sys/net/ipv4/tcp_fastopen</div></pre></td></tr></table></figure>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://shadowsocks.org/en/config/advanced.html" target="_blank" rel="external">Optimize the shadowsocks server on Linux</a></li>
+<li><a href="https://github.com/shadowsocks/shadowsocks/wiki/Optimizing-Shadowsocks" target="_blank" rel="external">Optimizing Shadowsocks</a></li>
+<li><a href="https://github.com/shadowsocks/shadowsocks/wiki/TCP-Fast-Open" target="_blank" rel="external">TCP Fast Open</a></li>
+<li><a href="https://www.ifshow.com/centos-7-shadowsocks-optimization/" target="_blank" rel="external">CentOS 7 Shadowsocks 优化</a></li>
+</ul>
+<hr>
+<h2 id="更新"><a href="#更新" class="headerlink" title="更新　"></a>更新　</h2><p>2016-1-12: 不要启用 <code>net.ipv4.tcp_tw_reuse</code> ,上文的配置文件已修正．具体原因可参考:</p>
+<ul>
+<li><a href="http://vincent.bernat.im/en/blog/2014-tcp-time-wait-state-linux.html" target="_blank" rel="external">Coping with the TCP TIME-WAIT state on busy Linux servers</a></li>
+<li><a href="http://www.cnxct.com/coping-with-the-tcp-time_wait-state-on-busy-linux-servers-in-chinese-and-dont-enable-tcp_tw_recycle/" target="_blank" rel="external">不要在linux上启用net.ipv4.tcp_tw_recycle参数</a></li>
+</ul>
+<p>2017-2-14: 修改<code>sysctl.conf</code>配置文件</p>
+<h2 id="编译并启用-hybla-模块"><a href="#编译并启用-hybla-模块" class="headerlink" title="编译并启用 hybla 模块"></a>编译并启用 hybla 模块</h2><p>检查系统可用算法<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl net.ipv4.tcp_available_congestion_control</div></pre></td></tr></table></figure></p>
+<p>Linode 没有自带，所以需要编译</p>
+<h3 id="检查-vps-内核版本"><a href="#检查-vps-内核版本" class="headerlink" title="检查 vps 内核版本"></a>检查 vps 内核版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">uname -r</div><div class="line">4.8.6-x86_64-linode78</div></pre></td></tr></table></figure>
+<h3 id="下载对应版本的内核源码"><a href="#下载对应版本的内核源码" class="headerlink" title="下载对应版本的内核源码"></a>下载对应版本的内核源码</h3><p>到<a href="https://www.kernel.org/pub/linux/kernel/v4.x/" target="_blank" rel="external">https://www.kernel.org/pub/linux/kernel/v4.x/</a> 查找并下载对应版本的tar.gz 文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mkdir /root/kernel</div><div class="line"><span class="built_in">cd</span> /root/kernel</div><div class="line">wget https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.8.6.tar.gz</div><div class="line">tar xvf linux-4.8.6.tar.gz</div></pre></td></tr></table></figure></p>
+<h3 id="安装编译工具"><a href="#安装编译工具" class="headerlink" title="安装编译工具"></a>安装编译工具</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum -y groupinstall <span class="string">"Development Tools"</span></div><div class="line">yum -y install ncurses-devel ncurses</div></pre></td></tr></table></figure>
+<h3 id="编辑配置文件"><a href="#编辑配置文件" class="headerlink" title="编辑配置文件"></a>编辑配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> linux-4.8.6</div><div class="line">zcat /proc/config.gz &gt; .config</div><div class="line">vi .config</div></pre></td></tr></table></figure>
+<p>查找<code>CONFIG_TCP_CONG_CUBIC=y</code>,在其下面增加一行<code>CONFIG_TCP_CONG_HYBLA=y</code><br>开始编译<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">make</div></pre></td></tr></table></figure></p>
+<p>等待内核编译完成，单核编译约15分钟。</p>
+<h3 id="编译模块"><a href="#编译模块" class="headerlink" title="编译模块"></a>编译模块</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> net/ipv4/</div><div class="line">mv Makefile Makefile.old</div><div class="line">vi Makefile</div></pre></td></tr></table></figure>
+<p>加入以下内容，<code>KDIR</code> 后面修改为你的源码路径。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># Makefile for tcp_hybla.ko</div><div class="line">obj-m := tcp_hybla.o</div><div class="line">KDIR := /root/kernel/linux-4.8.6</div><div class="line">PWD := $(shell pwd)</div><div class="line">default:</div><div class="line">	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules</div></pre></td></tr></table></figure></p>
+<p>进入源码根目录，开始编译模块<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /root/kernel/linux-4.8.6/</div><div class="line">make modules</div></pre></td></tr></table></figure></p>
+<p>等待编译完成。</p>
+<h3 id="测试加载模块"><a href="#测试加载模块" class="headerlink" title="测试加载模块"></a>测试加载模块</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /root/kernel/linux-4.8.6/net/ipv4</div><div class="line">cp tcp_hybla.ko /root/kernel/</div><div class="line"><span class="built_in">cd</span> /root/kernel</div><div class="line">insmod tcp_hybla.ko</div></pre></td></tr></table></figure>
+<p>如果加载成功，则执行命令显示如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sysctl net.ipv4.tcp_available_congestion_control</div><div class="line">net.ipv4.tcp_available_congestion_control = cubic reno hybla		<span class="comment"># 输出结果后面多了一个 hybla</span></div></pre></td></tr></table></figure></p>
+<h3 id="设置开机自动加载模块"><a href="#设置开机自动加载模块" class="headerlink" title="设置开机自动加载模块"></a>设置开机自动加载模块</h3><p>将<code>tcp_hybla.ko</code> 拷贝到 <code>/lib/modules/4.8.6-x86_64-linode78/kernel/net/ipv4</code>目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /lib/modules/4.8.6-x86_64-linode78/</div><div class="line">mkdir -p kernel/net/ipv4</div><div class="line"><span class="built_in">cd</span> kernel/net/ipv4</div><div class="line">cp /root/kernel/tcp_hybla.ko .</div><div class="line"><span class="built_in">cd</span> /lib/modules/4.8.6-x86_64-linode78/</div><div class="line">depmod <span class="_">-a</span></div></pre></td></tr></table></figure></p>
+<p>如果出现如下文件不存在的警告，可以通过创建对应的空白文件来解决。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">depmod: WARNING: could not open /lib/modules/4.8.6-x86_64-linode78/modules.order: No such file or directory</div><div class="line">depmod: WARNING: could not open /lib/modules/4.8.6-x86_64-linode78/modules.builtin: No such file or directory</div></pre></td></tr></table></figure></p>
+<p>解决办法<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">touch modules.order</div><div class="line">touch modules.builtin</div></pre></td></tr></table></figure></p>
+<p>再重新执行<code>depmod -a</code>命令即可。</p>
+<h3 id="设置-hybla-优先加载"><a href="#设置-hybla-优先加载" class="headerlink" title="设置 hybla 优先加载"></a>设置 hybla 优先加载</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/sysctl.conf</div></pre></td></tr></table></figure>
+<p>加入以下内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># for high-latency network</div><div class="line">net.ipv4.tcp_congestion_control=hybla</div></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;优化 Shadowsocks server 的前提条件是内核版本在 3.5 以上，可通过&lt;code&gt;uname -ir&lt;/code&gt;查看当前内核版本，如果版本过低，需要升级。&lt;/p&gt;
+&lt;p&gt;以下我的 VPS 内核版本升级的简单步骤：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;   VPS ： Digitalocean and Linode&lt;br&gt;   系统版本： CentOS 7 64bit&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="shadowsocks" scheme="http://www.leyar.me/tags/shadowsocks/"/>
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="hybla" scheme="http://www.leyar.me/tags/hybla/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Shadowsocks 之安装篇</title>
+    <link href="http://www.leyar.me/install-the-shadowsocks/"/>
+    <id>http://www.leyar.me/install-the-shadowsocks/</id>
+    <published>2015-08-01T06:00:00.000Z</published>
+    <updated>2017-02-19T00:00:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>版本： Python 版<br>加密方式： Chacha20<br>推荐安装 <a href="http://www.leyar.me/Compile-shadowsocks-libev-in-CentOS7/">Shadowsocks-libev</a> 版本</p>
+</blockquote>
+<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><h3 id="安装-shadowsocks"><a href="#安装-shadowsocks" class="headerlink" title="安装 shadowsocks"></a>安装 shadowsocks</h3><p>Debian/Ubuntu:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo apt-get install python-pip</div><div class="line">$ sudo pip install shadowsocks</div></pre></td></tr></table></figure></p>
+<p>CentOS 7(于2016-2-5更新)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo yum -y update</div><div class="line">$ sudo yum -y install python-pip</div><div class="line">$ pip install --upgrade pip</div><div class="line">$ sudo pip install shadowsocks</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><p>使用 chacha20 加密，必须安装 M2Crypto 以及libsodium</p>
+<h4 id="Installing-M2Crypto"><a href="#Installing-M2Crypto" class="headerlink" title="Installing M2Crypto"></a>Installing M2Crypto</h4><p>Debian/Ubuntu:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install python-m2crypto</div></pre></td></tr></table></figure></p>
+<p>CentOS:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum install m2crypto</div></pre></td></tr></table></figure></p>
+<h4 id="Installing-libsodium"><a href="#Installing-libsodium" class="headerlink" title="Installing libsodium"></a>Installing libsodium</h4><p>安装编译工具包 build-essential</p>
+<p>Debian/Ubuntu:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install build-essential</div></pre></td></tr></table></figure></p>
+<p>CentOS 7:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo yum groupinstall <span class="string">"Development Tools"</span></div><div class="line"><span class="comment">#sudo yum install kernel-devel kernel-headers</span></div></pre></td></tr></table></figure></p>
+<p>编译安装 <a href="https://github.com/jedisct1/libsodium" target="_blank" rel="external">libsodium</a>（版本需&gt;= 1.0.0）<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">wget https://github.com/jedisct1/libsodium/releases/download/1.0.8/libsodium-1.0.8.tar.gz</div><div class="line">tar xf libsodium-1.0.8.tar.gz &amp;&amp; <span class="built_in">cd</span> libsodium-1.0.8</div><div class="line">./configure &amp;&amp; make -j2</div><div class="line">sudo make install</div><div class="line">sudo ldconfig</div></pre></td></tr></table></figure></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>Create a config file <code>/etc/shadowsocks.json</code> .<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"server"</span>:<span class="string">"0.0.0.0"</span>,</div><div class="line">	<span class="attr">"server_port"</span>:<span class="number">39999</span>,</div><div class="line">	<span class="attr">"password"</span>:<span class="string">"mypassword"</span>,</div><div class="line">	<span class="attr">"timeout"</span>:<span class="number">300</span>,</div><div class="line">	<span class="attr">"method"</span>:<span class="string">"chacha20"</span>,</div><div class="line">	<span class="attr">"fast_open"</span>:<span class="literal">false</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>多用户配置<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="attr">"server"</span>:<span class="string">"0.0.0.0"</span>,</div><div class="line">	<span class="attr">"port_password"</span>: &#123;</div><div class="line">		<span class="attr">"38888"</span>:<span class="string">"password1"</span>,</div><div class="line">		<span class="attr">"38889"</span>:<span class="string">"password2"</span>,</div><div class="line">		<span class="attr">"38890"</span>:<span class="string">"password3"</span></div><div class="line">	&#125;,</div><div class="line">	<span class="attr">"timeout"</span>:<span class="number">300</span>,</div><div class="line">	<span class="attr">"method"</span>:<span class="string">"chacha20"</span>,</div><div class="line">	<span class="attr">"fast_open"</span>:<span class="literal">false</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="服务端启动"><a href="#服务端启动" class="headerlink" title="服务端启动"></a>服务端启动</h3><h4 id="常规启动"><a href="#常规启动" class="headerlink" title="常规启动"></a>常规启动</h4><p>To run the config file in the foreground:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssserver -c /etc/shadowsocks.json</div></pre></td></tr></table></figure></p>
+<p>or to run in the background:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssserver -c /etc/shadowsocks.json <span class="_">-d</span> start</div><div class="line">ssserver -c /etc/shadowsocks.json <span class="_">-d</span> stop	<span class="comment"># 停止 shadowsocks</span></div></pre></td></tr></table></figure></p>
+<h4 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h4><p>To check the log:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo less /var/<span class="built_in">log</span>/shadowsocks.log</div></pre></td></tr></table></figure></p>
+<h4 id="守护程序"><a href="#守护程序" class="headerlink" title="守护程序"></a>守护程序</h4><p>To run with deamon in CentOS7</p>
+<p>create file <code>sudo vi /etc/systemd/system/shadowsocks.service</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[Unit]</div><div class="line">Description=Shadowsocks</div><div class="line">After=network.target</div><div class="line"></div><div class="line">[Service]</div><div class="line">Type=forking</div><div class="line">PIDFile=/run/shadowsocks/server.pid</div><div class="line">PermissionsStartOnly=true</div><div class="line">ExecStartPre=/bin/mkdir -p /run/shadowsocks</div><div class="line">ExecStartPre=/bin/chown root:root /run/shadowsocks</div><div class="line">ExecStart=/usr/bin/ssserver --pid-file /var/run/shadowsocks/server.pid -c /etc/shadowsocks/config.json -d start</div><div class="line">Restart=on-abort</div><div class="line">User=root</div><div class="line">Group=root</div><div class="line">UMask=0027</div><div class="line"></div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure></p>
+<p>give the file permission:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/systemd/system</div><div class="line">chmod 755 shadowsocks.service</div></pre></td></tr></table></figure></p>
+<p>to run<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo systemctl start shadowsocks</div><div class="line">sudo systemctl <span class="built_in">enable</span> shadowsocks</div></pre></td></tr></table></figure></p>
+<h4 id="Firewalld"><a href="#Firewalld" class="headerlink" title="Firewalld"></a>Firewalld</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">touch /etc/firewalld/services/shadowsocks.xml</div><div class="line">sudo vi /etc/firewalld/services/shadowsocks.xml</div></pre></td></tr></table></figure>
+<p>加入如下内容：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">service</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">short</span>&gt;</span>shadowsocks<span class="tag">&lt;/<span class="name">short</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>enable shadowsocks.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">port</span> <span class="attr">protocol</span>=<span class="string">"tcp"</span> <span class="attr">port</span>=<span class="string">"39999"</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">port</span> <span class="attr">protocol</span>=<span class="string">"udp"</span> <span class="attr">port</span>=<span class="string">"39999"</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>添加防火墙策略<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --permanent --zone=public --add-service=shadowsocks</div><div class="line">firewall-cmd --permanent --add-masquerade</div><div class="line">firewall-cmd --reload</div></pre></td></tr></table></figure></p>
+<h3 id="客户端启动"><a href="#客户端启动" class="headerlink" title="客户端启动"></a>客户端启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sslocal -c /etc/shadowsocks.json</div></pre></td></tr></table></figure>
+<h2 id="Optimize"><a href="#Optimize" class="headerlink" title="Optimize"></a>Optimize</h2><p><a href="http://www.leyar.me/optimize-the-shadowsocks/">Shadowsocks 之优化篇</a><br><a href="https://github.com/shadowsocks/shadowsocks/wiki/Optimizing-Shadowsocks" target="_blank" rel="external">Optimizing-Shadowsocks</a><br><a href="https://www.ifshow.com/centos-7-shadowsocks-optimization/" target="_blank" rel="external">CentOS 7 Shadowsocks优化</a></p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>2017-2-19 更新： 推荐编译安装 Shadowsokcs-libev 版本，参考 <a href="http://www.leyar.me/Compile-shadowsocks-libev-in-CentOS7/">Compile Shadowsocks-libev in CentOS7</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;版本： Python 版&lt;br&gt;加密方式： Chacha20&lt;br&gt;推荐安装 &lt;a href=&quot;http://www.leyar.me/Compile-shadowsocks-libev-in-CentOS7/&quot;&gt;Shadowsocks-libev&lt;/a&gt; 版本&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;Install&quot;&gt;&lt;a href=&quot;#Install&quot; class=&quot;headerlink&quot; title=&quot;Install&quot;&gt;&lt;/a&gt;Install&lt;/h2&gt;&lt;h3 id=&quot;安装-shadowsocks&quot;&gt;&lt;a href=&quot;#安装-shadowsocks&quot; class=&quot;headerlink&quot; title=&quot;安装 shadowsocks&quot;&gt;&lt;/a&gt;安装 shadowsocks&lt;/h3&gt;&lt;p&gt;Debian/Ubuntu:&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;$ sudo apt-get install python-pip&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ sudo pip install shadowsocks&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;CentOS 7(于2016-2-5更新)&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;$ sudo yum -y update&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ sudo yum -y install python-pip&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ pip install --upgrade pip&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;$ sudo pip install shadowsocks&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="shadowsocks" scheme="http://www.leyar.me/tags/shadowsocks/"/>
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>NETGEAR WNDR4300 折腾之 OpenWrt + dnsmasq + SS</title>
+    <link href="http://www.leyar.me/netgear-wndr4300-openwrt-shadowsocks/"/>
+    <id>http://www.leyar.me/netgear-wndr4300-openwrt-shadowsocks/</id>
+    <published>2015-07-31T16:14:00.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一直想入手一个可以刷 <a href="http://wiki.openwrt.org/toh/netgear/wndr4300" target="_blank" rel="external">OpenWrt</a> 的路由器，国内的不考虑，国外的看中了两款，NETGEAR 的 WNDR4300 以及 linksys 的 E4200，E4200 貌似不能刷 OpenWrt，而且国内也没有地方可以买到。于是 WNDR4300 成了不二之选。</p>
+<p>这里记录下我的刷机并且实现自动科学上网的过程.</p>
+<blockquote>
+<p>本机系统环境： Archlinux<br><a href="https://sourceforge.net/p/openwrt-dist/wiki/DNS/" target="_blank" rel="external">防 DNS 劫持</a>方案: dnsmasq 搭配 ss-tunnel<br>针对 IP 封锁：搭配 ignore.list 列表<br><a id="more"></a></p>
+</blockquote>
+<h2 id="刷机"><a href="#刷机" class="headerlink" title="刷机"></a>刷机</h2><h3 id="下载-OpenWrt-固件"><a href="#下载-OpenWrt-固件" class="headerlink" title="下载 OpenWrt 固件"></a>下载 OpenWrt 固件</h3><p>下载 OpenWrt 官方安装镜像及升级包，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/openwrt-ar71xx-nand-wndr4300-ubi-factory.img</div><div class="line">wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/nand/openwrt-ar71xx-nand-wndr4300-squashfs-sysupgrade.tar</div></pre></td></tr></table></figure>
+<h3 id="刷入-OpenWrt-固件"><a href="#刷入-OpenWrt-固件" class="headerlink" title="刷入 OpenWrt 固件"></a>刷入 OpenWrt 固件</h3><p>登录路由器管理界面 (<a href="http://www.routerlogin.net" target="_blank" rel="external">http://www.routerlogin.net</a>) 进入「固件升级」页面，选择下载的安装镜像<code>openwrt-ar71xx-nand-wndr4300-ubi-factory.img</code>，点「确定」。</p>
+<p>等待镜像刷入成功。</p>
+<p>初次登入 OpenWrt 是没有密码的，随机键入一个字符即可进入管理界面。</p>
+<h3 id="升级-OpenWrt-固件"><a href="#升级-OpenWrt-固件" class="headerlink" title="升级 OpenWrt 固件"></a>升级 OpenWrt 固件</h3><p>「System」-「Backup/Flash Firmware」-「Flash new firmware image」，选中下载的<code>openwrt-ar71xx-nand-wndr4300-squashfs-sysupgrade.tar</code>升级包，「Flash image…」</p>
+<p>等待升级成功。</p>
+<h3 id="重启路由"><a href="#重启路由" class="headerlink" title="重启路由"></a>重启路由</h3><p>当固件刷入成功后，为了确保 5GHz 的 WiFi 功能能正常使用，必须先关闭路由电源等待 5s 再开启电源重新启动。</p>
+<p>至此，刷机步骤完成。</p>
+<h2 id="配置-OpenWrt"><a href="#配置-OpenWrt" class="headerlink" title="配置 OpenWrt"></a>配置 OpenWrt</h2><h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>「Network」-「Interface」-<code>WAN</code>后面的「Edit」，<code>Protocol</code>选择<code>PPPoE</code>，「Switch Protocol」，输入帐号密码，「Save&amp;Apply」，配置正确的话，此时有线网络可以正常连接上。</p>
+<h3 id="更改界面语言"><a href="#更改界面语言" class="headerlink" title="更改界面语言"></a>更改界面语言</h3><p><em>PS: 此步骤可选，我为了尽量节省空间，就没有做修改.</em></p>
+<p>「System」-「Software」-「Update list」-<code>filter</code>后面输入<code>chinese</code>搜索语言包，切换到「Available Packages」，点击搜索到的软件包后面的「install」安装中文包。</p>
+<p>「System」-「System」-「Language&amp;style」选择<code>chinese</code>-「Save&amp;Apply」，刷新即可甚至界面为中文。</p>
+<h2 id="安装及配置-Dnsmasq-和-SS"><a href="#安装及配置-Dnsmasq-和-SS" class="headerlink" title="安装及配置 Dnsmasq 和 SS"></a>安装及配置 Dnsmasq 和 SS</h2><blockquote>
+<p>这里罗列一下使用到的开源项目包括版本(截至2015-11-9)：</p>
+<ul>
+<li><a href="https://github.com/shadowsocks/openwrt-shadowsocks" target="_blank" rel="external">shadowsocks-libev-spec</a> v2.4.1-1 </li>
+<li><a href="https://github.com/aa65535/openwrt-dnsmasq" target="_blank" rel="external">dnsmasq-full</a> v2.72-4</li>
+</ul>
+</blockquote>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p><code>ssh</code> 到 openwrt</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ ssh root@192.168.1.1</div></pre></td></tr></table></figure>
+<p>更新软件包列表并安装依赖包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">opkg update</div><div class="line">opkg install ip libc libgcc libgmp libnettle libopenssl zlib</div></pre></td></tr></table></figure>
+<p>添加第三方源<code>OpenWrt-dist</code>源到<code>etc/opkg.conf</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">'src/gz openwrt_dist http://openwrt-dist.sourceforge.net/releases/ar71xx/packages</span></div><div class="line">src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/releases/luci/packages' &gt;&gt; /etc/opkg.conf</div></pre></td></tr></table></figure>
+<p>卸载原本自带的 dnsmasq，安装 dnsmasq-full 和 spec 版 ss </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">opkg update</div><div class="line">opkg remove dnsmasq</div><div class="line">opkg install dnsmasq-full</div><div class="line">opkg install shadowsocks-libev-spec</div><div class="line">opkg install luci-app-shadowsocks-spec</div></pre></td></tr></table></figure>
+<blockquote>
+<p>有时候会发现安装速度很慢，此时也可通过 PC 端下载并传至路由器 <code>/tmp</code>目录再执行安装．<br>上传文件到路由器：<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp luci-app-shadowsocks-spec_1.3.3-1_all.ipk shadowsocks-libev-spec_2.2.3-1_ar71xx.ipk root@192.168.1.1:/tmp/</div></pre></td></tr></table></figure></p>
+<p>ssh 到路由器执行安装:<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /tmp</div><div class="line">opkg install shadowsocks-libev-spec_2.2.3-1_ar71xx.ipk</div><div class="line">opkg install luci-app-shadowsocks-spec_1.3.3-1_all.ipk</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>下载忽略列表文件到<code>/etc/shadowsocks/ignore.list</code>，之后更新该文件也是使用此命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O- <span class="string">'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest'</span> | awk -F\| <span class="string">'/CN\|ipv4/ &#123; printf("%s/%d\n", $4, 32-log($5)/log(2)) &#125;'</span> &gt; /etc/shadowsocks/ignore.list</div></pre></td></tr></table></figure>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><h4 id="SS-的配置"><a href="#SS-的配置" class="headerlink" title="SS 的配置"></a>SS 的配置</h4><p>登录到路由器的 WEB 管理界面，</p>
+<p>「Services」-「ShadowSocks」- 「Global Setting」 里 「Enable」打勾并在下面输入 ss 服务器信息，「Proxy Setting」下的 「Proxy Method」选择<code>Ignore List</code>，「Proxy Protocol」选择<code>TCP only</code>，「UDP Forward」下勾选 「Enable」，然后点击「Save &amp; Apply」即可．</p>
+<p>这里配置启用了UDP 端口转发，默认会把本地的 5300 端口内容转发到 <code>8.8.4.4#53</code>．</p>
+<h4 id="DNS-的配置"><a href="#DNS-的配置" class="headerlink" title="DNS 的配置"></a>DNS 的配置</h4><p>「Network」-「DHCP and DNS」-「Resolv and Hosts Files」- 勾选「Ignore Hosts files」防止上级 DNS 的污染.</p>
+<p>打开 SSH 窗口，在<code>/etc/dnsmasq.conf</code>中加入如下内容:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server=127.0.0.1#5300</div></pre></td></tr></table></figure>
+<p>通过如上配置，可以有效防止DNS污染，使所有的网址都通过 GOOGLE 公共DNS 服务器来解析，但同时会使某些情况下访问国内网站会出现国际版的情况，此时就需要进行针对性的优化了．</p>
+<p>基本思路是，国内的站点使用 114 来进行解析，国外的站点继续走 GOOGLE 的公共 DNS．这可以通过对 dnsmasq 进行配置来实现．</p>
+<blockquote>
+<p>相关的配置文件如下:<br>[dnsmasq.conf] (<a href="https://github.com/aa65535/openwrt-dnsmasq/tree/master/etc" target="_blank" rel="external">https://github.com/aa65535/openwrt-dnsmasq/tree/master/etc</a>)<br>[dnsmasq-china-list] (<a href="https://github.com/felixonmars/dnsmasq-china-list" target="_blank" rel="external">https://github.com/felixonmars/dnsmasq-china-list</a>)</p>
+</blockquote>
+<p>操作步骤:</p>
+<p>SSH 到openwrt</p>
+<p>修改 <code>/etc/dnsmasq.conf</code> 文件，对应的配置范例可点击上面链接，主要修改的几个地方:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">no-poll</div><div class="line">no-resolv</div><div class="line">all-servers</div><div class="line"></div><div class="line">server=127.0.0.1#5300</div><div class="line">conf-dir=/etc/dnsmasq.d</div></pre></td></tr></table></figure>
+<p>创建 <code>dnsmasq.d</code> 配置目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir /etc/dnsmasq.d</div></pre></td></tr></table></figure>
+<p>切换到 PC 端 terminal 操作(Linux 系统下)<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/Download</div><div class="line">$ mkdir dnsmasq.d</div><div class="line">$ <span class="built_in">cd</span> dnsmasq.d</div><div class="line">$ git <span class="built_in">clone</span> git://github.com/felixonmars/dnsmasq-china-list .</div><div class="line">$ scp accelerated-domains.china.conf google.china.conf root@192.168.1.1:/etc/dnsmasq.d/		<span class="comment"># 这里将国内网址列表这个文件上传到路由器.</span></div></pre></td></tr></table></figure></p>
+<h3 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/shadowsocks restart</div><div class="line">/etc/init.d/dnsmasq restart</div></pre></td></tr></table></figure>
+<p>此时可以测试操作是否成功了。测试相关 ip 网址如下:</p>
+<ul>
+<li>国内 <a href="http://ip.cn" target="_blank" rel="external">http://ip.cn</a></li>
+<li>国外 <a href="http://www.whatsmyip.org/" target="_blank" rel="external">http://www.whatsmyip.org/</a></li>
+<li>查询所使用的 DNS 服务 <a href="https://www.whatsmydns.net/" target="_blank" rel="external">https://www.whatsmydns.net/</a></li>
+</ul>
+<h2 id="添加计划任务实现自动更新"><a href="#添加计划任务实现自动更新" class="headerlink" title="添加计划任务实现自动更新"></a>添加计划任务实现自动更新</h2><p>备注: 此更新脚本可以自动更新已安装的软件脚本以及 <code>ignore list</code>文件. 关于国内网址列表文件，我是在本机客户端自做了一个小脚本自动更新 git 仓库并上传到路由器覆盖.</p>
+<p>ssh 到 openwrt，新建文件 <code>/root/update</code>，添加如下内容:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"></div><div class="line"><span class="comment"># 更新 ignore 文件</span></div><div class="line"></div><div class="line"><span class="built_in">set</span> <span class="_">-e</span> -o pipefail</div><div class="line"></div><div class="line">wget -O- <span class="string">'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest'</span> | \</div><div class="line">    awk -F\| <span class="string">'/CN\|ipv4/ &#123; printf("%s/%d\n", $4, 32-log($5)/log(2)) &#125;'</span> &gt; \ </div><div class="line">    /tmp/ignore.list</div><div class="line"></div><div class="line">mv /tmp/ignore.list /etc/shadowsocks/</div><div class="line"></div><div class="line"><span class="keyword">if</span> pidof ss-redir&gt;/dev/null; <span class="keyword">then</span></div><div class="line">    /etc/init.d/shadowsocks rules</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment"># 更新软件</span></div><div class="line"></div><div class="line">opkg update</div><div class="line"></div><div class="line"><span class="keyword">for</span> ipk <span class="keyword">in</span> $(opkg list-upgradable | awk <span class="string">'$1!~/^kmod|^Multiple/&#123;print $1&#125;'</span>); <span class="keyword">do</span></div><div class="line">    opkg upgrade <span class="variable">$ipk</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<p>运行命令 <code>chmod +x /root/update</code> 给脚本添加可执行权限</p>
+<p>打开路由器 WEB 管理界面:</p>
+<p>「System」-「Scheduled Tasks」填写如下内容(每天 04:30 执行):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">30    4     *     *     *     /root/update&gt;/dev/null 2&gt;&amp;1</div></pre></td></tr></table></figure>
+<h2 id="后续补充"><a href="#后续补充" class="headerlink" title="后续补充"></a>后续补充</h2><p>还有一些涉及到的例如 SS 服务器的安装与优化，及其他的一些改善内容，后续再慢慢研究。</p>
+<blockquote>
+<p>参考资料:</p>
+<ul>
+<li><a href="http://undownding.me/2015/02/10/use-shadowsocks-on-openwrt/" target="_blank" rel="external">Use Shadowsocks on OpenWrt</a></li>
+</ul>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;一直想入手一个可以刷 &lt;a href=&quot;http://wiki.openwrt.org/toh/netgear/wndr4300&quot;&gt;OpenWrt&lt;/a&gt; 的路由器，国内的不考虑，国外的看中了两款，NETGEAR 的 WNDR4300 以及 linksys 的 E4200，E4200 貌似不能刷 OpenWrt，而且国内也没有地方可以买到。于是 WNDR4300 成了不二之选。&lt;/p&gt;
+&lt;p&gt;这里记录下我的刷机并且实现自动科学上网的过程.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本机系统环境： Archlinux&lt;br&gt;&lt;a href=&quot;https://sourceforge.net/p/openwrt-dist/wiki/DNS/&quot;&gt;防 DNS 劫持&lt;/a&gt;方案: dnsmasq 搭配 ss-tunnel&lt;br&gt;针对 IP 封锁：搭配 ignore.list 列表&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="openwrt" scheme="http://www.leyar.me/tags/openwrt/"/>
+    
+      <category term="SS" scheme="http://www.leyar.me/tags/SS/"/>
+    
+      <category term="NETGEAR" scheme="http://www.leyar.me/tags/NETGEAR/"/>
+    
+      <category term="dnsmasq" scheme="http://www.leyar.me/tags/dnsmasq/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS7 上使用 pdnsd 搭建 DNS 服务器</title>
+    <link href="http://www.leyar.me/setting-up-dns-server-on-centos7/"/>
+    <id>http://www.leyar.me/setting-up-dns-server-on-centos7/</id>
+    <published>2015-07-29T17:10:00.000Z</published>
+    <updated>2017-02-19T04:03:01.153Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在折腾路由器（后续再把自己的步骤记录一下）其中涉及到防 DNS 污染的问<br>题，优化方案我选择了在自己的 VPS 上搭建 DNS 服务器。这里记录下我的搭建过<br>程。</p>
+<p>系统： CentOS 7 64bit</p>
+<h2 id="安装-pdnsd"><a href="#安装-pdnsd" class="headerlink" title="安装 pdnsd"></a>安装 pdnsd</h2><p>到官方<a href="http://members.home.nl/p.a.rombouts/pdnsd/dl.html" target="_blank" rel="external">pdnsd Download Page</a>下载最新版本 rpm 包，截至今日（2015-7-30）最新版本为 1.2.9：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-1.2.9a-par_sl6.x86_64.rpm</div></pre></td></tr></table></figure></p>
+<p>然后通过 yum 安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum localinstall pdnsd-1.2.9a-par_sl6.x86_64.rpm</div></pre></td></tr></table></figure></p>
+<p>如此安装完成。<br><a id="more"></a></p>
+<h2 id="配置-pdnsd"><a href="#配置-pdnsd" class="headerlink" title="配置 pdnsd"></a>配置 pdnsd</h2><p>拷贝配置样本 <code>/etc/pdnsd.conf.sample</code>，并重命名为<code>/etc/pdnsd.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cp /etc/pdnsd.conf.sample /etc/pdnsd.conf</div></pre></td></tr></table></figure>
+<p>编辑配置文件 <code>pdnsd.conf</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/pdnsd.conf</div></pre></td></tr></table></figure>
+<p>参考我的配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div></pre></td><td class="code"><pre><div class="line">// Sample pdnsd configuration file. Must be customized to obtain a working pdnsd setup!</div><div class="line">// Read the pdnsd.conf(5) manpage for an explanation of the options.</div><div class="line">// Add or remove &apos;#&apos; in front of options you want to disable or enable, respectively.</div><div class="line">// Remove &apos;/*&apos; and &apos;*/&apos; to enable complete sections.</div><div class="line"></div><div class="line">global &#123;</div><div class="line">	perm_cache=4096;</div><div class="line">	cache_dir=&quot;/var/cache/pdnsd&quot;;</div><div class="line">#	pid_file = /var/run/pdnsd.pid;</div><div class="line">	run_as=&quot;pdnsd&quot;;</div><div class="line">	server_ip = 0.0.0.0;  # Use eth0 here if you want to allow other</div><div class="line">				# machines on your network to query pdnsd.</div><div class="line">	server_port = 9909;</div><div class="line">	status_ctl = on;</div><div class="line">#	paranoid=on;       # This option reduces the chance of cache poisoning</div><div class="line">	                   # but may make pdnsd less efficient, unfortunately.</div><div class="line">	query_method=udp_tcp;</div><div class="line">	min_ttl=1d;       # Retain cached entries at least 15 minutes.</div><div class="line">	max_ttl=1w;        # One week.</div><div class="line">	timeout=5;        # Global timeout option (10 seconds).</div><div class="line">	neg_domain_pol=on;</div><div class="line">	udpbufsize=1024;   # Upper limit on the size of UDP messages.</div><div class="line">&#125;</div><div class="line"></div><div class="line"># The following section is most appropriate if you have a fixed connection to</div><div class="line"># the Internet and an ISP which provides good DNS servers.</div><div class="line">server &#123;</div><div class="line">	label= &quot;googledns&quot;;</div><div class="line">	ip = 8.8.8.8</div><div class="line">	, 8.8.4.4</div><div class="line">	;		   # Put your ISP&apos;s DNS-server address(es) here.</div><div class="line">#	proxy_only=on;     # Do not query any name servers beside your ISP&apos;s.</div><div class="line">	                   # This may be necessary if you are behind some</div><div class="line">	                   # kind of firewall and cannot receive replies</div><div class="line">	                   # from outside name servers.</div><div class="line">	timeout=3;         # Server timeout; this may be much shorter</div><div class="line">			   # that the global timeout option.</div><div class="line">	uptest=none;       # Test if the network interface is active.</div><div class="line">	interface=eth0;    # The name of the interface to check.</div><div class="line">	interval=10m;      # Check every 10 minutes.</div><div class="line">	purge_cache=off;   # Keep stale cache entries in case the ISP&apos;s</div><div class="line">			   # DNS servers go offline.</div><div class="line">	edns_query=yes;    # Use EDNS for outgoing queries to allow UDP messages</div><div class="line">			   # larger than 512 bytes. May cause trouble with some</div><div class="line">			   # legacy systems.</div><div class="line">#	exclude=.localdomain;  # If your ISP censors certain names, you may</div><div class="line">#			   # want to exclude them here, and provide an</div><div class="line">#			    # alternative server section below that will</div><div class="line">#			    # successfully resolve the names.</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*</div><div class="line"># The following section is more appropriate for dial-up connections.</div><div class="line"># Read about how to use pdnsd-ctl for dynamic configuration in the documentation.</div><div class="line">server &#123;</div><div class="line">	label= &quot;dialup&quot;;</div><div class="line">	file = &quot;/etc/ppp/resolv.conf&quot;;  # Preferably do not use /etc/resolv.conf</div><div class="line">	proxy_only=on;</div><div class="line">	timeout=4;</div><div class="line">	uptest=if;</div><div class="line">	interface = ppp0;</div><div class="line">	interval=10;       # Check the interface every 10 seconds.</div><div class="line">	purge_cache=off;</div><div class="line">	preset=off;</div><div class="line">&#125;</div><div class="line">*/</div><div class="line"></div><div class="line">/*</div><div class="line"># The servers provided by OpenDNS are fast, but they do not reply with</div><div class="line"># NXDOMAIN for non-existant domains, instead they supply you with an</div><div class="line"># address of one of their search engines. They also lie about the addresses of </div><div class="line"># of the search engines of google, microsoft and yahoo.</div><div class="line"># If you do not like this behaviour the &quot;reject&quot; option may be useful.</div><div class="line">server &#123;</div><div class="line">	label = &quot;opendns&quot;;</div><div class="line">	ip = 208.67.222.222, 208.67.220.220;</div><div class="line">	reject = 208.69.32.0/24,  # You may need to add additional address ranges</div><div class="line">	         208.69.34.0/24,  # here if the addresses of their search engines</div><div class="line">	         208.67.219.0/24; # change.</div><div class="line">	reject_policy = fail;     # If you do not provide any alternative server</div><div class="line">	                          # sections, like the following root-server</div><div class="line">	                          # example, &quot;negate&quot; may be more appropriate here.</div><div class="line">	timeout = 4;</div><div class="line">	uptest = ping;            # Test availability using ICMP echo requests.</div><div class="line">        ping_timeout = 100;       # ping test will time out after 10 seconds.</div><div class="line">	interval = 15m;           # Test every 15 minutes.</div><div class="line">	preset = off;</div><div class="line">&#125;</div><div class="line">*/</div><div class="line"></div><div class="line">/*</div><div class="line"># This section is meant for resolving from root servers.</div><div class="line">server &#123;</div><div class="line">	label = &quot;root-servers&quot;;</div><div class="line">	root_server = discover; # Query the name servers listed below</div><div class="line">				# to obtain a full list of root servers.</div><div class="line">	randomize_servers = on; # Give every root server an equal chance</div><div class="line">	                        # of being queried.</div><div class="line">	ip = 	198.41.0.4,     # This list will be expanded to the full</div><div class="line">		192.228.79.201; # list on start up.</div><div class="line">	timeout = 5;</div><div class="line">	uptest = query;         # Test availability using empty DNS queries.</div><div class="line">#	query_test_name = .;    # To be used if remote servers ignore empty queries.</div><div class="line">	interval = 30m;         # Test every half hour.</div><div class="line">	ping_timeout = 300;     # Test should time out after 30 seconds.</div><div class="line">	purge_cache = off;</div><div class="line">#	edns_query = yes;	# Use EDNS for outgoing queries to allow UDP messages</div><div class="line">			   	# larger than 512 bytes. May cause trouble with some</div><div class="line">			   	# legacy systems.</div><div class="line">	exclude = .localdomain;</div><div class="line">	policy = included;</div><div class="line">	preset = off;</div><div class="line">&#125;</div><div class="line">*/</div><div class="line"></div><div class="line">source &#123;</div><div class="line">	owner=localhost;</div><div class="line">#	serve_aliases=on;</div><div class="line">	file=&quot;/etc/hosts&quot;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*</div><div class="line">include &#123;file=&quot;/etc/pdnsd.include&quot;;&#125;	# Read additional definitions from /etc/pdnsd.include.</div><div class="line">*/</div><div class="line"></div><div class="line">rr &#123;</div><div class="line">	name=localhost;</div><div class="line">	reverse=on;</div><div class="line">	a=127.0.0.1;</div><div class="line">	owner=localhost;</div><div class="line">	soa=localhost,root.localhost,42,86400,900,86400,86400;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/*</div><div class="line">neg &#123;</div><div class="line">	name=doubleclick.net;</div><div class="line">	types=domain;   # This will also block xxx.doubleclick.net, etc.</div><div class="line">&#125;</div><div class="line">*/</div><div class="line"></div><div class="line">/*</div><div class="line">neg &#123;</div><div class="line">	name=bad.server.com;   # Badly behaved server you don&apos;t want to connect to.</div><div class="line">	types=A,AAAA;</div><div class="line">&#125;</div><div class="line">*/</div></pre></td></tr></table></figure></p>
+<p>更多配置详情参考：<a href="http://members.home.nl/p.a.rombouts/pdnsd/doc.html" target="_blank" rel="external">pdnsd Documents</a></p>
+<h2 id="启动-pdnsd"><a href="#启动-pdnsd" class="headerlink" title="启动 pdnsd"></a>启动 pdnsd</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">service pdnsd start</div></pre></td></tr></table></figure>
+<p>开机启动：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chkcongif pdnsd on</div></pre></td></tr></table></figure></p>
+<h2 id="添加防火墙规则"><a href="#添加防火墙规则" class="headerlink" title="添加防火墙规则"></a>添加防火墙规则</h2><p>将 pdnsd 端口（我的是 9909）加入防火墙规则列表里：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/sbin/iptables <span class="_">-l</span> INPUT -p tcp --dport 9909 -j ACCEPT</div><div class="line">/etc/init.d/iptables save</div><div class="line">service iptables restart</div></pre></td></tr></table></figure></p>
+<h2 id="测试-pdnsd"><a href="#测试-pdnsd" class="headerlink" title="测试 pdnsd"></a>测试 pdnsd</h2><p>本地使用自建 DNS 测试<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dig @x.x.x.x -p 9909 youtube.com	<span class="comment"># x.x.x.x 改为 DNS 服务器 IP</span></div></pre></td></tr></table></figure></p>
+<p>如果设置正确，则会出现如下查询结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">; &lt;&lt;&gt;&gt; DiG 9.10.2-P2 &lt;&lt;&gt;&gt; @104.131.144.145 -p 9909 youtube.com</div><div class="line">; (1 server found)</div><div class="line">;; global options: +cmd</div><div class="line">;; Got answer:</div><div class="line">;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 11382</div><div class="line">;; flags: qr rd ra; QUERY: 1, ANSWER: 11, AUTHORITY: 0, ADDITIONAL: 1</div><div class="line"></div><div class="line">;; OPT PSEUDOSECTION:</div><div class="line">; EDNS: version: 0, flags:; udp: 1024</div><div class="line">;; QUESTION SECTION:</div><div class="line">;youtube.com.			IN	A</div><div class="line"></div><div class="line">;; ANSWER SECTION:</div><div class="line">youtube.com.		82182	IN	A	74.125.239.98</div><div class="line">youtube.com.		82182	IN	A	74.125.239.96</div><div class="line">youtube.com.		82182	IN	A	74.125.239.102</div><div class="line">youtube.com.		82182	IN	A	74.125.239.97</div><div class="line">youtube.com.		82182	IN	A	74.125.239.105</div><div class="line">youtube.com.		82182	IN	A	74.125.239.100</div><div class="line">youtube.com.		82182	IN	A	74.125.239.110</div><div class="line">youtube.com.		82182	IN	A	74.125.239.99</div><div class="line">youtube.com.		82182	IN	A	74.125.239.104</div><div class="line">youtube.com.		82182	IN	A	74.125.239.103</div><div class="line">youtube.com.		82182	IN	A	74.125.239.101</div><div class="line"></div><div class="line">;; Query time: 190 msec</div><div class="line">;; SERVER: 104.131.144.145#9909(104.131.144.145)</div><div class="line">;; WHEN: Thu Jul 30 01:50:40 CST 2015</div><div class="line">;; MSG SIZE  rcvd: 216</div></pre></td></tr></table></figure></p>
+<p>返回的 ip 可参考：<a href="https://www.whatsmydns.net" target="_blank" rel="external">Whatsmydns</a></p>
+<p>参考来源：<a href="http://blog.tshine.me/centos%E8%87%AA%E5%BB%BAdns%E6%9C%8D%E5%8A%A1%E5%99%A8.html" target="_blank" rel="external">Centos自建DNS</a> </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在折腾路由器（后续再把自己的步骤记录一下）其中涉及到防 DNS 污染的问&lt;br&gt;题，优化方案我选择了在自己的 VPS 上搭建 DNS 服务器。这里记录下我的搭建过&lt;br&gt;程。&lt;/p&gt;
+&lt;p&gt;系统： CentOS 7 64bit&lt;/p&gt;
+&lt;h2 id=&quot;安装-pdnsd&quot;&gt;&lt;a href=&quot;#安装-pdnsd&quot; class=&quot;headerlink&quot; title=&quot;安装 pdnsd&quot;&gt;&lt;/a&gt;安装 pdnsd&lt;/h2&gt;&lt;p&gt;到官方&lt;a href=&quot;http://members.home.nl/p.a.rombouts/pdnsd/dl.html&quot;&gt;pdnsd Download Page&lt;/a&gt;下载最新版本 rpm 包，截至今日（2015-7-30）最新版本为 1.2.9：&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;wget http://members.home.nl/p.a.rombouts/pdnsd/releases/pdnsd-1.2.9a-par_sl6.x86_64.rpm&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;然后通过 yum 安装&lt;br&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;yum localinstall pdnsd-1.2.9a-par_sl6.x86_64.rpm&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;如此安装完成。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="dns" scheme="http://www.leyar.me/tags/dns/"/>
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="centos" scheme="http://www.leyar.me/tags/centos/"/>
+    
+      <category term="pdnsd" scheme="http://www.leyar.me/tags/pdnsd/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Archlinux 安装笔记</title>
+    <link href="http://www.leyar.me/installation-of-archlinux/"/>
+    <id>http://www.leyar.me/installation-of-archlinux/</id>
+    <published>2015-07-28T03:28:46.000Z</published>
+    <updated>2017-02-19T04:03:01.149Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前就打算将 Ubuntu 换成 Archlinux，但这个计划一直被搁置，直到把双系统中的<br>Windows 换成了 Windows 10，才决定顺便一起将 Ubuntu 也换了。</p>
+<p>安装方法参考的官方 <a href="https://wiki.archlinux.org/index.php/Main_page" target="_blank" rel="external">Wiki</a>，<br>完全在文字界面下安装，以便更深入的认识 Linux。这里简单记录下我的安装过程。<br><a id="more"></a></p>
+<h2 id="安装准备"><a href="#安装准备" class="headerlink" title="安装准备"></a>安装准备</h2><h3 id="制作-U-盘启动盘"><a href="#制作-U-盘启动盘" class="headerlink" title="制作 U 盘启动盘"></a>制作 U 盘启动盘</h3><p>在官方 Archlinux <a href="https://www.archlinux.org/download/" target="_blank" rel="external">Download Page</a>下载最新的镜像。</p>
+<p>使用 <code>dd</code> 制作 U 盘启动盘</p>
+<p>先通过 <code>lsblk</code> 查看 U 盘所在驱动器，并确保其处于未挂载状态，然后通过以下命令开始制作启动 U 盘。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">dd bs=4M <span class="keyword">if</span>=/path/to/archlinux.iso of=/dev/sdx &amp;&amp; sync</div></pre></td></tr></table></figure>
+<p><code>if</code> 后面的参数为 iso 所在的路径，<code>of</code> 后面的参数为 u 盘所在驱动器名，例如<code>/dev/sdf</code></p>
+<p>注意：以上方式会格式化 U 盘，需注意做好备份工作。</p>
+<p>其他方法参照官方 Wiki：<br><a href="https://wiki.archlinux.org/index.php/USB_flash_installation_media" target="_blank" rel="external">USB flash installation media</a></p>
+<p>U 盘制作完成后，重启并启动到 BIOS 模式（也可启动到 UEFI 模式），选择Archlinux 进入系统。之后会看到一个 <code>zsh</code>命令提示符。</p>
+<h3 id="网络连接"><a href="#网络连接" class="headerlink" title="网络连接"></a>网络连接</h3><p>正常情况下有线网络会自动连接上。需要设置静态 IP 或者无线网络可以参考官方 Wiki</p>
+<h3 id="硬盘分区"><a href="#硬盘分区" class="headerlink" title="硬盘分区"></a>硬盘分区</h3><p>以下分区步骤是通过命令行操作，可以提前用 PE 等其他工具在图形界面下先进行分区。我这里分为 /，/boot,/home,swap 四个分区。</p>
+<p>如果已在图形界面分好区，可以直接跳到格式化分区步骤。</p>
+<p>以 BIOS/MBR 为例进行分区(双系统请注意填写正确的分区编号)：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">lsblk		<span class="comment"># 查看设备及分区情况</span></div><div class="line">parted /dev/sdx <span class="built_in">print</span>		<span class="comment"># 查看磁盘分区表类型</span></div><div class="line">parted /dev/sdx	<span class="comment"># 打开需要新建分区表的设备,并进入 parted 交互模式</span></div><div class="line">(parted) mkpart primary ext3 1M 300M		<span class="comment"># 创建 /boot 分区</span></div><div class="line">(parted) <span class="built_in">set</span> 1 boot on		<span class="comment"># 设置 /boot 为启动目录</span></div><div class="line">(parted) mkpart primary ext3 300M 20G		<span class="comment"># 20 G `/` 分区</span></div><div class="line">(parted) mkpart primary linux-swap 20G 24G	<span class="comment"># swap 分区</span></div><div class="line">(parted) mkpart primary ext3 24G 100%		<span class="comment"># 剩下的空间给 /home</span></div></pre></td></tr></table></figure>
+<p><em>图形分区工具可以选择 <a href="https://wiki.archlinux.org/index.php/GParted" target="_blank" rel="external">GParted</a></em></p>
+<h3 id="创建文件系统"><a href="#创建文件系统" class="headerlink" title="创建文件系统"></a>创建文件系统</h3><p>分区之后需要将其格式化为指定的文件系统。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">lsblk /dev/sdx	<span class="comment"># 查看所有分区</span></div><div class="line">mkswap /dev/sdax	<span class="comment"># 格式化 swap 区</span></div><div class="line">swapon /dev/sdax	<span class="comment"># 启用 swap 区</span></div><div class="line">mkfs.ext4 /dev/sdaxy	<span class="comment"># 格式化其他分区为 ext4 文件系统</span></div></pre></td></tr></table></figure></p>
+<h3 id="挂载分区"><a href="#挂载分区" class="headerlink" title="挂载分区"></a>挂载分区</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mount /dev/sdxR /mnt	<span class="comment"># 挂载 `/`（root）分区</span></div><div class="line">mkdir /mnt/boot</div><div class="line">mount /dev/sdxy /mnt/boot	<span class="comment"># 挂载 `/boot` 分区</span></div><div class="line">mkdir /mnt/home</div><div class="line">mount /dev/sdxy /mnt/home	<span class="comment"># 挂载 `/home` 分区</span></div></pre></td></tr></table></figure>
+<h3 id="选择安装镜像"><a href="#选择安装镜像" class="headerlink" title="选择安装镜像"></a>选择安装镜像</h3><p>编辑 <code>/etc/pacman.d/mirrorlist</code>，设置安装源。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/pacman.d/mirrorlist</div></pre></td></tr></table></figure></p>
+<p>通过 <code>/cn</code> 搜索中国的镜像源，去掉前面的注释启用。</p>
+<p>这里贴一个使用<a href="https://www.archlinux.org/mirrorlist/" target="_blank" rel="external">镜像列表生成器</a>生成的距离我这边最近的镜像列表。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">##</div><div class="line">## Arch Linux repository mirrorlist</div><div class="line">## Generated on 2015-07-31</div><div class="line">##</div><div class="line"></div><div class="line">## China</div><div class="line">Server = http://mirrors.163.com/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirror.bjtu.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.cqu.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.hust.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.hustunique.com/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.neusoft.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.opencas.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://run.hit.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch</div><div class="line">Server = http://mirrors.zju.edu.cn/archlinux/$repo/os/$arch</div></pre></td></tr></table></figure></p>
+<p>更改镜像源后，使用<code>pacman -Syy</code>强制刷新。</p>
+<h2 id="安装系统"><a href="#安装系统" class="headerlink" title="安装系统"></a>安装系统</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pacstrap -i /mnt base base-devel</div></pre></td></tr></table></figure>
+<h2 id="生成-fstab-file-system-table"><a href="#生成-fstab-file-system-table" class="headerlink" title="生成 fstab (file system table)"></a>生成 fstab (file system table)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">genfstab -U -p /mnt &gt;&gt; /mnt/etc/fstab</div><div class="line">vi /mnt/etc/fstabi	<span class="comment"># 检查生成 fstab 是否正确</span></div></pre></td></tr></table></figure>
+<h2 id="切换新系统"><a href="#切换新系统" class="headerlink" title="切换新系统"></a>切换新系统</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">arch-chroot /mnt /bin/bash</div></pre></td></tr></table></figure>
+<h2 id="配置新系统"><a href="#配置新系统" class="headerlink" title="配置新系统"></a>配置新系统</h2><h3 id="Locale"><a href="#Locale" class="headerlink" title="Locale"></a>Locale</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/locale.gen</div></pre></td></tr></table></figure>
+<p>去掉以下几项前面的注释“#”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">en_US.UTF-8 UTF-8</div><div class="line">zh_CN.UTF-8 UTF-8</div><div class="line">zh_TW.UTF-8 UTF-8</div><div class="line">zh_HK.UTF-8 UTF-8</div></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">locale-gen		<span class="comment"># 生成 locale 讯息</span></div><div class="line"><span class="built_in">echo</span> LANG=en_US.UTF-8 &gt; /etc/locale.conf		<span class="comment"># 提交本地化选项</span></div></pre></td></tr></table></figure>
+<h3 id="时区"><a href="#时区" class="headerlink" title="时区"></a>时区</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ls /usr/share/zoneinfo	<span class="comment">#查看可用时区</span></div><div class="line">ls /usr/share/Asia		<span class="comment">#查看亚洲可用时区</span></div><div class="line">ln <span class="_">-s</span> /usr/share/zoneinfo/Asia/Shanghai /etc/localtime	<span class="comment">#设置时区</span></div></pre></td></tr></table></figure>
+<p>注意： 后期当出现时间不准确的问题，可通过强制执行上面的最后一项命令来修正。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</div></pre></td></tr></table></figure></p>
+<h3 id="硬件时间"><a href="#硬件时间" class="headerlink" title="硬件时间"></a>硬件时间</h3><p>为了便于统一机器上所有系统的硬件时间模式，可将操作系统时间设置成 UTC时间。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hwclock --systohc --utc	<span class="comment"># 自动生成 /etc/adjtime</span></div></pre></td></tr></table></figure></p>
+<p>关于时间问题，还可以参考<a href="https://wiki.archlinux.org/index.php/Time" target="_blank" rel="external">Time</a></p>
+<h3 id="设置主机名"><a href="#设置主机名" class="headerlink" title="设置主机名"></a>设置主机名</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> *ileyar* &gt; /etc/hostname		<span class="comment"># myhostname 为 ileyar</span></div></pre></td></tr></table></figure>
+<p>修改 <code>/etc/hosts</code> 添加新建的主机名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#&lt;ip-address&gt;	&lt;hostname.domain.org&gt;	&lt;hostname&gt;</div><div class="line">127.0.0.1	localhost.localdomain	localhost	ileyar</div><div class="line">::1		localhost.localdomain	localhost	ileyar</div></pre></td></tr></table></figure></p>
+<h3 id="配置网络"><a href="#配置网络" class="headerlink" title="配置网络"></a>配置网络</h3><p>我这里使用的有线，直接使用 dhcpcd 服务即可。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ip link	<span class="comment">#查看网络接口名</span></div><div class="line">systemctl <span class="built_in">enable</span> dhcpcd@*interface_name*.service	<span class="comment">#interface_name 为网络接口名</span></div></pre></td></tr></table></figure></p>
+<p>其他也可以使用 netctl 或者 systemd-networkd 来配置并管理网络。详细操作方法参考官方 Wiki。</p>
+<h3 id="设置-Root-密码"><a href="#设置-Root-密码" class="headerlink" title="设置 Root 密码"></a>设置 Root 密码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">passwd</div></pre></td></tr></table></figure>
+<h3 id="安装并配置-bootloader"><a href="#安装并配置-bootloader" class="headerlink" title="安装并配置 bootloader"></a>安装并配置 bootloader</h3><p>这里针对 BIOS 主板使用 GRUB 来进行引导。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">pacman -S grub	<span class="comment"># 安装 grub 包</span></div><div class="line">grub-install --target=i386-pc --recheck /dev/sda</div><div class="line">pacman -S os-prober		<span class="comment"># 检测硬盘上其他已安装系统的程序</span></div><div class="line">grub-mkconfig -o /boot/grub/grub.cfg		<span class="comment"># 自动生成引导项配置</span></div></pre></td></tr></table></figure></p>
+<h3 id="卸载分区并重启"><a href="#卸载分区并重启" class="headerlink" title="卸载分区并重启"></a>卸载分区并重启</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exit</span></div><div class="line">reboot</div></pre></td></tr></table></figure>
+<p>拔除 U 盘，通过引导项进入新系统即可。至此基本系统安装完毕。</p>
+<h2 id="安装系统后必备操作"><a href="#安装系统后必备操作" class="headerlink" title="安装系统后必备操作"></a>安装系统后必备操作</h2><h4 id="安装-zsh："><a href="#安装-zsh：" class="headerlink" title="安装 zsh："></a>安装 zsh：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pacman -S zsh</div></pre></td></tr></table></figure>
+<h4 id="创建新用户并设置用户组"><a href="#创建新用户并设置用户组" class="headerlink" title="创建新用户并设置用户组"></a>创建新用户并设置用户组</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">useradd -m -g users -G audio,video,floppy,network,rfkill,scanner,storage,optical,power,wheel,uucp <span class="_">-s</span> /usr/bin/zsh leyar	<span class="comment"># 新建用户 leyar</span></div><div class="line">passwd leyar		<span class="comment"># 设置用户密码</span></div></pre></td></tr></table></figure>
+<p>此时可以切换到新建的用户进行余下的操作了。</p>
+<h4 id="安装图形界面"><a href="#安装图形界面" class="headerlink" title="安装图形界面"></a>安装图形界面</h4><h5 id="安装-X-图形服务器："><a href="#安装-X-图形服务器：" class="headerlink" title="安装 X 图形服务器："></a>安装 X 图形服务器：</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo pacman -S xorg-server xorg-xinit</div></pre></td></tr></table></figure>
+<h5 id="安装显卡驱动："><a href="#安装显卡驱动：" class="headerlink" title="安装显卡驱动："></a>安装显卡驱动：</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ lspci | grep VGA	<span class="comment"># 查看显卡</span></div><div class="line">$ sudo pacman -Ss xf86-video-ati	<span class="comment"># 查找并安装 ATI 开源驱动</span></div></pre></td></tr></table></figure>
+<p>常用开源驱动：</p>
+<ul>
+<li>NVIDIA: xf86-video-nouveau</li>
+<li>Intel: xf86-video-intel</li>
+<li>ATI: xf86-video-ati</li>
+</ul>
+<p>至此可以使用 <code>startx</code> 命令手动启动 X图形界面了。</p>
+<h5 id="安装桌面环境"><a href="#安装桌面环境" class="headerlink" title="安装桌面环境"></a>安装桌面环境</h5><h6 id="GNOME"><a href="#GNOME" class="headerlink" title="GNOME"></a>GNOME</h6><p>由于 Xorg 只提供了图形环境的基本框架，用户体验有点差强人意。为了使界面更友好，此时需要安装桌面环境，我这里使用的是 GNOME<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo pacman -S gnome</div></pre></td></tr></table></figure></p>
+<p>将以下命令添加到<code>~/.xinitrc</code>，即可从控制台下启动 GNOME.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">exec</span> gnome-session</div></pre></td></tr></table></figure></p>
+<p>至此，可通过 <code>startx</code>来启动 GNOME.</p>
+<h6 id="GDM"><a href="#GDM" class="headerlink" title="GDM"></a>GDM</h6><ul>
+<li>如果想通过图形化登陆，则可以使用登陆管理器来操作，比如 GDM</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo pacman -S gdm		<span class="comment"># 安装 gdm</span></div><div class="line">$ systemctl <span class="built_in">enable</span> gdm		<span class="comment"># 开机启动 gdm.service</span></div><div class="line">$ systemctl <span class="_">-f</span> <span class="built_in">enable</span> graphical.target		<span class="comment"># 当无法进入图形界面时则经此实现</span></div><div class="line">$ systemctl <span class="built_in">enable</span> NetworkManager.service	<span class="comment"># 启动网络管理服务</span></div></pre></td></tr></table></figure>
+<h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h2><p>至此，基本的系统及桌面环境都安装完成，更多的有关程序安装配置等问题，也可以在图形界面浏览器中自行 Google，后续会更新一些我在配置过程中遇到的问题及解决办法。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;之前就打算将 Ubuntu 换成 Archlinux，但这个计划一直被搁置，直到把双系统中的&lt;br&gt;Windows 换成了 Windows 10，才决定顺便一起将 Ubuntu 也换了。&lt;/p&gt;
+&lt;p&gt;安装方法参考的官方 &lt;a href=&quot;https://wiki.archlinux.org/index.php/Main_page&quot;&gt;Wiki&lt;/a&gt;，&lt;br&gt;完全在文字界面下安装，以便更深入的认识 Linux。这里简单记录下我的安装过程。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="http://www.leyar.me/tags/linux/"/>
+    
+      <category term="archlinux" scheme="http://www.leyar.me/tags/archlinux/"/>
+    
+  </entry>
+  
+</feed>

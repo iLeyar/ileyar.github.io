@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 关于博客一些整改 · Leyar's Notebook</title><meta name="description" content="关于博客一些整改 - Leyar"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/images/favicon.ico"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://www.leyar.me/atom.xml" title="Leyar's Notebook"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/iLeyar" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">关于博客一些整改</h1><div class="post-info">2016年3月19日</div><div class="post-content"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>其实一直想给博客换一个主题，顺便也将多说评论迁移到 Disqus，原因之一是为了与主博客统一。原因之二是多说的评论提醒功能形同虚设，经常性收不到邮件提示，再加上现在多说几乎没有人在维护了，以防万一，还是早点迁移出来。</p>
+<blockquote>
+<p>计划整改内容：</p>
+<ul>
+<li><del>主题由 <a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">Yilia</a> 更换为 <a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="external">Next</a>;</del></li>
+<li><del>评论从多说迁移至 Disqus;</del></li>
+<li>博客添加 SSL;</li>
+<li>邮箱服务搭建;</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><h3 id="主题"><a href="#主题" class="headerlink" title="主题"></a>主题</h3><p>看大家对 Next 的评价很高，就心痒痒给这个博客也换上了。不过发现似乎大部分功能自己也用不上，还有点多余。但整个页面看着也还可以，适合用来做生活博客，貌似不太适合用来存放技术笔记？等找到更好的主题，再换着玩。</p>
+<p>给 blog 也重新换了一个 favicon，看着感觉还行。这样也好区分我的生活博跟笔记博了。毕竟两个都存了书签，经常性出误点的情况，囧…</p>
+<h3 id="评论"><a href="#评论" class="headerlink" title="评论"></a>评论</h3><p>将多说评论转到 Disqus, Google 到的方法有两个，一个是通过 Python 2.x 来进行转换，一个是通过 php，因为没有装 Python 2，于是我选择了通过 php 转换。由于评论没几条，所以操作也很快。具体方法详见<a href="http://urouge.github.io/migrate-to-disqus/" target="_blank" rel="external">多说评论迁移至Disqus</a></p>
+<p>当然也因为用了 Disqus，这个主题的一些特色功能也用不上了。比如多说评论显示 UA，还有 jiathis 之类的。不过自己也不会用到，也就无所谓了。</p>
+<h3 id="SSL-amp-amp-邮箱"><a href="#SSL-amp-amp-邮箱" class="headerlink" title="SSL &amp;&amp; 邮箱"></a>SSL &amp;&amp; 邮箱</h3><p>SSL 因为生活博客已经换上，这个博客要添加上也很快。自建邮箱功能还在研究中，预备使用 Postfix。打算给生活博客换域名，到时候会用到群发功能。</p>
+<p>暂时，就先这样。</p>
+</div></article></div></main><footer><div class="paginator"><a href="/some-pit/" class="prev">PREV</a><a href="/usage-of-mysql/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+var disqus_identifier = 'something-new-about-blog/';
+var disqus_title = '关于博客一些整改';
+var disqus_url = 'http://www.leyar.me/something-new-about-blog/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//ileyar.disqus.com/count.js" async></script><div class="copyright"><p>© 2011 - 2017 <a href="http://www.leyar.me">Leyar</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-74627504-2",'auto');ga('send','pageview');</script></body></html>
