@@ -1,3 +1,4 @@
+---
 title: "通过 rsync 将 Hexo 部署到 Digitalocean vps"
 date: 2015-05-01 21:20:53
 tags:

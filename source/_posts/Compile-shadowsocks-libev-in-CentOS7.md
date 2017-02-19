@@ -1,4 +1,6 @@
-title: Compile Shadowsocks-libev in CentOS7
+---
+layout: post
+title: "Compile Shadowsocks-libev in CentOS7"
 date: 2017-02-13 19:35:27
 updated: 2017-2-19 05:20:00
 tags:

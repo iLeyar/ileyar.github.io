@@ -1,9 +1,10 @@
 title: Shadowsocks 之优化篇
 date: 2015-08-01 14:40
+updated: 2017-2-19 9:59
 tags:
 - shadowsocks
 - linux
-
+- hybla
 ---
 
 前言
@@ -13,9 +14,8 @@ tags:
 
 以下我的 VPS 内核版本升级的简单步骤：
 
->	VPS ： Digitalocean
+>	VPS ： Digitalocean and Linode
 >	系统版本： CentOS 7 64bit
-
 <!--more-->
 
 更新内核
@@ -140,3 +140,106 @@ echo 3 > /proc/sys/net/ipv4/tcp_fastopen
 + [不要在linux上启用net.ipv4.tcp_tw_recycle参数](http://www.cnxct.com/coping-with-the-tcp-time_wait-state-on-busy-linux-servers-in-chinese-and-dont-enable-tcp_tw_recycle/)
 
 2017-2-14: 修改`sysctl.conf`配置文件
+
+编译并启用 hybla 模块
+-------
+
+检查系统可用算法
+```bash
+sysctl net.ipv4.tcp_available_congestion_control
+```
+Linode 没有自带，所以需要编译
+
+### 检查 vps 内核版本
+```bash
+uname -r
+4.8.6-x86_64-linode78
+```
+### 下载对应版本的内核源码
+到<https://www.kernel.org/pub/linux/kernel/v4.x/> 查找并下载对应版本的tar.gz 文件
+```bash
+mkdir /root/kernel
+cd /root/kernel
+wget https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.8.6.tar.gz
+tar xvf linux-4.8.6.tar.gz
+```
+### 安装编译工具
+```bash
+yum -y groupinstall "Development Tools"
+yum -y install ncurses-devel ncurses
+```
+### 编辑配置文件
+```bash
+cd linux-4.8.6
+zcat /proc/config.gz > .config
+vi .config
+```
+查找`CONFIG_TCP_CONG_CUBIC=y`,在其下面增加一行`CONFIG_TCP_CONG_HYBLA=y`
+开始编译
+```bash
+make
+```
+等待内核编译完成，单核编译约15分钟。
+### 编译模块
+```bash
+cd net/ipv4/
+mv Makefile Makefile.old
+vi Makefile
+```
+加入以下内容，`KDIR` 后面修改为你的源码路径。
+```
+# Makefile for tcp_hybla.ko
+obj-m := tcp_hybla.o
+KDIR := /root/kernel/linux-4.8.6
+PWD := $(shell pwd)
+default:
+	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
+```
+进入源码根目录，开始编译模块
+```bash
+cd /root/kernel/linux-4.8.6/
+make modules
+```
+等待编译完成。
+### 测试加载模块
+```bash
+cd /root/kernel/linux-4.8.6/net/ipv4
+cp tcp_hybla.ko /root/kernel/
+cd /root/kernel
+insmod tcp_hybla.ko
+```
+如果加载成功，则执行命令显示如下
+```bash
+sysctl net.ipv4.tcp_available_congestion_control
+net.ipv4.tcp_available_congestion_control = cubic reno hybla		# 输出结果后面多了一个 hybla
+```
+### 设置开机自动加载模块
+将`tcp_hybla.ko` 拷贝到 `/lib/modules/4.8.6-x86_64-linode78/kernel/net/ipv4`目录
+```bash
+cd /lib/modules/4.8.6-x86_64-linode78/
+mkdir -p kernel/net/ipv4
+cd kernel/net/ipv4
+cp /root/kernel/tcp_hybla.ko .
+cd /lib/modules/4.8.6-x86_64-linode78/
+depmod -a
+```
+如果出现如下文件不存在的警告，可以通过创建对应的空白文件来解决。
+```bash
+depmod: WARNING: could not open /lib/modules/4.8.6-x86_64-linode78/modules.order: No such file or directory
+depmod: WARNING: could not open /lib/modules/4.8.6-x86_64-linode78/modules.builtin: No such file or directory
+```
+解决办法
+```bash
+touch modules.order
+touch modules.builtin
+```
+再重新执行`depmod -a`命令即可。
+### 设置 hybla 优先加载
+```bash
+vi /etc/sysctl.conf
+```
+加入以下内容
+```
+# for high-latency network
+net.ipv4.tcp_congestion_control=hybla
+```
