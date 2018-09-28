@@ -17,7 +17,7 @@
 <p>添加以下内容到 <code>~/.bashrc</code> 文件中：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> [[ (<span class="variable">$COLORTERM</span> == gnome-terminal || $(cat /proc/<span class="variable">$PPID</span>/cmdline) == *gnome-terminal* )</div><div class="line">   &amp;&amp; <span class="variable">$TERM</span> != screen* ]]; <span class="keyword">then</span></div><div class="line">   <span class="built_in">export</span> TERM=xterm-256color</div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure></p>
 <p>此配置使 256 色仅在 Gnome Terminal 中显示且不在 screen/tmux 会话中。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>更详细的方法参考： <a href="http://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin" target="_blank" rel="external">How can i install and user powerline plugin</a><br>经此一番设置，你的 bash 应该已经美化过啦，如果没有，就重启下~ enjoy~</p>
-</div></article></div></main><footer><div class="paginator"><a href="/note-everyday-5.5/" class="prev">PREV</a><a href="/Digitalocean-vps-nginx-setup/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+</div></article></div></main><footer><div class="paginator"><a href="/note-everyday-5.5/" class="prev">上一篇</a><a href="/Digitalocean-vps-nginx-setup/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
 var disqus_identifier = 'install-and-use-powerline-plugin/';
 var disqus_title = '使用 powerline 美化插件';
 var disqus_url = 'http://www.leyar.me/install-and-use-powerline-plugin/';

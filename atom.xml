@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.leyar.me/"/>
-  <updated>2018-09-28T07:28:51.628Z</updated>
+  <updated>2018-09-28T07:29:55.067Z</updated>
   <id>http://www.leyar.me/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.leyar.me/Manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys/"/>
     <id>http://www.leyar.me/Manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys/</id>
     <published>2018-09-28T06:28:13.000Z</published>
-    <updated>2018-09-28T07:28:51.628Z</updated>
+    <updated>2018-09-28T07:29:55.067Z</updated>
     
     <content type="html"><![CDATA[<p>很多时候，会发现自己需要在同一台电脑上操作多个 GitHub 帐号，比如我会有有两个博客，均托管在 GitHub Pages 上，此时就需要再注册一个 GitHub 帐号了。</p>
 <p>要在同一台电脑中管理多个 GitHub 帐号，就需要用到 ssh-key. 这里记录下我的操作。</p>
@@ -28,6 +28,7 @@
 <p>此时会生成两个不同的 keys：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">~/.ssh/github_rsa</div><div class="line">~/.ssh/github_2_rsa</div></pre></td></tr></table></figure>
 <p>同时还会生成同名的 <code>.pub</code> 后缀的公用密钥。 将此密钥分别复制到对应的帐号中。</p>
+<hr>
 <h2 id="注册新生成的-SSH-Keys"><a href="#注册新生成的-SSH-Keys" class="headerlink" title="注册新生成的 SSH Keys"></a>注册新生成的 SSH Keys</h2><ul>
 <li>确保 ssh-agent 已启用<code>eval &quot;$(ssh-agent -s)</code></li>
 <li>注册<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-add ~/.ssh/github_rsa</div><div class="line">ssh-add ~/.ssh/github_2_rsa</div></pre></td></tr></table></figure>

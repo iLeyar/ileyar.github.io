@@ -4,6 +4,7 @@
 <p>此时会生成两个不同的 keys：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">~/.ssh/github_rsa</div><div class="line">~/.ssh/github_2_rsa</div></pre></td></tr></table></figure>
 <p>同时还会生成同名的 <code>.pub</code> 后缀的公用密钥。 将此密钥分别复制到对应的帐号中。</p>
+<hr>
 <h2 id="注册新生成的-SSH-Keys"><a href="#注册新生成的-SSH-Keys" class="headerlink" title="注册新生成的 SSH Keys"></a>注册新生成的 SSH Keys</h2><ul>
 <li>确保 ssh-agent 已启用<code>eval &quot;$(ssh-agent -s)</code></li>
 <li>注册<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh-add ~/.ssh/github_rsa</div><div class="line">ssh-add ~/.ssh/github_2_rsa</div></pre></td></tr></table></figure>
@@ -28,7 +29,7 @@
 <p>提交本地仓库至远程仓库</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git add .</div><div class="line">git commit -m &quot;new commit&quot;</div><div class="line">git push -u origin master</div></pre></td></tr></table></figure>
 <p>可以看到，其实就是将 @ 与: 之间的内容修改为 SSH keys 配置中对应的 HOST 即可。<br>至于 hexo 对应的 github deploy 问题，后续再做修改更新。</p>
-</div></article></div></main><footer><div class="paginator"><a href="/Compile-shadowsocks-libev-in-CentOS7/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+</div></article></div></main><footer><div class="paginator"><a href="/Compile-shadowsocks-libev-in-CentOS7/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
 var disqus_identifier = 'Manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys/';
 var disqus_title = '在同一台电脑上管理多个 GitHub 帐号';
 var disqus_url = 'http://www.leyar.me/Manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys/';
