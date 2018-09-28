@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>http://www.leyar.me/tags/Arch/</loc>
+        <lastmod>2016-12-15T04:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/wndr4300/</loc>
+        <lastmod>2016-12-15T04:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/trunk/</loc>
+        <lastmod>2016-12-15T04:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/compile/</loc>
+        <lastmod>2016-12-15T04:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/backup/</loc>
+        <lastmod>2017-02-18T20:23:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/centos7/</loc>
+        <lastmod>2017-02-18T21:20:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/shadowsocks/</loc>
+        <lastmod>2017-02-19T01:59:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/hybla/</loc>
+        <lastmod>2017-02-19T01:59:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/digitalocean/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/nginx/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/rsync/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/ubuntu/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/fcitx/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/pinyin/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/input/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/git/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/404/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/vim/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/goldendict/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/command/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/firefox/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/archlinux/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/bash/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/vps/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/hexo/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/dns/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/linux/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/centos/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/ssh/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/openwrt/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/SS/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/NETGEAR/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/dnsmasq/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/Docker/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/Shadowsocks/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/Carina/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/powerline/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/chrome/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/lantern/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/solarized/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/Ubuntu/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/CentOS/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/SSH/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/pdnsd/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/key/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/dropbear/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/web/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/ruby/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/css/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/html/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/arch/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/gnome/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/gdm/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/fctix/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/terminal/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/blog/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/theme/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/mysql/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/mariadb/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/tags/github/</loc>
+        <lastmod>2018-09-28T08:08:55.236Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+</urlset>
+<!-- XML Sitemap generated by Hexo SEO Friendly Sitemap Generator -->

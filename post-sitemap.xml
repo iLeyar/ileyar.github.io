@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>http://www.leyar.me</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/Manage-multiple-github-accounts-on-a-single-machine-with-ssh-keys/</loc>
+        <lastmod>2018-09-28T08:08:55.236Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/netgear-wndr4300-openwrt-shadowsocks/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/new-poses-for-scientific-Internet/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/note-everyday-5.5/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/resolve-the-issue-about-Permission-denied/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/securing-your-server/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/setting-up-dns-server-on-centos7/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/openwrt-ssh-key/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/skill-tree/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/some-pit/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/something-new-about-blog/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/usage-of-mysql/</loc>
+        <lastmod>2017-02-19T04:03:01.153Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/Digitalocean-vps-nginx-setup/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/After-installing-Hexo/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/Install-ubuntu-with-harddisk-under-xp-system/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/SecuringSSH/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/about-fcitx-pinyin-input/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/create-404-page/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/Something-about-vim/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/hello-world/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/hexo-deploy-to-git-error/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/hexo-nginx-403-forbidden/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/how-to-install-dictionaries-for-goldendict/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/common-commands-for-git/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/extensions-for-my-firefox/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/installation-of-archlinux/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/install-and-use-powerline-plugin/</loc>
+        <lastmod>2017-02-19T04:03:01.149Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/optimize-the-shadowsocks/</loc>
+        <lastmod>2017-02-19T01:59:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/install-the-shadowsocks/</loc>
+        <lastmod>2017-02-19T00:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/Compile-shadowsocks-libev-in-CentOS7/</loc>
+        <lastmod>2017-02-18T21:20:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/backup-your-blog-to-github/</loc>
+        <lastmod>2017-02-18T20:23:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/create-a-blog-with-hexo-in-ubuntu/</loc>
+        <lastmod>2017-02-18T19:43:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.leyar.me/openwrt-buildroot-for-wndr4300/</loc>
+        <lastmod>2016-12-15T04:00:00.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+</urlset>
+<!-- XML Sitemap generated by Hexo SEO Friendly Sitemap Generator -->
