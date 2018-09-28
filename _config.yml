@@ -82,7 +82,7 @@ google_analytics: UA-74627504-2
 ## Docs: http://hexo.io/docs/deployment.html
 deploy: 
 - type: git
-  repo: git@github.com:iLeyar/ileyar.github.io.git
+  repo: git@ileyar.github.com:iLeyar/ileyar.github.io.git
   branch: master
   message:
           #- type: rsync
