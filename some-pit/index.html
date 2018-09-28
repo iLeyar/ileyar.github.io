@@ -10,7 +10,7 @@
 <p>这个在<a href="https://wiki.archlinux.org/index.php/Fcitx_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87" target="_blank" rel="external">官方文档</a>)有解决方法。照搬过来。<br><strong>解决：</strong>修改 GSettings 配置，执行如下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt; gsettings <span class="built_in">set</span> \</div><div class="line">&gt;   org.gnome.settings-daemon.plugins.xsettings overrides \</div><div class="line">&gt;   <span class="string">"&#123;'Gtk/IMModule':&lt;'fcitx'&gt;&#125;"</span></div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
 </blockquote>
 <h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>暂时遇到的问题就这么多，后续遇到在慢慢添加。</p>
-</div></article></div></main><footer><div class="paginator"><a href="/common-commands-for-git/" class="prev">上一篇</a><a href="/something-new-about-blog/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
+</div></article></div></main><footer><div class="paginator"><a href="/common-commands-for-git/" class="prev">PREV</a><a href="/something-new-about-blog/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'ileyar';
 var disqus_identifier = 'some-pit/';
 var disqus_title = 'Archlinux 下踩过的坑（持续更新）';
 var disqus_url = 'http://www.leyar.me/some-pit/';
