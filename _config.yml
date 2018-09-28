@@ -85,10 +85,10 @@ deploy:
   repo: git@github.com:iLeyar/ileyar.github.io.git
   branch: master
   message:
-- type: rsync
-  host: 139.162.108.89
-  user: leyar 
-  root: /var/www/www.leyar.me
-  delete: true
-  verbose: true
-  ignore_errors: false
+          #- type: rsync
+          #host: 139.162.108.89
+          #  user: leyar 
+          #  root: /var/www/www.leyar.me
+          #  delete: true
+          #  verbose: true
+          #  ignore_errors: false

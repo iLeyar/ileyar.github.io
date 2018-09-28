@@ -20,9 +20,9 @@ Leyar's Blog
 一个喜欢瞎折腾的女生，生于 90 年代，却有着 80 年代的灵魂，生性散漫，偶尔敏感。
 
 - [About me](https://about.me/leyar)
-- [Life's blog](http://www.ileyar.com)
-- [Other blog](http://www.leyar.com)
-- [This blog](http://www.leyar.me)
+- [Life's blog](https://ileyar.com)
+- [Other blog](http://leyar.com)
+- [This blog](https://leyar.me)
 - Email: [![](https://www.ileyar.com/images/mail.png)](mailto:leyar.me@gmail.com)
 
 欢迎一起学习，交流，分享。
