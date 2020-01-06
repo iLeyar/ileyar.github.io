@@ -10,7 +10,7 @@ tags:
 
 ## 生成不同的 SSH Keys
 
-```
+```bash
 ssh-keygen -t rsa -C "xxx@mail.com" -f "github_rsa"
 ssh-keygen -t rsa -C "yyy@mail.com" -f "github_2_rsa"
 ```
@@ -22,13 +22,13 @@ ssh-keygen -t rsa -C "yyy@mail.com" -f "github_2_rsa"
 ```
 同时还会生成同名的 `.pub` 后缀的公用密钥。 将此密钥分别复制到对应的帐号中。
 
----------------------------------------------------------------------------------------
+<!--more-->
 
 ## 注册新生成的 SSH Keys
 
 * 确保 ssh-agent 已启用`eval "$(ssh-agent -s)`
 * 注册
-```
+```bash
 ssh-add ~/.ssh/github_rsa
 ssh-add ~/.ssh/github_2_rsa
 ```
@@ -57,7 +57,7 @@ User git
 
 先检查是否使用了正确的用户名及邮箱。
 
-```
+```bash
 git config --list
 git config [--global] user.name "[name]"  # 配置用户名
 git config [--global] user.email "[email address]"  # 配置邮箱
@@ -66,11 +66,11 @@ git config [--global] user.email "[email address]"  # 配置邮箱
 ### 克隆远程仓库
 
 克隆帐号1的远程仓库
-```
+```bash
 git clone git@xxx.github.com:xxx/repo_name.git
 ```
 克隆帐号2的远程仓库
-```
+```bash
 git clone git@yyy.github.com:yyy/repo_name.git
 ```
 
@@ -79,20 +79,20 @@ git clone git@yyy.github.com:yyy/repo_name.git
 ### 提交本地已有仓库
 
 检查远程仓库配置
-```
+```bash
 git remote -v
 ```
 
 更新对应配置
 
-```
+```bash
 git remote set-url origin git@xxx.github.com:xxx/repo_name.git
 git remote set-url origin git@yyy.github.com:yyy/repo_name.git
 ```
 
 ### 本地创建新仓库
 
-```
+```bash
 git init
 git remote add origin git@xxx.github.com:xxx/repo_name.git
 git remote add origin git@yyy.github.com:yyy/repo_name.git
@@ -100,7 +100,7 @@ git remote add origin git@yyy.github.com:yyy/repo_name.git
 
 提交本地仓库至远程仓库
 
-```
+```bash
 git add .
 git commit -m "new commit"
 git push -u origin master
@@ -111,7 +111,7 @@ git push -u origin master
 ### Hexo 部署配置
 
 * 安装 `hexo-deployer-git`
-	```
+	```bash
 	npm install hexo-deployer-git --save
 	```
 * 编辑`_config.yml`文件
